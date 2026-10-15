@@ -41,7 +41,7 @@ The local clean-environment verification is recorded in `docs/evidence/clean-ins
 
 ## Recompute the benchmark
 
-`benchmarks/protocol.json`, `oracle.json` and `frozen_manifest.json` define evaluation. `implementation.json` records agent/provider hashes and model digests. Start the model and run `python -m tracemedic.benchmark`.
+`benchmarks/protocol.json`, `oracle.json` and `frozen_manifest.json` define evaluation. `implementation.json` records agent/provider hashes and model digests. Start the model, run `python scripts/verify_model.py`, then `python -m tracemedic.benchmark`. A changed model digest requires a new experiment label. The actual served identities for the delivered experiment are saved in `docs/evidence/model-identity.json`.
 
 The runner skips existing rows identified by method, incident and repetition; it never silently replaces a failure. For a fresh experiment, preserve `benchmarks/results` in a named archive and use a new checkout. Do not rerun only favorable cases and present them as the same experiment. Latency includes MCP startup and model work; GPU cache/system load affect it. See the report for exact counts.
 

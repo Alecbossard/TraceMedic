@@ -1,0 +1,19 @@
+{
+  "ollama": {
+    "version": "0.40.4"
+  },
+  "models": [
+    {
+      "name": "tracemedic-qwen3:4b",
+      "expected_digest": "4955325f82d6e570a48fb0d309967d8266d6710f3555d7ddcdf79714a2f520ab",
+      "actual_digest": "4955325f82d6e570a48fb0d309967d8266d6710f3555d7ddcdf79714a2f520ab",
+      "matches": true
+    },
+    {
+      "name": "qwen3:4b-instruct-2507-q4_K_M",
+      "expected_digest": "0edcdef34593eac1aa2be9c7d06c432dcf81945adca5eca2f27662c18f168ba0",
+      "actual_digest": "0edcdef34593eac1aa2be9c7d06c432dcf81945adca5eca2f27662c18f168ba0",
+      "matches": true
+    }
+  ]
+}

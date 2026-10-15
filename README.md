@@ -93,7 +93,15 @@ Validation evidence is separated into four classes:
 | Real crash recovery | `docs/evidence/real-recovery.json` | Killed process, fresh-process resume, preserved evidence and one fixture execution |
 | Frozen benchmark | `benchmarks/results/` | Per-incident deterministic/single/multi comparison, raw traces, exact counts and failures |
 
-The corpus contains **24 authored synthetic incidents**, with **12 held out**. The frozen protocol plans **42 runs**: 14 per method, including two repeated cases. Results and limitations are in [the benchmark report](benchmarks/report.md); the raw data is in [raw.jsonl](benchmarks/results/raw.jsonl). Keyword-based scoring checks expected concepts, valid citations and an actual fixture check. It is not a semantic entailment proof or a production accuracy estimate. Agent agreement is never used as ground truth.
+The corpus contains **24 authored synthetic incidents**, with **12 held out**. The frozen protocol executed **42 runs**: 14 per method, including two repeated cases. Results and limitations are in [the benchmark report](benchmarks/report.md); all traces are in [raw.jsonl](benchmarks/results/raw.jsonl).
+
+| Method | Correct automatic outcomes | Median wall time | Model calls across 14 runs |
+|---|---:|---:|---:|
+| Deterministic rules | 5 / 14 | 1.84 s | 0 |
+| Single agent | 10 / 14 | 28.24 s | 137 |
+| Three agents | 9 / 14 | 39.46 s | 198 |
+
+The multi-agent variant did **not** outperform the single agent in this experiment. Both LLM variants had three supported conclusions rejected by the automatic scorer and one non-completed run. Keyword scoring checks expected concepts, valid citations and actual execution; it can reject a correct paraphrase and miss unsupported sentences. [Scoring notes](benchmarks/scoring_notes.md) explain concrete limits. These results are not production accuracy estimates. Agent agreement is never used as ground truth.
 
 ```powershell
 .\.venv\Scripts\python.exe -m pytest -q

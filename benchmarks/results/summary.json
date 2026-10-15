@@ -1,0 +1,61 @@
+{
+  "status": "complete",
+  "model": "tracemedic-qwen3:4b",
+  "total_runs": 42,
+  "protocol_version": 1,
+  "methods": [
+    {
+      "method": "deterministic",
+      "runs": 14,
+      "correct_supported": 3,
+      "unsupported": 0,
+      "abstention_correct": 2,
+      "correct_total": 5,
+      "completed": 14,
+      "median_latency_s": 1.841,
+      "model_calls": 0,
+      "tool_calls": 84,
+      "tool_successes": 82,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": null
+    },
+    {
+      "method": "single",
+      "runs": 14,
+      "correct_supported": 9,
+      "unsupported": 3,
+      "abstention_correct": 1,
+      "correct_total": 10,
+      "completed": 13,
+      "median_latency_s": 28.236,
+      "model_calls": 137,
+      "tool_calls": 91,
+      "tool_successes": 91,
+      "input_tokens": 348729,
+      "output_tokens": 14321,
+      "cost_usd": null
+    },
+    {
+      "method": "multi",
+      "runs": 14,
+      "correct_supported": 8,
+      "unsupported": 3,
+      "abstention_correct": 1,
+      "correct_total": 9,
+      "completed": 13,
+      "median_latency_s": 39.463,
+      "model_calls": 198,
+      "tool_calls": 122,
+      "tool_successes": 120,
+      "input_tokens": null,
+      "output_tokens": null,
+      "cost_usd": null
+    }
+  ],
+  "limitations": [
+    "Small synthetic fixture corpus; keyword-based scoring is not semantic proof.",
+    "One repetition per held-out case plus two repeated cases per method; not a statistical production estimate.",
+    "Local hardware/electricity cost not measured."
+  ]
+}

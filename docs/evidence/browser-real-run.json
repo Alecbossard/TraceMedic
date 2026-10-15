@@ -1,0 +1,37 @@
+{
+  "command": "node frontend/scripts/browser-qa.mjs --real",
+  "browser_result": {
+    "passed": true,
+    "runId": "16f5146c-d649-40e4-8baa-fce5381c373f",
+    "layouts": [
+      {
+        "name": "tablet",
+        "width": 900,
+        "scrollWidth": 900
+      },
+      {
+        "name": "mobile",
+        "width": 390,
+        "scrollWidth": 390
+      }
+    ],
+    "errors": []
+  },
+  "provider": "ollama",
+  "model": "tracemedic-qwen3:4b",
+  "run_id": "16f5146c-d649-40e4-8baa-fce5381c373f",
+  "status": "completed",
+  "cancelled_events": 1,
+  "resumed_events": 1,
+  "metrics": {
+    "model_calls": 14,
+    "tool_calls": 9,
+    "tool_successes": 9,
+    "input_tokens": 32352,
+    "output_tokens": 1870,
+    "usage_complete": true,
+    "model_latency_ms": 105771.2,
+    "cost_usd": null
+  },
+  "capture_note": "The later browser-qa.json and viewport images inspect this recorded real trace in replay mode."
+}

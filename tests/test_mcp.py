@@ -1,6 +1,7 @@
 import json
 import os
 import shutil
+import signal
 
 from tracemedic.mcp_client import connect_tools
 from tracemedic.store import stable_id
@@ -61,3 +62,21 @@ async def test_changed_fixture_is_never_executed(engine, tmp_path):
         output = await tools.call("run_check", {}, "verifier", 0)
     assert not output.ok
     assert "Fixture changed" in json.dumps(output.data)
+
+
+async def test_real_tool_process_unavailable_then_reconnected(engine):
+    run = engine.create("case-01")
+    failure = None
+    try:
+        async with connect_tools(engine.settings, engine.store, run, "case-01") as tools:
+            listed = await tools.call("list_files", {}, "investigator", 0)
+            pid = listed.data["server_pid"]
+            assert pid not in (os.getpid(), os.getppid())
+            os.kill(pid, signal.SIGTERM)
+            await tools.call("read_file", {"path": "runtime.log"}, "investigator", 1)
+    except Exception as exc:
+        failure = exc
+    assert failure is not None, "A dead tool subprocess must not yield a successful read"
+    async with connect_tools(engine.settings, engine.store, run, "case-01") as tools:
+        result = await tools.call("read_file", {"path": "runtime.log"}, "investigator", 2)
+    assert result.ok and result.evidence
