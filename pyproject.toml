@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tracemedic"
-version = "0.1.0"
+version = "0.2.0"
 description = "Evidence-first incident investigation with LangGraph and a real MCP boundary"
 requires-python = ">=3.13"
 dependencies = [
@@ -29,7 +29,7 @@ tracemedic = "tracemedic.cli:main"
 where = ["src"]
 
 [tool.setuptools.package-data]
-tracemedic = ["fixture_hashes.json"]
+tracemedic = ["fixture_hashes.json", "fixture_hashes_v2.json"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"

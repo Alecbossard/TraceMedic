@@ -1,0 +1,184 @@
+[
+  {
+    "id": "51fb980b-92ef-49ff-b128-5de578c60cd7",
+    "incident_id": "case-16",
+    "mode": "multi",
+    "status": "completed",
+    "diagnostic": {
+      "outcome": "supported",
+      "summary": "ERROR ConnectionError: DNS lookup failed for service-db; registry=['service_db'] The service attempts to resolve a host name from the input configuration, but the host name in the settings (\"service-db\") does not match the key in the hosts registry (\"service_db\"). The service raises a ConnectionError when the host is not found in the registry, and the error message reflects the mismatch in naming. Client cannot resolve a resource name.",
+      "hypothesis_ids": [
+        "h-06dae1d88eaef886096c"
+      ],
+      "evidence_ids": [
+        "e-1bf3e7476e2d2bbe1709",
+        "e-1aa5e0c5090a3402a527",
+        "e-5430e11383451f8e7be5",
+        "e-6602bed5292992c2b2be"
+      ],
+      "next_actions": [
+        "finish']}\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705"
+      ],
+      "limitations": [
+        "Scope: captured synthetic execution; deployment history and production cause are not established."
+      ],
+      "support_level": "reproduction",
+      "rendered_from_reviewed_records": true
+    },
+    "metrics": {
+      "model_calls": 7,
+      "tool_calls": 2,
+      "tool_successes": 2,
+      "input_tokens": 8273,
+      "output_tokens": 805,
+      "usage_complete": true,
+      "model_latency_ms": 16393.6,
+      "cost_usd": null
+    },
+    "rejections": []
+  },
+  {
+    "id": "bca212be-a1ce-49a7-9136-cdc2a93a904f",
+    "incident_id": "case-04",
+    "mode": "multi",
+    "status": "completed",
+    "diagnostic": {
+      "outcome": "supported",
+      "summary": "ERROR AttributeError: 'Encoder' object has no attribute 'decode_bytes' in runtime.log The dependency update introduced a version of the Encoder class that no longer defines a decode_bytes method, while the service.py code still attempts to call decode_bytes on the Encoder instance. Packet export fails with AttributeError: 'Encoder' object has no attribute 'decode_bytes'",
+      "hypothesis_ids": [
+        "h-ba544deffc6a4c83a510"
+      ],
+      "evidence_ids": [
+        "e-b2f4ea36cbd17fab0f34",
+        "e-0954a9a68a7dbc6be3bc",
+        "e-e5962bf9649acca6e195",
+        "e-24dd2929bd09fb0ac179"
+      ],
+      "next_actions": [
+        "finish']}\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705\u2705"
+      ],
+      "limitations": [
+        "Scope: captured synthetic execution; deployment history and production cause are not established."
+      ],
+      "support_level": "reproduction",
+      "rendered_from_reviewed_records": true
+    },
+    "metrics": {
+      "model_calls": 8,
+      "tool_calls": 2,
+      "tool_successes": 2,
+      "input_tokens": 9473,
+      "output_tokens": 1295,
+      "usage_complete": true,
+      "model_latency_ms": 23676.4,
+      "cost_usd": null
+    },
+    "rejections": [
+      "Action rejected: Insufficient finish selects no causal record; use []"
+    ]
+  },
+  {
+    "id": "4b3d1860-0a76-40b0-b729-4d371aa3b848",
+    "incident_id": "case-20",
+    "mode": "multi",
+    "status": "failed",
+    "diagnostic": {
+      "outcome": "insufficient",
+      "summary": "Three consecutive invalid actions; inspect audit events.",
+      "hypothesis_ids": [],
+      "evidence_ids": [],
+      "next_actions": [
+        "Inspect the audit trail and resolve the reported limit or error before starting a new investigation."
+      ],
+      "limitations": [
+        "Three consecutive invalid actions; inspect audit events.",
+        "This is a controlled system termination, not a successful LLM diagnosis."
+      ]
+    },
+    "metrics": {
+      "model_calls": 5,
+      "tool_calls": 1,
+      "tool_successes": 1,
+      "input_tokens": 5149,
+      "output_tokens": 416,
+      "usage_complete": true,
+      "model_latency_ms": 8263.1,
+      "cost_usd": null
+    },
+    "rejections": [
+      "Action rejected: A causal proposal needs an exact service.py quote AND an exact quote from another file showing its captured condition or effect; two code quotes alone are insufficient. Use [] if unavailable.",
+      "Action rejected: A causal proposal needs an exact service.py quote AND an exact quote from another file showing its captured condition or effect; two code quotes alone are insufficient. Use [] if unavailable.",
+      "Action rejected: A causal proposal needs an exact service.py quote AND an exact quote from another file showing its captured condition or effect; two code quotes alone are insufficient. Use [] if unavailable."
+    ]
+  },
+  {
+    "id": "adb432c1-5626-4853-967a-595d9decb7c4",
+    "incident_id": "case-22",
+    "mode": "single",
+    "status": "completed",
+    "diagnostic": {
+      "outcome": "supported",
+      "summary": "E1:L3: ERROR expected=False; actual=True the age calculation in service.py uses a difference in milliseconds, but the max_age_seconds setting is 2 seconds, and the input shows a 500ms difference (0.5 seconds), which should not exceed the threshold; however, the error condition is triggered when age_ms > max_age_seconds, and since 500ms is less than 500, the condition fails, yet the error log shows expected=False; actual=True, indicating a misalignment in the assertion logic fresh sensor messages are incorrectly treated as stale",
+      "hypothesis_ids": [
+        "h-fdf7c3827f4a55fa8590"
+      ],
+      "evidence_ids": [
+        "e-885bd2ded794d812b0a9",
+        "e-9b06406812f6688eecbc"
+      ],
+      "next_actions": [
+        "submit_review"
+      ],
+      "limitations": [
+        "Scope: captured synthetic execution; deployment history and production cause are not established."
+      ],
+      "support_level": "reproduction",
+      "rendered_from_reviewed_records": true
+    },
+    "metrics": {
+      "model_calls": 5,
+      "tool_calls": 2,
+      "tool_successes": 2,
+      "input_tokens": 7082,
+      "output_tokens": 445,
+      "usage_complete": true,
+      "model_latency_ms": 10088.0,
+      "cost_usd": null
+    },
+    "rejections": []
+  },
+  {
+    "id": "2bd17e49-f7c9-4fba-8be7-83bd249b5e34",
+    "incident_id": "case-19",
+    "mode": "single",
+    "status": "failed",
+    "diagnostic": {
+      "outcome": "insufficient",
+      "summary": "Three consecutive invalid actions; inspect audit events.",
+      "hypothesis_ids": [],
+      "evidence_ids": [],
+      "next_actions": [
+        "Inspect the audit trail and resolve the reported limit or error before starting a new investigation."
+      ],
+      "limitations": [
+        "Three consecutive invalid actions; inspect audit events.",
+        "This is a controlled system termination, not a successful LLM diagnosis."
+      ]
+    },
+    "metrics": {
+      "model_calls": 4,
+      "tool_calls": 1,
+      "tool_successes": 1,
+      "input_tokens": 4095,
+      "output_tokens": 302,
+      "usage_complete": true,
+      "model_latency_ms": 6709.0,
+      "cost_usd": null
+    },
+    "rejections": [
+      "Action rejected: A causal proposal needs an exact service.py quote AND an exact quote from another file showing its captured condition or effect; two code quotes alone are insufficient. Use [] if unavailable.",
+      "Action rejected: A causal proposal needs an exact service.py quote AND an exact quote from another file showing its captured condition or effect; two code quotes alone are insufficient. Use [] if unavailable.",
+      "Action rejected: A causal proposal needs an exact service.py quote AND an exact quote from another file showing its captured condition or effect; two code quotes alone are insufficient. Use [] if unavailable."
+    ]
+  }
+]

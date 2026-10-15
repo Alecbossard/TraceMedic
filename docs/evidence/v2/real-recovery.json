@@ -1,0 +1,658 @@
+{
+  "provider": "ollama",
+  "model": "tracemedic-qwen3:4b",
+  "engine_version": "v2",
+  "run_id": "real-recovery-d88a048b",
+  "terminated_pid": 13860,
+  "hard_kill": true,
+  "resume_exit_code": 0,
+  "status": "completed",
+  "evidence_before": 5,
+  "evidence_after": 5,
+  "all_snapshots_preserved": true,
+  "aliases_preserved": true,
+  "fixture_execution_records": 1,
+  "fixture_tool_result_events": 1,
+  "metrics_before": {
+    "model_calls": 5,
+    "tool_calls": 2,
+    "tool_successes": 2,
+    "input_tokens": 6410,
+    "output_tokens": 381,
+    "usage_complete": true,
+    "model_latency_ms": 8111.0,
+    "cost_usd": null
+  },
+  "metrics_after": {
+    "model_calls": 7,
+    "tool_calls": 2,
+    "tool_successes": 2,
+    "input_tokens": 9875,
+    "output_tokens": 640,
+    "usage_complete": true,
+    "model_latency_ms": 13344.3,
+    "cost_usd": null
+  },
+  "events": [
+    {
+      "seq": 1,
+      "run_id": "real-recovery-d88a048b",
+      "event_key": "mcp-discovery",
+      "timestamp": "2026-10-15T20:26:53.797570+00:00",
+      "role": "system",
+      "kind": "mcp_connected",
+      "message": "Discovered tools over MCP stdio in a separate process",
+      "data": {
+        "client_pid": 3052,
+        "tools": [
+          "list_files",
+          "read_file",
+          "search_trace",
+          "get_test_report",
+          "run_check",
+          "read_bundle",
+          "run_experiment"
+        ],
+        "transport": "stdio",
+        "sdk": "mcp 2.3.0"
+      }
+    },
+    {
+      "seq": 2,
+      "run_id": "real-recovery-d88a048b",
+      "event_key": "attempt:0:coordinator:0",
+      "timestamp": "2026-10-15T20:26:53.838766+00:00",
+      "role": "coordinator",
+      "kind": "model_attempt",
+      "message": "Decision call 1/18",
+      "data": {
+        "attempt": 1,
+        "context_chars": 456,
+        "decoding": "json_schema_control"
+      }
+    },
+    {
+      "seq": 3,
+      "run_id": "real-recovery-d88a048b",
+      "event_key": "response:attempt:0:coordinator:0",
+      "timestamp": "2026-10-15T20:26:55.143220+00:00",
+      "role": "coordinator",
+      "kind": "model_response",
+      "message": "delegate",
+      "data": {
+        "name": "delegate",
+        "arguments": {
+          "hypothesis_ids": [],
+          "target": "investigator",
+          "task": "Analyze the telemetry gateway configuration change for potential schema or endpoint mismatches in the database connection string."
+        },
+        "input_tokens": 692,
+        "output_tokens": 40,
+        "latency_ms": 1302.7
+      }
+    },
+    {
+      "seq": 4,
+      "run_id": "real-recovery-d88a048b",
+      "event_key": "delegate:0",
+      "timestamp": "2026-10-15T20:26:55.156191+00:00",
+      "role": "coordinator",
+      "kind": "delegation",
+      "message": "Analyze the telemetry gateway configuration change for potential schema or endpoint mismatches in the database connection string.",
+      "data": {
+        "target": "investigator",
+        "task": "Analyze the telemetry gateway configuration change for potential schema or endpoint mismatches in the database connection string.",
+        "hypothesis_ids": []
+      }
+    },
+    {
+      "seq": 5,
+      "run_id": "real-recovery-d88a048b",
+      "event_key": "attempt:1:investigator:1",
+      "timestamp": "2026-10-15T20:26:55.991720+00:00",
+      "role": "investigator",
+      "kind": "model_attempt",
+      "message": "Decision call 2/18",
+      "data": {
+        "attempt": 1,
+        "context_chars": 588,
+        "decoding": "native_function"
+      }
+    },
+    {
+      "seq": 6,
+      "run_id": "real-recovery-d88a048b",
+      "event_key": "response:attempt:1:investigator:1",
+      "timestamp": "2026-10-15T20:26:56.855092+00:00",
+      "role": "investigator",
+      "kind": "model_response",
+      "message": "read_bundle",
+      "data": {
+        "name": "read_bundle",
+        "arguments": {
+          "paths": [
+            "runtime.log",
+            "service.py",
+            "settings.json",
+            "input.json",
+            "report.json"
+          ]
+        },
+        "input_tokens": 1213,
+        "output_tokens": 38,
+        "latency_ms": 858.5
+      }
+    },
+    {
+      "seq": 7,
+      "run_id": "real-recovery-d88a048b",
+      "event_key": "tool-start:1",
+      "timestamp": "2026-10-15T20:26:56.874429+00:00",
+      "role": "investigator",
+      "kind": "tool_call",
+      "message": "read_bundle",
+      "data": {
+        "arguments": {
+          "paths": [
+            "runtime.log",
+            "service.py",
+            "settings.json",
+            "input.json",
+            "report.json"
+          ]
+        },
+        "operation_key": "mcp:27ca95eee44d4d50284c"
+      }
+    },
+    {
+      "seq": 8,
+      "run_id": "real-recovery-d88a048b",
+      "event_key": "tool-end:1",
+      "timestamp": "2026-10-15T20:26:56.985963+00:00",
+      "role": "investigator",
+      "kind": "tool_result",
+      "message": "read_bundle: ok",
+      "data": {
+        "tool": "read_bundle",
+        "ok": true,
+        "data": {
+          "file_errors": {},
+          "truncated_paths": [],
+          "lines_per_file": 40
+        },
+        "evidence": [
+          {
+            "id": "e-9c4bec24a49696ff1e6a",
+            "incident_id": "case-01",
+            "path": "runtime.log",
+            "start_line": 1,
+            "end_line": 4,
+            "excerpt": "2026-01-10T09:00:00Z INFO heartbeat healthy\n2026-01-10T09:00:01Z DEBUG metrics flush completed\n2026-01-10T09:00:02Z ERROR AssertionError: ConnectionRefused: target port 6433; probe listener 5432\n2026-01-10T09:00:03Z INFO supervisor captured incident",
+            "sha256": "fae8916453118f2f0f888426450781cd9aa1ed64f9718d7858215a629a14b476"
+          },
+          {
+            "id": "e-df50e18332a780c392b0",
+            "incident_id": "case-01",
+            "path": "service.py",
+            "start_line": 1,
+            "end_line": 3,
+            "excerpt": "def run(c, d):\n    assert c[\"port\"] == d[\"listening_port\"], f\"ConnectionRefused: target port {c[chr(112)+chr(111)+chr(114)+chr(116)]}; probe listener {d[chr(108)+chr(105)+chr(115)+chr(116)+chr(101)+chr(110)+chr(105)+chr(110)+chr(103)+chr(95)+chr(112)+chr(111)+chr(114)+chr(116)]}\"\n    return \"connected\"",
+            "sha256": "60af6cbddad06810cd4386060ff47916acde893c84768a86f41488f70f611eeb"
+          },
+          {
+            "id": "e-e99284bdf6122e92dcf7",
+            "incident_id": "case-01",
+            "path": "settings.json",
+            "start_line": 1,
+            "end_line": 4,
+            "excerpt": "{\n  \"host\": \"localhost\",\n  \"port\": 6433\n}",
+            "sha256": "933b5e2b0882b12926ff14a6477d91958fcdf1ff06b8678ffd5be248a75adde5"
+          },
+          {
+            "id": "e-4c48213cdf6e41b4a96e",
+            "incident_id": "case-01",
+            "path": "input.json",
+            "start_line": 1,
+            "end_line": 3,
+            "excerpt": "{\n  \"listening_port\": 5432\n}",
+            "sha256": "b8b7dee2c1643b4a3f91651e7145a86a274aa4471fc2d7f88b27f656c8fa138c"
+          },
+          {
+            "id": "e-986b1b404c2238a99c9e",
+            "incident_id": "case-01",
+            "path": "report.json",
+            "start_line": 1,
+            "end_line": 6,
+            "excerpt": "{\n  \"test\": \"test_service_contract\",\n  \"status\": \"failed\",\n  \"expected\": \"connected\",\n  \"observed\": \"AssertionError: ConnectionRefused: target port 6433; probe listener 5432\"\n}",
+            "sha256": "97396aeec9a50f1cd99f3210a94387fc70506927d231c0ccf4faa3a7661ddfb8"
+          }
+        ],
+        "error": null,
+        "operation_key": "mcp:27ca95eee44d4d50284c"
+      }
+    },
+    {
+      "seq": 9,
+      "run_id": "real-recovery-d88a048b",
+      "event_key": "attempt:2:investigator:2",
+      "timestamp": "2026-10-15T20:26:57.822949+00:00",
+      "role": "investigator",
+      "kind": "model_attempt",
+      "message": "Decision call 3/18",
+      "data": {
+        "attempt": 1,
+        "context_chars": 2239,
+        "decoding": "json_schema_control"
+      }
+    },
+    {
+      "seq": 10,
+      "run_id": "real-recovery-d88a048b",
+      "event_key": "response:attempt:2:investigator:2",
+      "timestamp": "2026-10-15T20:27:01.363649+00:00",
+      "role": "investigator",
+      "kind": "model_response",
+      "message": "submit_findings",
+      "data": {
+        "name": "submit_findings",
+        "arguments": {
+          "hypotheses": [
+            {
+              "citations": [
+                {
+                  "line_ref": "E1:L3"
+                },
+                {
+                  "line_ref": "E2:L2"
+                }
+              ],
+              "effect": "The service fails to establish a database connection and raises an AssertionError indicating a port mismatch.",
+              "mechanism": "The service compares the configured port in settings.json with the listening port in input.json. When the values differ (6433 vs 5432), the assertion fails, causing the connection to be refused and the service to halt execution.",
+              "next_check": "Verify if the database endpoint accepts connections on port 6433 or if the input.json listening_port is misconfigured.",
+              "trigger": "The service receives a configuration where settings.json specifies port 6433 and input.json specifies listening_port 5432, leading to an assertion failure in service.py."
+            }
+          ],
+          "unknowns": [
+            "The exact database service configuration or network policies that might allow or block port 6433 are unknown."
+          ]
+        },
+        "input_tokens": 1856,
+        "output_tokens": 207,
+        "latency_ms": 3536.2
+      }
+    },
+    {
+      "seq": 11,
+      "run_id": "real-recovery-d88a048b",
+      "event_key": "findings:2",
+      "timestamp": "2026-10-15T20:27:01.385125+00:00",
+      "role": "investigator",
+      "kind": "findings",
+      "message": "1 causal proposal(s); 1 unknown(s)",
+      "data": {
+        "hypotheses": [
+          {
+            "trigger": "The service receives a configuration where settings.json specifies port 6433 and input.json specifies listening_port 5432, leading to an assertion failure in service.py.",
+            "mechanism": "The service compares the configured port in settings.json with the listening port in input.json. When the values differ (6433 vs 5432), the assertion fails, causing the connection to be refused and the service to halt execution.",
+            "effect": "The service fails to establish a database connection and raises an AssertionError indicating a port mismatch.",
+            "next_check": "Verify if the database endpoint accepts connections on port 6433 or if the input.json listening_port is misconfigured.",
+            "claim": "The service receives a configuration where settings.json specifies port 6433 and input.json specifies listening_port 5432, leading to an assertion failure in service.py. The service compares the configured port in settings.json with the listening port in input.json. When the values differ (6433 vs 5432), the assertion fails, causing the connection to be refused and the service to halt execution. The service fails to establish a database connection and raises an AssertionError indicating a port mismatch.",
+            "id": "h-4f7c31ff8402caf95c6f",
+            "alias": "H1",
+            "citations": [
+              {
+                "evidence_id": "e-9c4bec24a49696ff1e6a",
+                "line": 3,
+                "quote": "2026-01-10T09:00:02Z ERROR AssertionError: ConnectionRefused: target port 6433; probe listener 5432",
+                "quote_truncated": false
+              },
+              {
+                "evidence_id": "e-df50e18332a780c392b0",
+                "line": 2,
+                "quote": "    assert c[\"port\"] == d[\"listening_port\"], f\"ConnectionRefused: target port {c[chr(112)+chr(111)+chr(114)+chr(116)]}; probe listener {d[chr(108)+chr(105)+chr(115)+chr(116)+chr(101)+chr(110)+chr(105)+chr(110)+chr(103)+chr(95)+chr(112)+chr(",
+                "quote_truncated": true
+              }
+            ],
+            "evidence_ids": [
+              "e-9c4bec24a49696ff1e6a",
+              "e-df50e18332a780c392b0"
+            ],
+            "status": "proposed",
+            "reason": "",
+            "check_ids": [],
+            "support_level": "unverified"
+          }
+        ],
+        "unknowns": [
+          "The exact database service configuration or network policies that might allow or block port 6433 are unknown."
+        ]
+      }
+    },
+    {
+      "seq": 12,
+      "run_id": "real-recovery-d88a048b",
+      "event_key": "attempt:3:coordinator:3",
+      "timestamp": "2026-10-15T20:27:02.218673+00:00",
+      "role": "coordinator",
+      "kind": "model_attempt",
+      "message": "Decision call 4/18",
+      "data": {
+        "attempt": 1,
+        "context_chars": 1524,
+        "decoding": "json_schema_control"
+      }
+    },
+    {
+      "seq": 13,
+      "run_id": "real-recovery-d88a048b",
+      "event_key": "response:attempt:3:coordinator:3",
+      "timestamp": "2026-10-15T20:27:03.796172+00:00",
+      "role": "coordinator",
+      "kind": "model_response",
+      "message": "delegate",
+      "data": {
+        "name": "delegate",
+        "arguments": {
+          "hypothesis_ids": [
+            "H1"
+          ],
+          "target": "verifier",
+          "task": "Validate that the assertion failure in service.py (E2:L2) occurs when settings.json specifies port 6433 and input.json specifies listening_port 5432, using the exact line references E1:L3 and E2:L2 as cited in the hypothesis."
+        },
+        "input_tokens": 1002,
+        "output_tokens": 80,
+        "latency_ms": 1575.4
+      }
+    },
+    {
+      "seq": 14,
+      "run_id": "real-recovery-d88a048b",
+      "event_key": "delegate:3",
+      "timestamp": "2026-10-15T20:27:03.805935+00:00",
+      "role": "coordinator",
+      "kind": "delegation",
+      "message": "Validate that the assertion failure in service.py (E2:L2) occurs when settings.json specifies port 6433 and input.json specifies listening_port 5432, using the exact line references E1:L3 and E2:L2 as cited in the hypothesis.",
+      "data": {
+        "target": "verifier",
+        "task": "Validate that the assertion failure in service.py (E2:L2) occurs when settings.json specifies port 6433 and input.json specifies listening_port 5432, using the exact line references E1:L3 and E2:L2 as cited in the hypothesis.",
+        "hypothesis_ids": [
+          "H1"
+        ]
+      }
+    },
+    {
+      "seq": 15,
+      "run_id": "real-recovery-d88a048b",
+      "event_key": "attempt:4:verifier:4",
+      "timestamp": "2026-10-15T20:27:04.642171+00:00",
+      "role": "verifier",
+      "kind": "model_attempt",
+      "message": "Decision call 5/18",
+      "data": {
+        "attempt": 1,
+        "context_chars": 3136,
+        "decoding": "native_function"
+      }
+    },
+    {
+      "seq": 16,
+      "run_id": "real-recovery-d88a048b",
+      "event_key": "response:attempt:4:verifier:4",
+      "timestamp": "2026-10-15T20:27:05.485268+00:00",
+      "role": "verifier",
+      "kind": "model_response",
+      "message": "run_check",
+      "data": {
+        "name": "run_check",
+        "arguments": {},
+        "input_tokens": 1647,
+        "output_tokens": 16,
+        "latency_ms": 838.2
+      }
+    },
+    {
+      "seq": 17,
+      "run_id": "real-recovery-d88a048b",
+      "event_key": "tool-start:4",
+      "timestamp": "2026-10-15T20:27:05.505786+00:00",
+      "role": "verifier",
+      "kind": "tool_call",
+      "message": "run_check",
+      "data": {
+        "arguments": {
+          "operation_key": "36e2791db291d500313a"
+        },
+        "operation_key": "mcp:7ee8615dc80f7f0218aa"
+      }
+    },
+    {
+      "seq": 18,
+      "run_id": "real-recovery-d88a048b",
+      "event_key": "tool-end:4",
+      "timestamp": "2026-10-15T20:27:05.683240+00:00",
+      "role": "verifier",
+      "kind": "tool_result",
+      "message": "run_check: ok",
+      "data": {
+        "tool": "run_check",
+        "ok": true,
+        "data": {
+          "status": "reproduced",
+          "detail": "AssertionError: ConnectionRefused: target port 6433; probe listener 5432",
+          "fixture": "case-01",
+          "scope": "immutable synthetic fixture; no production resource contacted",
+          "check_id": "c-7524eae6c50e1f01d981"
+        },
+        "evidence": [],
+        "error": null,
+        "operation_key": "mcp:7ee8615dc80f7f0218aa"
+      }
+    },
+    {
+      "seq": 19,
+      "run_id": "real-recovery-d88a048b",
+      "event_key": "resume:18",
+      "timestamp": "2026-10-15T20:27:07.895742+00:00",
+      "role": "system",
+      "kind": "resumed",
+      "message": "Resumed saved V2 graph, aliases and operation keys",
+      "data": {}
+    },
+    {
+      "seq": 21,
+      "run_id": "real-recovery-d88a048b",
+      "event_key": "attempt:5:verifier:5",
+      "timestamp": "2026-10-15T20:27:09.234140+00:00",
+      "role": "verifier",
+      "kind": "model_attempt",
+      "message": "Decision call 6/18",
+      "data": {
+        "attempt": 1,
+        "context_chars": 3695,
+        "decoding": "native_function"
+      }
+    },
+    {
+      "seq": 22,
+      "run_id": "real-recovery-d88a048b",
+      "event_key": "response:attempt:5:verifier:5",
+      "timestamp": "2026-10-15T20:27:12.309586+00:00",
+      "role": "verifier",
+      "kind": "model_response",
+      "message": "submit_review",
+      "data": {
+        "name": "submit_review",
+        "arguments": {
+          "verdicts": [
+            {
+              "check_ids": [
+                "C1"
+              ],
+              "hypothesis_id": "H1",
+              "reason": "The assertion in service.py (E2:L2) fails when settings.json specifies port 6433 and input.json specifies listening_port 5432, as directly observed in the runtime.log (E1:L3) and confirmed by the error message in the report.json (E5:L5). The mechanism matches the cited trigger and effect, with no deviation from the exact line references.",
+              "status": "confirmed"
+            }
+          ],
+          "needs_more": false,
+          "request": ""
+        },
+        "input_tokens": 2165,
+        "output_tokens": 140,
+        "latency_ms": 3073.6
+      }
+    },
+    {
+      "seq": 23,
+      "run_id": "real-recovery-d88a048b",
+      "event_key": "review:5",
+      "timestamp": "2026-10-15T20:27:12.336520+00:00",
+      "role": "verifier",
+      "kind": "review",
+      "message": "Causal records reviewed against executed checks",
+      "data": {
+        "verdicts": [
+          {
+            "trigger": "The service receives a configuration where settings.json specifies port 6433 and input.json specifies listening_port 5432, leading to an assertion failure in service.py.",
+            "mechanism": "The service compares the configured port in settings.json with the listening port in input.json. When the values differ (6433 vs 5432), the assertion fails, causing the connection to be refused and the service to halt execution.",
+            "effect": "The service fails to establish a database connection and raises an AssertionError indicating a port mismatch.",
+            "next_check": "Verify if the database endpoint accepts connections on port 6433 or if the input.json listening_port is misconfigured.",
+            "claim": "The service receives a configuration where settings.json specifies port 6433 and input.json specifies listening_port 5432, leading to an assertion failure in service.py. The service compares the configured port in settings.json with the listening port in input.json. When the values differ (6433 vs 5432), the assertion fails, causing the connection to be refused and the service to halt execution. The service fails to establish a database connection and raises an AssertionError indicating a port mismatch.",
+            "id": "h-4f7c31ff8402caf95c6f",
+            "alias": "H1",
+            "citations": [
+              {
+                "evidence_id": "e-9c4bec24a49696ff1e6a",
+                "line": 3,
+                "quote": "2026-01-10T09:00:02Z ERROR AssertionError: ConnectionRefused: target port 6433; probe listener 5432",
+                "quote_truncated": false
+              },
+              {
+                "evidence_id": "e-df50e18332a780c392b0",
+                "line": 2,
+                "quote": "    assert c[\"port\"] == d[\"listening_port\"], f\"ConnectionRefused: target port {c[chr(112)+chr(111)+chr(114)+chr(116)]}; probe listener {d[chr(108)+chr(105)+chr(115)+chr(116)+chr(101)+chr(110)+chr(105)+chr(110)+chr(103)+chr(95)+chr(112)+chr(",
+                "quote_truncated": true
+              }
+            ],
+            "evidence_ids": [
+              "e-9c4bec24a49696ff1e6a",
+              "e-df50e18332a780c392b0"
+            ],
+            "status": "confirmed",
+            "reason": "The assertion in service.py (E2:L2) fails when settings.json specifies port 6433 and input.json specifies listening_port 5432, as directly observed in the runtime.log (E1:L3) and confirmed by the error message in the report.json (E5:L5). The mechanism matches the cited trigger and effect, with no deviation from the exact line references.",
+            "check_ids": [
+              "c-7524eae6c50e1f01d981"
+            ],
+            "support_level": "reproduction"
+          }
+        ],
+        "needs_more": false,
+        "request": ""
+      }
+    },
+    {
+      "seq": 24,
+      "run_id": "real-recovery-d88a048b",
+      "event_key": "attempt:6:coordinator:6",
+      "timestamp": "2026-10-15T20:27:12.364835+00:00",
+      "role": "coordinator",
+      "kind": "model_attempt",
+      "message": "Decision call 7/18",
+      "data": {
+        "attempt": 1,
+        "context_chars": 2566,
+        "decoding": "json_schema_control"
+      }
+    },
+    {
+      "seq": 25,
+      "run_id": "real-recovery-d88a048b",
+      "event_key": "response:attempt:6:coordinator:6",
+      "timestamp": "2026-10-15T20:27:14.526818+00:00",
+      "role": "coordinator",
+      "kind": "model_response",
+      "message": "finish",
+      "data": {
+        "name": "finish",
+        "arguments": {
+          "hypothesis_ids": [
+            "H1"
+          ],
+          "next_actions": [
+            "Verify that the assertion in service.py (E2:L2) correctly validates port consistency between settings.json and input.json by reproducing the exact configuration with port 6433 in settings.json and 5432 in input.json.",
+            "Confirm the runtime.log (E1:L3) and report.json (E5:L5) capture the exact error message when the port values differ.",
+            "Ensure no external configuration or network policy overrides the port values during service startup."
+          ],
+          "outcome": "supported"
+        },
+        "input_tokens": 1300,
+        "output_tokens": 119,
+        "latency_ms": 2159.7
+      }
+    },
+    {
+      "seq": 26,
+      "run_id": "real-recovery-d88a048b",
+      "event_key": "diagnostic:6",
+      "timestamp": "2026-10-15T20:27:14.545738+00:00",
+      "role": "coordinator",
+      "kind": "diagnostic",
+      "message": "The service receives a configuration where settings.json specifies port 6433 and input.json specifies listening_port 5432, leading to an assertion failure in service.py. The service compares the configured port in settings.json with the listening port in input.json. When the values differ (6433 vs 5432), the assertion fails, causing the connection to be refused and the service to halt execution. The service fails to establish a database connection and raises an AssertionError indicating a port mismatch.",
+      "data": {
+        "outcome": "supported",
+        "summary": "The service receives a configuration where settings.json specifies port 6433 and input.json specifies listening_port 5432, leading to an assertion failure in service.py. The service compares the configured port in settings.json with the listening port in input.json. When the values differ (6433 vs 5432), the assertion fails, causing the connection to be refused and the service to halt execution. The service fails to establish a database connection and raises an AssertionError indicating a port mismatch.",
+        "hypothesis_ids": [
+          "h-4f7c31ff8402caf95c6f"
+        ],
+        "evidence_ids": [
+          "e-9c4bec24a49696ff1e6a",
+          "e-df50e18332a780c392b0"
+        ],
+        "next_actions": [
+          "Verify that the assertion in service.py (E2:L2) correctly validates port consistency between settings.json and input.json by reproducing the exact configuration with port 6433 in settings.json and 5432 in input.json.",
+          "Confirm the runtime.log (E1:L3) and report.json (E5:L5) capture the exact error message when the port values differ.",
+          "Ensure no external configuration or network policy overrides the port values during service startup."
+        ],
+        "limitations": [
+          "Scope: captured synthetic execution; deployment history and production cause are not established.",
+          "Source references and executed checks do not guarantee that the proposed mechanism is complete or semantically correct."
+        ],
+        "support_level": "reproduction",
+        "rendered_from_reviewed_records": true
+      }
+    },
+    {
+      "seq": 27,
+      "run_id": "real-recovery-d88a048b",
+      "event_key": "session:25",
+      "timestamp": "2026-10-15T20:27:14.698026+00:00",
+      "role": "system",
+      "kind": "session_end",
+      "message": "Runner session ended",
+      "data": {
+        "elapsed_ms": 6800.6
+      }
+    }
+  ],
+  "diagnostic": {
+    "outcome": "supported",
+    "summary": "The service receives a configuration where settings.json specifies port 6433 and input.json specifies listening_port 5432, leading to an assertion failure in service.py. The service compares the configured port in settings.json with the listening port in input.json. When the values differ (6433 vs 5432), the assertion fails, causing the connection to be refused and the service to halt execution. The service fails to establish a database connection and raises an AssertionError indicating a port mismatch.",
+    "hypothesis_ids": [
+      "h-4f7c31ff8402caf95c6f"
+    ],
+    "evidence_ids": [
+      "e-9c4bec24a49696ff1e6a",
+      "e-df50e18332a780c392b0"
+    ],
+    "next_actions": [
+      "Verify that the assertion in service.py (E2:L2) correctly validates port consistency between settings.json and input.json by reproducing the exact configuration with port 6433 in settings.json and 5432 in input.json.",
+      "Confirm the runtime.log (E1:L3) and report.json (E5:L5) capture the exact error message when the port values differ.",
+      "Ensure no external configuration or network policy overrides the port values during service startup."
+    ],
+    "limitations": [
+      "Scope: captured synthetic execution; deployment history and production cause are not established.",
+      "Source references and executed checks do not guarantee that the proposed mechanism is complete or semantically correct."
+    ],
+    "support_level": "reproduction",
+    "rendered_from_reviewed_records": true
+  }
+}
