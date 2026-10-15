@@ -1,0 +1,7 @@
+{
+  "suite": "captured-behavior",
+  "expected": "loaded",
+  "actual": null,
+  "error": "RuntimeError",
+  "status": "failed"
+}

@@ -1,0 +1,7 @@
+{
+  "suite": "captured-behavior",
+  "expected": "connected",
+  "actual": null,
+  "error": "AttributeError",
+  "status": "failed"
+}

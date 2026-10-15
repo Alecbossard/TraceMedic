@@ -1,0 +1,4 @@
+INFO worker initialized
+DEBUG health probe: ok
+ERROR captured check: expected=['blue']; actual=['red', 'blue']
+WARN optional metrics exporter not configured

@@ -1,0 +1,12 @@
+{
+  "suite": "captured-behavior",
+  "expected": [
+    "blue"
+  ],
+  "actual": [
+    "red",
+    "blue"
+  ],
+  "error": null,
+  "status": "failed"
+}

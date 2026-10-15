@@ -1,0 +1,239 @@
+{
+  "sample-01": {
+    "split": "reserved-v2",
+    "abstain": false,
+    "concept_groups": [
+      [
+        "bool",
+        "truth"
+      ],
+      [
+        "string",
+        "non-empty",
+        "nonempty"
+      ],
+      [
+        "false"
+      ]
+    ],
+    "expected": {
+      "sent": false
+    },
+    "prohibited": []
+  },
+  "sample-02": {
+    "split": "reserved-v2",
+    "abstain": false,
+    "concept_groups": [
+      [
+        "version"
+      ],
+      [
+        "string",
+        "lexic",
+        "lexicograph"
+      ],
+      [
+        "2.10"
+      ],
+      [
+        "2.9"
+      ]
+    ],
+    "expected": "loaded",
+    "prohibited": []
+  },
+  "sample-03": {
+    "split": "reserved-v2",
+    "abstain": false,
+    "concept_groups": [
+      [
+        "millisecond",
+        "ttl_ms"
+      ],
+      [
+        "second"
+      ],
+      [
+        "convert",
+        "unit",
+        "1000"
+      ]
+    ],
+    "expected": 1030,
+    "prohibited": []
+  },
+  "sample-04": {
+    "split": "reserved-v2",
+    "abstain": false,
+    "concept_groups": [
+      [
+        "default"
+      ],
+      [
+        "mutable",
+        "shared",
+        "persist",
+        "reuse"
+      ],
+      [
+        "list",
+        "bucket"
+      ]
+    ],
+    "expected": [
+      "blue"
+    ],
+    "prohibited": []
+  },
+  "sample-05": {
+    "split": "reserved-v2",
+    "abstain": false,
+    "concept_groups": [
+      [
+        "zero",
+        "0"
+      ],
+      [
+        "false",
+        "falsy",
+        "truth"
+      ],
+      [
+        "or",
+        "default"
+      ]
+    ],
+    "expected": 0,
+    "prohibited": []
+  },
+  "sample-06": {
+    "split": "reserved-v2",
+    "abstain": false,
+    "concept_groups": [
+      [
+        "admin"
+      ],
+      [
+        "active",
+        "inactive",
+        "disabled"
+      ],
+      [
+        "precedence",
+        "or",
+        "group",
+        "and"
+      ]
+    ],
+    "expected": false,
+    "prohibited": []
+  },
+  "sample-07": {
+    "split": "reserved-v2",
+    "abstain": false,
+    "concept_groups": [
+      [
+        "filter"
+      ],
+      [
+        "empty",
+        "blank"
+      ],
+      [
+        "shift",
+        "position",
+        "index",
+        "column"
+      ]
+    ],
+    "expected": {
+      "name": "Lina",
+      "email": ""
+    },
+    "prohibited": []
+  },
+  "sample-08": {
+    "split": "reserved-v2",
+    "abstain": false,
+    "concept_groups": [
+      [
+        "retry",
+        "retr",
+        "attempt"
+      ],
+      [
+        "raise",
+        "re-raise",
+        "rerais"
+      ],
+      [
+        "except",
+        "handler",
+        "first",
+        "immediate"
+      ]
+    ],
+    "expected": "delivered",
+    "prohibited": []
+  },
+  "sample-09": {
+    "split": "reserved-v2",
+    "abstain": false,
+    "concept_groups": [
+      [
+        "adapter"
+      ],
+      [
+        "string",
+        "str",
+        "endpoint"
+      ],
+      [
+        "overwrite",
+        "reassign",
+        "shadow",
+        "replac"
+      ]
+    ],
+    "expected": "connected",
+    "prohibited": []
+  },
+  "sample-10": {
+    "split": "reserved-v2",
+    "abstain": false,
+    "concept_groups": [
+      [
+        "unicode",
+        "normaliz",
+        "NFC",
+        "NFD"
+      ],
+      [
+        "compos",
+        "accent",
+        "code point",
+        "codepoint",
+        "representation"
+      ]
+    ],
+    "expected": "found",
+    "prohibited": []
+  },
+  "sample-11": {
+    "split": "reserved-v2",
+    "abstain": true,
+    "concept_groups": [],
+    "expected": "ready",
+    "prohibited": []
+  },
+  "sample-12": {
+    "split": "reserved-v2",
+    "abstain": true,
+    "concept_groups": [],
+    "expected": {
+      "indexed": 2
+    },
+    "prohibited": []
+  }
+}

@@ -6,7 +6,7 @@ Updated: 2026-10-15. This file is the resumption entry point.
 
 - Inspected the existing checkout: empty Git repository, no user files or commits.
 - Remote `https://github.com/Alecbossard/TraceMedic.git` now contains the delivered project; default branch is `codex/tracemedic`.
-- Working branch: `codex/tracemedic`; Windows, Python 3.13.1, Node 24.11.0, RTX 4060 Laptop 8 GB, 16 GB RAM.
+- V1 delivery: `aba50e7` on `codex/tracemedic`. Active V2 branch: `codex/v2-evidence`; Windows, Python 3.13.1, Node 24.11.0, RTX 4060 Laptop 8 GB, 16 GB RAM.
 - Repository-local Ollama 0.40.4 and Qwen3 4B Instruct Q4_K_M are running. Alias `tracemedic-qwen3:4b` uses an explicit template that serializes native tools as JSON.
 - Official LangGraph persistence/durable execution, MCP SDK and Ollama tool/structured-output documentation consulted before implementation.
 
@@ -32,6 +32,6 @@ Updated: 2026-10-15. This file is the resumption entry point.
 
 ## Next actions
 
-No planned implementation work remains. Preserve the v1 corpus, implementation hashes and all 42 results. For a new experiment, freeze a new version before tuning. At resumption, inspect the latest HEAD/CI status and the durable data directory rather than rerunning successful validations unnecessarily.
+User requested V2. See `docs/v2_proposal.md`: causal records with literal citations, bounded bundle reads and controlled JSON interventions, compact contexts, versioned runners/UI. Preserve all V1 frozen inputs, code and 42 results. Twelve new reserved cases and the 56-run comparison protocol are frozen in `benchmarks/v2/` before V2 prompt development. All original cases are now development/regression data for V2. Next: implement V2 MCP/contracts/runner, test recovery, tune only on original cases, freeze implementation, execute every reserved trial, inspect UI and publish results/CI. No V2 performance result exists yet.
 
 The local UI uses `data/app` for its real demo trace. Restart it with `python -m tracemedic.cli --data-dir data/app serve`; open `http://127.0.0.1:8000`. The recorded completed trace can also be imported into another selected data directory with `scripts/import_demo.py`. The `.runtime/` model/runtime and local databases remain intentionally untracked.
