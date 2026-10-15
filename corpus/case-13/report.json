@@ -1,0 +1,6 @@
+{
+  "test": "test_service_contract",
+  "status": "failed",
+  "expected": "ok",
+  "observed": "TimeoutError: response=120ms exceeds timeout=50ms"
+}

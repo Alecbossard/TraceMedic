@@ -1,0 +1,6 @@
+{
+  "installed_modules": [
+    "json",
+    "sqlite3"
+  ]
+}

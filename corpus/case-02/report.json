@@ -1,0 +1,6 @@
+{
+  "test": "test_service_contract",
+  "status": "failed",
+  "expected": "ready",
+  "observed": "RuntimeError: Missing environment variable: DB_URL; supplied keys: ['DATABASE_URL']"
+}

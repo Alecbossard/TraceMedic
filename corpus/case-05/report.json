@@ -1,0 +1,6 @@
+{
+  "test": "test_service_contract",
+  "status": "failed",
+  "expected": "ready",
+  "observed": "RuntimeError: Dependency incompatible: installed=(1, 4), minimum=(1, 8)"
+}

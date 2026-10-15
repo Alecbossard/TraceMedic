@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "held_out": [
+    "case-02",
+    "case-04",
+    "case-06",
+    "case-08",
+    "case-10",
+    "case-12",
+    "case-14",
+    "case-16",
+    "case-18",
+    "case-20",
+    "case-22",
+    "case-24"
+  ],
+  "repetitions": 1,
+  "repeated_cases": [
+    "case-08",
+    "case-20"
+  ],
+  "seed": 17,
+  "llm_call_limit": 18,
+  "tool_call_limit": 14,
+  "max_output_tokens_per_call": 1200,
+  "scoring": "All expected concept groups in final diagnosis and a confirmed hypothesis, with valid source evidence and successful independent fixture verification. Ambiguous cases require abstention. See protocol.md."
+}

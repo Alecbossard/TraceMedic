@@ -1,0 +1,6 @@
+{
+  "test": "test_service_contract",
+  "status": "failed",
+  "expected": "ready",
+  "observed": "ModuleNotFoundError: No module named 'archive_driver'; installed=['json', 'sqlite3']"
+}

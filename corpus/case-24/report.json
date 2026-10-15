@@ -1,0 +1,9 @@
+{
+  "test": "test_service_contract",
+  "status": "failed",
+  "expected": [
+    "E",
+    "W"
+  ],
+  "observed": "expected=['E', 'W']; actual=['E', 'E']"
+}

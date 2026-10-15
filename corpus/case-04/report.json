@@ -1,0 +1,6 @@
+{
+  "test": "test_service_contract",
+  "status": "failed",
+  "expected": "hello",
+  "observed": "AttributeError: 'Encoder' object has no attribute 'decode_bytes'"
+}

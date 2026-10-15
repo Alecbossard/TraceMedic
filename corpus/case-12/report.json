@@ -1,0 +1,9 @@
+{
+  "test": "test_service_contract",
+  "status": "failed",
+  "expected": [
+    3,
+    4
+  ],
+  "observed": "IndexError: list index out of range"
+}

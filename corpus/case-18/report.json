@@ -1,0 +1,6 @@
+{
+  "test": "test_service_contract",
+  "status": "failed",
+  "expected": "written",
+  "observed": "PermissionError: connected as reader; permission denied for INSERT; grants=['SELECT']"
+}

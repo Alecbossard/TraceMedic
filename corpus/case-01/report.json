@@ -1,0 +1,6 @@
+{
+  "test": "test_service_contract",
+  "status": "failed",
+  "expected": "connected",
+  "observed": "AssertionError: ConnectionRefused: target port 6433; probe listener 5432"
+}

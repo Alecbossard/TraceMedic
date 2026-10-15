@@ -1,0 +1,408 @@
+{
+  "case-01": {
+    "split": "development",
+    "family": "configuration",
+    "abstain": false,
+    "concept_groups": [
+      [
+        "port"
+      ],
+      [
+        "6433"
+      ],
+      [
+        "5432"
+      ]
+    ],
+    "expected": "connected"
+  },
+  "case-02": {
+    "split": "test",
+    "family": "configuration",
+    "abstain": false,
+    "concept_groups": [
+      [
+        "DB_URL"
+      ],
+      [
+        "DATABASE_URL"
+      ],
+      [
+        "variable",
+        "environment"
+      ]
+    ],
+    "expected": "ready"
+  },
+  "case-03": {
+    "split": "development",
+    "family": "configuration",
+    "abstain": false,
+    "concept_groups": [
+      [
+        "info"
+      ],
+      [
+        "uppercase",
+        "case",
+        "INFO"
+      ]
+    ],
+    "expected": "ready"
+  },
+  "case-04": {
+    "split": "test",
+    "family": "dependency",
+    "abstain": false,
+    "concept_groups": [
+      [
+        "decode_bytes"
+      ],
+      [
+        "loads",
+        "method",
+        "attribute"
+      ]
+    ],
+    "expected": "hello"
+  },
+  "case-05": {
+    "split": "development",
+    "family": "dependency",
+    "abstain": false,
+    "concept_groups": [
+      [
+        "1.4"
+      ],
+      [
+        "1.8"
+      ],
+      [
+        "version",
+        "dependency",
+        "incompatible"
+      ]
+    ],
+    "expected": "ready"
+  },
+  "case-06": {
+    "split": "test",
+    "family": "dependency",
+    "abstain": false,
+    "concept_groups": [
+      [
+        "archive_driver"
+      ],
+      [
+        "missing",
+        "installed",
+        "module"
+      ]
+    ],
+    "expected": "ready"
+  },
+  "case-07": {
+    "split": "development",
+    "family": "data",
+    "abstain": false,
+    "concept_groups": [
+      [
+        "12,5",
+        "comma"
+      ],
+      [
+        "float",
+        "decimal",
+        "parse"
+      ]
+    ],
+    "expected": 12.5
+  },
+  "case-08": {
+    "split": "test",
+    "family": "data",
+    "abstain": false,
+    "concept_groups": [
+      [
+        "naive",
+        "timezone",
+        "offset"
+      ],
+      [
+        "aware",
+        "+00:00"
+      ]
+    ],
+    "expected": true
+  },
+  "case-09": {
+    "split": "development",
+    "family": "data",
+    "abstain": false,
+    "concept_groups": [
+      [
+        "duplicate",
+        "same",
+        "A7"
+      ],
+      [
+        "overwrite",
+        "dictionary",
+        "dict",
+        "key"
+      ]
+    ],
+    "expected": 2
+  },
+  "case-10": {
+    "split": "test",
+    "family": "application",
+    "abstain": false,
+    "concept_groups": [
+      [
+        "empty",
+        "zero",
+        "0"
+      ],
+      [
+        "division",
+        "divide",
+        "len"
+      ]
+    ],
+    "expected": null
+  },
+  "case-11": {
+    "split": "development",
+    "family": "application",
+    "abstain": false,
+    "concept_groups": [
+      [
+        "email"
+      ],
+      [
+        "missing",
+        "KeyError",
+        "absent"
+      ]
+    ],
+    "expected": null
+  },
+  "case-12": {
+    "split": "test",
+    "family": "application",
+    "abstain": false,
+    "concept_groups": [
+      [
+        "range",
+        "index",
+        "off-by-one"
+      ],
+      [
+        "+ 1",
+        "+1",
+        "length",
+        "len",
+        "bound"
+      ]
+    ],
+    "expected": [
+      3,
+      4
+    ]
+  },
+  "case-13": {
+    "split": "development",
+    "family": "timeout",
+    "abstain": false,
+    "concept_groups": [
+      [
+        "50"
+      ],
+      [
+        "120"
+      ],
+      [
+        "timeout"
+      ]
+    ],
+    "expected": "ok"
+  },
+  "case-14": {
+    "split": "test",
+    "family": "timeout",
+    "abstain": false,
+    "concept_groups": [
+      [
+        "retry",
+        "attempt"
+      ],
+      [
+        "1",
+        "one"
+      ],
+      [
+        "2",
+        "two"
+      ]
+    ],
+    "expected": "ok"
+  },
+  "case-15": {
+    "split": "development",
+    "family": "timeout",
+    "abstain": false,
+    "concept_groups": [
+      [
+        "lock"
+      ],
+      [
+        "twice",
+        "reentrant",
+        "deadlock",
+        "same"
+      ]
+    ],
+    "expected": "ok"
+  },
+  "case-16": {
+    "split": "test",
+    "family": "connection",
+    "abstain": false,
+    "concept_groups": [
+      [
+        "service-db"
+      ],
+      [
+        "service_db"
+      ],
+      [
+        "DNS",
+        "name",
+        "host"
+      ]
+    ],
+    "expected": "connected"
+  },
+  "case-17": {
+    "split": "development",
+    "family": "connection",
+    "abstain": false,
+    "concept_groups": [
+      [
+        "certificate"
+      ],
+      [
+        "expir"
+      ]
+    ],
+    "expected": "connected"
+  },
+  "case-18": {
+    "split": "test",
+    "family": "connection",
+    "abstain": false,
+    "concept_groups": [
+      [
+        "INSERT"
+      ],
+      [
+        "permission",
+        "grant",
+        "reader",
+        "SELECT"
+      ]
+    ],
+    "expected": "written"
+  },
+  "case-19": {
+    "split": "development",
+    "family": "ambiguous",
+    "abstain": true,
+    "concept_groups": [],
+    "expected": null
+  },
+  "case-20": {
+    "split": "test",
+    "family": "ambiguous",
+    "abstain": true,
+    "concept_groups": [],
+    "expected": null
+  },
+  "case-21": {
+    "split": "development",
+    "family": "ambiguous",
+    "abstain": true,
+    "concept_groups": [],
+    "expected": null
+  },
+  "case-22": {
+    "split": "test",
+    "family": "data",
+    "abstain": false,
+    "concept_groups": [
+      [
+        "millisecond",
+        "ms"
+      ],
+      [
+        "second"
+      ],
+      [
+        "unit",
+        "convert",
+        "1000",
+        "500"
+      ]
+    ],
+    "expected": false
+  },
+  "case-23": {
+    "split": "development",
+    "family": "data",
+    "abstain": false,
+    "concept_groups": [
+      [
+        "-x",
+        "sign",
+        "negative",
+        "negat"
+      ],
+      [
+        "forward",
+        "axis",
+        "transform"
+      ]
+    ],
+    "expected": [
+      2,
+      1
+    ]
+  },
+  "case-24": {
+    "split": "test",
+    "family": "data",
+    "abstain": false,
+    "concept_groups": [
+      [
+        "tenant"
+      ],
+      [
+        "key",
+        "cache"
+      ],
+      [
+        "omit",
+        "missing",
+        "include",
+        "shared",
+        "collision",
+        "only"
+      ]
+    ],
+    "expected": [
+      "E",
+      "W"
+    ]
+  }
+}

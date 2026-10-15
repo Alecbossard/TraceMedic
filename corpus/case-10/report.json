@@ -1,0 +1,6 @@
+{
+  "test": "test_service_contract",
+  "status": "failed",
+  "expected": null,
+  "observed": "ZeroDivisionError: division by zero"
+}

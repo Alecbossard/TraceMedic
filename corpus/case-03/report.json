@@ -1,0 +1,6 @@
+{
+  "test": "test_service_contract",
+  "status": "failed",
+  "expected": "ready",
+  "observed": "ValueError: Invalid level 'info'; accepted: ['DEBUG', 'INFO', 'WARN', 'ERROR']"
+}

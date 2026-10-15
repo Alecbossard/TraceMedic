@@ -1,0 +1,167 @@
+{
+  "case-01": {
+    "settings.json": "933b5e2b0882b12926ff14a6477d91958fcdf1ff06b8678ffd5be248a75adde5",
+    "input.json": "b8b7dee2c1643b4a3f91651e7145a86a274aa4471fc2d7f88b27f656c8fa138c",
+    "service.py": "60af6cbddad06810cd4386060ff47916acde893c84768a86f41488f70f611eeb",
+    "report.json": "97396aeec9a50f1cd99f3210a94387fc70506927d231c0ccf4faa3a7661ddfb8",
+    "runtime.log": "fae8916453118f2f0f888426450781cd9aa1ed64f9718d7858215a629a14b476"
+  },
+  "case-02": {
+    "settings.json": "7a0d5621c52304a4e042fab56604a2af4a18d395222c18ea752a262062cf11d0",
+    "input.json": "3c6ae8e9d29048a3711b4d5cc158c37fedb438ea954f31cfccaeb7013a2d72ea",
+    "service.py": "3aeff1f8cb3974b1c253551114f46ed8c99507a1306232629009dd44ff3a48df",
+    "report.json": "514bfa7276fc1957769c821b2952cbd3361a3d630b8823c9c916ede4e470779c",
+    "runtime.log": "753111e9332ac760b058d147dd38fe89eaf502c10c9a7b15ed355e9d76cfcfce"
+  },
+  "case-03": {
+    "settings.json": "11e3848542e7a5faae781708391a8d0c21648643d2177f8cdce04c4d2ba14e3d",
+    "input.json": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+    "service.py": "8a7922c8305dc94aea3b689165079269dcedbb8b70acc33e9358fd23312250b4",
+    "report.json": "3177d19fa87da5386ca60c85bded3b8b82446bb0d93ea9c73e37f9fa9d9f0cb1",
+    "runtime.log": "141869893466cf61d548aa7b09bbcc1caee6dd73128147335699aebfcdebebda"
+  },
+  "case-04": {
+    "settings.json": "2c42f3daba151f5976e69f04e1e320efc092715cba293ffd8e235aea777ca485",
+    "input.json": "99d80e266b8c72902d4776baf6e3bc5db3d1e05d60bb7aadd4b15084d682d158",
+    "service.py": "5b68425ee59b4252b31358b8643bb2b3f20bdb53213c79fedec65379a98a7eaf",
+    "report.json": "5ed74c831777d62118dcebbcab3859ef6c3fe0c19e4afb135afcd1d709a077b6",
+    "runtime.log": "1a4b28449badc8021bbc2e50c5cd644ae4a21ad35e0d1e0d98ccc174cbc414e1"
+  },
+  "case-05": {
+    "settings.json": "eee69171220eda954d8c15a2b83ede55a005e2424577f3cbe9f30c20fefad5b6",
+    "input.json": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+    "service.py": "2f11498ac1b73ee53acba572130d4f09035d3d386ef01f1ee47286f2a0ff3318",
+    "report.json": "159b2a34b6a933fa1c0655e85978208b226a4bbc7dbd4794c0dabd7fa79677f1",
+    "runtime.log": "638d5afa77e142baa7c9dca084e7a10a8f254584c446e3a6292120d2d824b7e1"
+  },
+  "case-06": {
+    "settings.json": "1dfdda8e348fd5f8469f32395b378c38b3257c3e19fcda3af7d83df38f4080ac",
+    "input.json": "364bb23bfd561c7e1832f808ccee00af17d08e013cff982a6fdf111ea4c944bb",
+    "service.py": "a872f7b2d160ec5bfc42288ca1307a5c4e5e6e0ab0a039decc8954d2399f8d59",
+    "report.json": "985ffa213fcc49fc75c7c2c78d4584b136ca3ee4286afa79cf1c5214d799d2f3",
+    "runtime.log": "a7b6c4132d4239d7e4d7107531741d353b229c3cde192e99d6eabe032cc88ee6"
+  },
+  "case-07": {
+    "settings.json": "6b73c5ad81784622148d131086551729830ee1be6c9a63f2a6a57bde64ed26ce",
+    "input.json": "7fcb3ca9563aaf7b10f0d504f91a142f71ac76e81e2a057f929a2151083716a2",
+    "service.py": "f0d6324dae22eec210d6845445df6c6a5f77f54e242f6ba78a8d0ab48a5fde2d",
+    "report.json": "373cf5d776144e9b184cc78dfc0ff1a5d7d8760ef981622a783ab9222c85d238",
+    "runtime.log": "c3eec5c5054cc6f411cfa6ac2fbedee2a1ec67b1c779f30bdf0af27b56be04b7"
+  },
+  "case-08": {
+    "settings.json": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+    "input.json": "def9156bc4002742ca7a97df0c80cae2b617bb28a620a77ad73edb2a99a023e2",
+    "service.py": "c4aaaf40281b08cd25cffcd0450af07061eb972eb76010211234efbbad9bef68",
+    "report.json": "2b373655bd4fb4b7c082bd40c865ba6580ad2dd468ccedf1d4dacae5d1bd6de3",
+    "runtime.log": "4a6535037fc506432336d98bfdebc73e8214d6d7c8649fc04baedf2e8b43e74d"
+  },
+  "case-09": {
+    "settings.json": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+    "input.json": "44d521d584d6ba68fe3ea08e35fc6cb5faafac66d87eac33aa251679bbbffa0a",
+    "service.py": "24b50b6152ca2ddab5793995ea464aa3bee2fc724facd1727f1b04d844d0d797",
+    "report.json": "42ebf21e803efc2c3b533ae98cc2d68d17eff1b72bee2cc981220d6a33fbd0d5",
+    "runtime.log": "0613d2d6821a084629821036c46d5cb181f5956e856ce14199173118d3eae96a"
+  },
+  "case-10": {
+    "settings.json": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+    "input.json": "fc7eb59acb5a98d510da26c4408a8f4e8bca8a9f5c1ba37783b874d901beb741",
+    "service.py": "d605120fbfd30b8888cbddeec230de0f42ed9da382d1fc0164e7f5ab85008083",
+    "report.json": "ddc07076099e5610cea48924ad805840029c7f273d4b9d77f5a6be20a28a9037",
+    "runtime.log": "24944ee4a922e6a196c742586b77ef07b0314522356292f8c54945bfd27989d4"
+  },
+  "case-11": {
+    "settings.json": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+    "input.json": "c39ba65f7f3f8bb2635bc0221ebcd23121e593a8a2046e6747117f467acb630f",
+    "service.py": "b034428904feb361affd244eef6371fa9c6ef7735242c2ba6af90aa314a58090",
+    "report.json": "983e8493d8f0abaac8217e4a6e46a28b4304774d3e2c5754c6e57856f882185f",
+    "runtime.log": "464533f4a54e9e1f6cb28c313d7d2c839ef138e27480ed15d51e05f358b2f134"
+  },
+  "case-12": {
+    "settings.json": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+    "input.json": "ae02e782362003045d0615f92f744e93f54288ddabef0834f0697f0303738c00",
+    "service.py": "b76e432a3d67ec5838b99ee16171cfe25e474df5c2fba60e072b9fa02cb5e01f",
+    "report.json": "7bf00ffc5efa2058556f31c804d4456e6483d91d2ea70849e796c4bb90f4d77a",
+    "runtime.log": "188a0f0a913a50004a9ad96d7e284b65b53e5cd5fbf8279f407ad5831b5120c7"
+  },
+  "case-13": {
+    "settings.json": "a7e3cfe1423f0a9c393d9f9c678ad41b5ecf6451399d0d916e27f6419c590ddb",
+    "input.json": "7c16159b0b4bc1b12b064e9a2f2881ab4cce4f5f5fced0998cb16f3264cd3fbe",
+    "service.py": "f50d2a1358ddeb0856185a6a58d086ab830ea9a6df536f4703022b7bf0a1ce9c",
+    "report.json": "b98f1c7c460e92abb359c3b7aa3d2176ece57c938428e511eecf759fd162fa12",
+    "runtime.log": "e152dbf8080686d86f9cebf2f54283841859bddc09d164a755122461803f908d"
+  },
+  "case-14": {
+    "settings.json": "faed2672ee62b0467dc1c9a3104e69bae203cf3684a2482abafaac6b3dfe904b",
+    "input.json": "dd8bc566343ef8a7c3c84c6ff3e1ae8a53cd62499e8774c66dd794c6109c2c0f",
+    "service.py": "0126fcbdfba2c28c035912d034b9c43c90bf69304d601457e079da6f12606259",
+    "report.json": "68c47b4fb27a3890cbebe660930922921fa6e9cdc6766ef2e4f284e6ba57bef0",
+    "runtime.log": "d981aecd792829bedd2dba36ddb11899ac6d4c63a7f1e943256ca39f1e7f088c"
+  },
+  "case-15": {
+    "settings.json": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+    "input.json": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+    "service.py": "0e96ea8a5bee9f563e460b9ea7d4ee17e63bb623b4bbcaf17e1b8a7bb5d1797b",
+    "report.json": "6096d5d739946abfcfdb01dfe378e131a8431223ef740acde5874d7fa6c56c77",
+    "runtime.log": "def8f692fc1904242e1d555398d62b53b97c7a71588f4d9de3bec147221c28ae"
+  },
+  "case-16": {
+    "settings.json": "c8ea6fe47fcefef68321b18f89a100a9c7bf39a54392c2225535deef0b753ea1",
+    "input.json": "457ed47e073e7c52e5e2c0c56ce19d2e151a576b1f5189c88cda9659560afe3b",
+    "service.py": "106a039b8bcb8c66b0e5b812b7dc9c347bfa70863fe4bbf54a525deaac680bf6",
+    "report.json": "c6fa215bf56eb0775b6788d5bc558791306521b378d6a01548cf2afd779558fb",
+    "runtime.log": "8ab53db3fceb24486d41e53d15630261c1f96f8aec49d20469a3b0229a5e14b4"
+  },
+  "case-17": {
+    "settings.json": "2f4e3800c216da1d5744c875b42ff25710f0dd4117e1a3e2a1cdc508f8a12965",
+    "input.json": "43a80137c40bc29192d766519cbea44fdb9f7ec5cf30c0f564e97286c25a29f7",
+    "service.py": "d07ed47107fbff2a67ce635091e116b79bede9d7e551fcf8958b9707bd54314b",
+    "report.json": "5df45ea8eb7787f2cc017cd741a6c8701713822465f89fb889a25d24dc2f00aa",
+    "runtime.log": "c30689452126beefe5e8195010ae4123eecb586685a528a46721e1332e3681f0"
+  },
+  "case-18": {
+    "settings.json": "b05e40a0623a6914aaeb917175b824ff2ac300cb857f0e92ba6d896d4c32e62e",
+    "input.json": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+    "service.py": "2753cc1e5305e03db2f8fb6cd91c2536f64a574205f7523ff1679e047b1e588c",
+    "report.json": "b80c94727d9203599225324be160a1f942e7e345f2e7d95416c4e4bd77e0dcc1",
+    "runtime.log": "821b060dc487805fb84790c38c4cc4877dceeefe9bfdfef443e05530be8d13c1"
+  },
+  "case-19": {
+    "settings.json": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+    "input.json": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+    "report.json": "22b316d6293c6a908758015879a3d61227d760a5f227aa8708f63f0e7d2e49d2",
+    "runtime.log": "8d348ddbe167ef2c2b7073590a310be72d7657492443e9f5450b285ba06c82f1"
+  },
+  "case-20": {
+    "settings.json": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+    "input.json": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+    "report.json": "22b316d6293c6a908758015879a3d61227d760a5f227aa8708f63f0e7d2e49d2",
+    "runtime.log": "4d9fc11a9753e1e29f7c5c885383f75836b00bcd92e18fd76f91a3c05124ab65"
+  },
+  "case-21": {
+    "settings.json": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+    "input.json": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+    "report.json": "22b316d6293c6a908758015879a3d61227d760a5f227aa8708f63f0e7d2e49d2",
+    "runtime.log": "8143edbb60342d2cc05bcb09a5331c7a6df414515547b881278282a39bc44399"
+  },
+  "case-22": {
+    "settings.json": "49a13c9c4b21c8e16593541a2a904d7d6e79bb19bc0bd0e4e152065aafe5971c",
+    "input.json": "cf9c27f699f0592061970f3a105733e4629c60a50be8dcaf71ca394d47911006",
+    "service.py": "716c7f75420886fda2cd23e0f25a45e27de922148f3c7482055fb14ac7fb1694",
+    "report.json": "7aed2473980ee4a8516e5ee64f2c13437baddd2c7fb7ccec8dd872431e101ef1",
+    "runtime.log": "9a0128a0170cfa012b592395e707e8bec401a4278d5c5a3037a57c7326434323"
+  },
+  "case-23": {
+    "settings.json": "af83515871f05aa58317e1de6988d438a0e6990bc5518a55717133e88a13fa96",
+    "input.json": "4f623f8f0a4af7a646506cfca4ccf20be8168b531673314d966f1ebc96b1f25f",
+    "service.py": "4fab418444a60d007b4dd19a8f0f016bfff9c2be146564459a721d6430007cce",
+    "report.json": "844a361cbd1a761d5c4c1c4034e89ddd62dacdd435a298da2d957209dd118742",
+    "runtime.log": "bbbd79a9fda58c9a4b3017ee902685c3d5276f3412d3ade41aa2d32dfe480a9c"
+  },
+  "case-24": {
+    "settings.json": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+    "input.json": "ba3e9204059ae10956728bb19743f2d6f4b936b9a6f60422107426b2d16a1f74",
+    "service.py": "723d09b2587e70a89183f5d49f9ca1eceab6394bd5fd3adca64ff51928936d49",
+    "report.json": "18d59c3c76e90a8f8edd3d1abae681a722a7eb7710a5d94a5eda0cf8f32f2eb3",
+    "runtime.log": "fb5e9ea64c88fef10ebe94394f3457fdda70edea5e227376e7ab5980f4f1b444"
+  }
+}

@@ -1,0 +1,4 @@
+2026-01-10T09:00:00Z INFO heartbeat healthy
+2026-01-10T09:00:01Z DEBUG metrics flush completed
+2026-01-10T09:00:02Z ERROR IndexError: list index out of range
+2026-01-10T09:00:03Z INFO supervisor captured incident

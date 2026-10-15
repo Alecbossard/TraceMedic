@@ -1,0 +1,14 @@
+{
+  "requests": [
+    {
+      "tenant": "east",
+      "item": 7,
+      "value": "E"
+    },
+    {
+      "tenant": "west",
+      "item": 7,
+      "value": "W"
+    }
+  ]
+}

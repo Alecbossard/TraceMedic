@@ -1,0 +1,6 @@
+{
+  "test": "test_service_contract",
+  "status": "failed",
+  "expected": true,
+  "observed": "TypeError: can't compare offset-naive and offset-aware datetimes"
+}

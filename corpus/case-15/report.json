@@ -1,0 +1,6 @@
+{
+  "test": "test_service_contract",
+  "status": "failed",
+  "expected": "ok",
+  "observed": "TimeoutError: non-reentrant lock acquired twice by the same worker"
+}

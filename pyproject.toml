@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools==80.9.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tracemedic"
+version = "0.1.0"
+description = "Evidence-first incident investigation with LangGraph and a real MCP boundary"
+requires-python = ">=3.13"
+dependencies = [
+  "langgraph==1.2.15",
+  "langgraph-checkpoint-sqlite==3.1.2",
+  "mcp==2.3.0",
+  "fastapi==0.143.2",
+  "uvicorn==0.54.0",
+  "httpx==0.28.1",
+  "pydantic==2.14.1",
+  "pydantic-settings==2.16.0",
+  "python-dotenv==1.2.4",
+]
+
+[project.optional-dependencies]
+dev = ["pytest==9.1.1", "pytest-asyncio==1.4.0", "ruff==0.17.1"]
+
+[project.scripts]
+tracemedic = "tracemedic.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+tracemedic = ["fixture_hashes.json"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+markers = ["real: opt-in real model integration (TRACEMEDIC_REAL_TESTS=1)"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+extend-exclude = ["corpus"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+ignore = ["E501"]

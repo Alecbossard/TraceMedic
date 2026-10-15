@@ -1,0 +1,6 @@
+{
+  "test": "test_service_contract",
+  "status": "failed",
+  "expected": 2,
+  "observed": "expected=2; actual=1"
+}
