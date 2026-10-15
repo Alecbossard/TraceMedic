@@ -26,7 +26,11 @@ async def prepared(settings):
 
 
 def test_v2_reserved_suite_and_v1_code_are_frozen():
-    for filename in ("benchmarks/v2/frozen_manifest.json", "benchmarks/implementation.json"):
+    for filename in (
+        "benchmarks/v2/frozen_manifest.json",
+        "benchmarks/implementation.json",
+        "benchmarks/v2/implementation.json",
+    ):
         frozen = json.loads((ROOT / filename).read_text())
         for relative, digest in frozen.get("files", frozen).items():
             assert hashlib.sha256((ROOT / relative).read_bytes()).hexdigest() == digest, relative

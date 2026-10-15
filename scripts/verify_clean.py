@@ -1,5 +1,6 @@
 """Verify a Git archive in a fresh checkout/environment inside this repository."""
 
+import argparse
 import json
 import os
 import subprocess
@@ -10,6 +11,9 @@ import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+parser = argparse.ArgumentParser()
+parser.add_argument("--workflow", choices=["v1", "v2"], default="v2")
+args = parser.parse_args()
 folder = ROOT / ".runtime" / ("clean-" + str(uuid.uuid4())[:8])
 folder.mkdir(parents=True)
 archive = folder / "source.zip"
@@ -51,7 +55,9 @@ try:
     run([npm, "ci", "--prefix", "frontend"])
     run([npm, "run", "build", "--prefix", "frontend"])
     run([npm, "audit", "--prefix", "frontend", "--audit-level=high"])
-    run([str(python), "scripts/import_demo.py"])
+    run([str(python), "scripts/import_demo.py", "--workflow", "v1"])
+    if args.workflow == "v2":
+        run([str(python), "scripts/import_demo.py", "--workflow", "v2"])
     result = "passed"
 finally:
     evidence = {
@@ -64,6 +70,10 @@ finally:
         "steps": steps,
         "scope": "Fresh Git archive, new Python venv and npm ci. No user-site packages or existing node_modules reused. Provider runtime is external and not reinstalled by this check.",
     }
-    (ROOT / "docs" / "evidence" / "clean-install.json").write_text(
-        json.dumps(evidence, indent=2) + "\n"
+    destination = ROOT / "docs/evidence"
+    if args.workflow == "v2":
+        destination = destination / "v2"
+    destination.mkdir(parents=True, exist_ok=True)
+    (destination / "clean-install.json").write_text(
+        json.dumps(evidence, indent=2) + "\n", encoding="utf-8", newline="\n"
     )

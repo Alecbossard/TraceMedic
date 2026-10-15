@@ -1,0 +1,317 @@
+{
+  "kind": "real-native-mcp-tool-integration",
+  "scope": "One task-directed real model decision and real MCP experiment. Not a full LangGraph investigation or a benchmark run.",
+  "provider": "ollama",
+  "model": "tracemedic-qwen3:4b",
+  "context": {
+    "task": "Test whether aligning the configured port with the captured listener changes the reproduced result. Choose one existing settings value replacement from the source evidence. Do not alter the input, source or expected result.",
+    "sources": [
+      {
+        "id": "e-df50e18332a780c392b0",
+        "incident_id": "case-01",
+        "path": "service.py",
+        "start_line": 1,
+        "end_line": 3,
+        "excerpt": "def run(c, d):\n    assert c[\"port\"] == d[\"listening_port\"], f\"ConnectionRefused: target port {c[chr(112)+chr(111)+chr(114)+chr(116)]}; probe listener {d[chr(108)+chr(105)+chr(115)+chr(116)+chr(101)+chr(110)+chr(105)+chr(110)+chr(103)+chr(95)+chr(112)+chr(111)+chr(114)+chr(116)]}\"\n    return \"connected\"",
+        "sha256": "60af6cbddad06810cd4386060ff47916acde893c84768a86f41488f70f611eeb"
+      },
+      {
+        "id": "e-e99284bdf6122e92dcf7",
+        "incident_id": "case-01",
+        "path": "settings.json",
+        "start_line": 1,
+        "end_line": 4,
+        "excerpt": "{\n  \"host\": \"localhost\",\n  \"port\": 6433\n}",
+        "sha256": "933b5e2b0882b12926ff14a6477d91958fcdf1ff06b8678ffd5be248a75adde5"
+      },
+      {
+        "id": "e-4c48213cdf6e41b4a96e",
+        "incident_id": "case-01",
+        "path": "input.json",
+        "start_line": 1,
+        "end_line": 3,
+        "excerpt": "{\n  \"listening_port\": 5432\n}",
+        "sha256": "b8b7dee2c1643b4a3f91651e7145a86a274aa4471fc2d7f88b27f656c8fa138c"
+      }
+    ],
+    "baseline": {
+      "status": "reproduced",
+      "detail": "AssertionError: ConnectionRefused: target port 6433; probe listener 5432",
+      "fixture": "case-01",
+      "scope": "immutable synthetic fixture; no production resource contacted",
+      "check_id": "c-ec4079cf3985784a04e9"
+    }
+  },
+  "action": {
+    "name": "run_experiment",
+    "arguments": {
+      "changes": [
+        {
+          "path": "/settings/port",
+          "value": 5432
+        }
+      ]
+    },
+    "input_tokens": 961,
+    "output_tokens": 34,
+    "latency_ms": 1321.3
+  },
+  "result": {
+    "ok": true,
+    "data": {
+      "status": "passed",
+      "detail": "expected='connected'; actual='connected'",
+      "baseline": {
+        "status": "reproduced",
+        "detail": "AssertionError: ConnectionRefused: target port 6433; probe listener 5432"
+      },
+      "trial": {
+        "status": "passed",
+        "detail": "expected='connected'; actual='connected'"
+      },
+      "changes": [
+        {
+          "path": "/settings/port",
+          "value": 5432
+        }
+      ],
+      "scope": "Isolated trusted synthetic fixture, unchanged source and expected result. No repair applied. A changed result does not prove a production cause.",
+      "kind": "intervention",
+      "check_id": "c-b6b4e93aa5038ed7feae"
+    },
+    "evidence": [],
+    "error": null
+  },
+  "events": [
+    {
+      "seq": 1,
+      "run_id": "tool-proof-060489a3",
+      "event_key": "mcp-discovery",
+      "timestamp": "2026-10-15T20:56:09.019574+00:00",
+      "role": "system",
+      "kind": "mcp_connected",
+      "message": "Discovered tools over MCP stdio in a separate process",
+      "data": {
+        "client_pid": 4492,
+        "tools": [
+          "list_files",
+          "read_file",
+          "search_trace",
+          "get_test_report",
+          "run_check",
+          "read_bundle",
+          "run_experiment"
+        ],
+        "transport": "stdio",
+        "sdk": "mcp 2.3.0"
+      }
+    },
+    {
+      "seq": 2,
+      "run_id": "tool-proof-060489a3",
+      "event_key": "tool-start:0",
+      "timestamp": "2026-10-15T20:56:09.034780+00:00",
+      "role": "integration",
+      "kind": "tool_call",
+      "message": "read_bundle",
+      "data": {
+        "arguments": {
+          "paths": [
+            "service.py",
+            "settings.json",
+            "input.json"
+          ]
+        },
+        "operation_key": "mcp:ceac3db9603ba467aaf9"
+      }
+    },
+    {
+      "seq": 3,
+      "run_id": "tool-proof-060489a3",
+      "event_key": "tool-end:0",
+      "timestamp": "2026-10-15T20:56:09.148670+00:00",
+      "role": "integration",
+      "kind": "tool_result",
+      "message": "read_bundle: ok",
+      "data": {
+        "tool": "read_bundle",
+        "ok": true,
+        "data": {
+          "file_errors": {},
+          "truncated_paths": [],
+          "lines_per_file": 40
+        },
+        "evidence": [
+          {
+            "id": "e-df50e18332a780c392b0",
+            "incident_id": "case-01",
+            "path": "service.py",
+            "start_line": 1,
+            "end_line": 3,
+            "excerpt": "def run(c, d):\n    assert c[\"port\"] == d[\"listening_port\"], f\"ConnectionRefused: target port {c[chr(112)+chr(111)+chr(114)+chr(116)]}; probe listener {d[chr(108)+chr(105)+chr(115)+chr(116)+chr(101)+chr(110)+chr(105)+chr(110)+chr(103)+chr(95)+chr(112)+chr(111)+chr(114)+chr(116)]}\"\n    return \"connected\"",
+            "sha256": "60af6cbddad06810cd4386060ff47916acde893c84768a86f41488f70f611eeb"
+          },
+          {
+            "id": "e-e99284bdf6122e92dcf7",
+            "incident_id": "case-01",
+            "path": "settings.json",
+            "start_line": 1,
+            "end_line": 4,
+            "excerpt": "{\n  \"host\": \"localhost\",\n  \"port\": 6433\n}",
+            "sha256": "933b5e2b0882b12926ff14a6477d91958fcdf1ff06b8678ffd5be248a75adde5"
+          },
+          {
+            "id": "e-4c48213cdf6e41b4a96e",
+            "incident_id": "case-01",
+            "path": "input.json",
+            "start_line": 1,
+            "end_line": 3,
+            "excerpt": "{\n  \"listening_port\": 5432\n}",
+            "sha256": "b8b7dee2c1643b4a3f91651e7145a86a274aa4471fc2d7f88b27f656c8fa138c"
+          }
+        ],
+        "error": null,
+        "operation_key": "mcp:ceac3db9603ba467aaf9"
+      }
+    },
+    {
+      "seq": 4,
+      "run_id": "tool-proof-060489a3",
+      "event_key": "tool-start:1",
+      "timestamp": "2026-10-15T20:56:09.168344+00:00",
+      "role": "integration",
+      "kind": "tool_call",
+      "message": "run_check",
+      "data": {
+        "arguments": {
+          "operation_key": "d611f176b78cff2e65ff"
+        },
+        "operation_key": "mcp:04e8cecade3a75f54543"
+      }
+    },
+    {
+      "seq": 5,
+      "run_id": "tool-proof-060489a3",
+      "event_key": "tool-end:1",
+      "timestamp": "2026-10-15T20:56:09.351149+00:00",
+      "role": "integration",
+      "kind": "tool_result",
+      "message": "run_check: ok",
+      "data": {
+        "tool": "run_check",
+        "ok": true,
+        "data": {
+          "status": "reproduced",
+          "detail": "AssertionError: ConnectionRefused: target port 6433; probe listener 5432",
+          "fixture": "case-01",
+          "scope": "immutable synthetic fixture; no production resource contacted",
+          "check_id": "c-ec4079cf3985784a04e9"
+        },
+        "evidence": [],
+        "error": null,
+        "operation_key": "mcp:04e8cecade3a75f54543"
+      }
+    },
+    {
+      "seq": 6,
+      "run_id": "tool-proof-060489a3",
+      "event_key": "model-attempt",
+      "timestamp": "2026-10-15T20:56:09.358279+00:00",
+      "role": "integration",
+      "kind": "model_attempt",
+      "message": "One real native experiment selection",
+      "data": {}
+    },
+    {
+      "seq": 7,
+      "run_id": "tool-proof-060489a3",
+      "event_key": "model-response",
+      "timestamp": "2026-10-15T20:56:10.686656+00:00",
+      "role": "integration",
+      "kind": "model_response",
+      "message": "run_experiment",
+      "data": {
+        "name": "run_experiment",
+        "arguments": {
+          "changes": [
+            {
+              "path": "/settings/port",
+              "value": 5432
+            }
+          ]
+        },
+        "input_tokens": 961,
+        "output_tokens": 34,
+        "latency_ms": 1321.3
+      }
+    },
+    {
+      "seq": 8,
+      "run_id": "tool-proof-060489a3",
+      "event_key": "tool-start:2",
+      "timestamp": "2026-10-15T20:56:10.701550+00:00",
+      "role": "integration",
+      "kind": "tool_call",
+      "message": "run_experiment",
+      "data": {
+        "arguments": {
+          "changes": [
+            {
+              "path": "/settings/port",
+              "value": 5432
+            }
+          ],
+          "operation_key": "cadea61ae5d0cffba297"
+        },
+        "operation_key": "mcp:843fe4b3255590d35b63"
+      }
+    },
+    {
+      "seq": 9,
+      "run_id": "tool-proof-060489a3",
+      "event_key": "tool-end:2",
+      "timestamp": "2026-10-15T20:56:10.893181+00:00",
+      "role": "integration",
+      "kind": "tool_result",
+      "message": "run_experiment: ok",
+      "data": {
+        "tool": "run_experiment",
+        "ok": true,
+        "data": {
+          "status": "passed",
+          "detail": "expected='connected'; actual='connected'",
+          "baseline": {
+            "status": "reproduced",
+            "detail": "AssertionError: ConnectionRefused: target port 6433; probe listener 5432"
+          },
+          "trial": {
+            "status": "passed",
+            "detail": "expected='connected'; actual='connected'"
+          },
+          "changes": [
+            {
+              "path": "/settings/port",
+              "value": 5432
+            }
+          ],
+          "scope": "Isolated trusted synthetic fixture, unchanged source and expected result. No repair applied. A changed result does not prove a production cause.",
+          "kind": "intervention",
+          "check_id": "c-b6b4e93aa5038ed7feae"
+        },
+        "evidence": [],
+        "error": null,
+        "operation_key": "mcp:843fe4b3255590d35b63"
+      }
+    }
+  ],
+  "metrics": {
+    "model_calls": 1,
+    "tool_calls": 3,
+    "tool_successes": 3,
+    "input_tokens": 961,
+    "output_tokens": 34,
+    "usage_complete": true,
+    "model_latency_ms": 1321.3,
+    "cost_usd": null
+  }
+}

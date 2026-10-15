@@ -7,7 +7,9 @@ from tracemedic.v2.engine import Engine as V2Engine
 
 def build_engine(settings, workflow=None, run_id=None, provider=None):
     if run_id:
-        workflow = Store(settings.audit_db).run(run_id)["state"].get("engine_version", "v1")
+        state = Store(settings.audit_db).run(run_id)["state"]
+        workflow = state.get("engine_version", "v1")
+        settings = settings.model_copy(update=state["config"])
     workflow = workflow or ("v1" if settings.provider == "scripted" else "v2")
     if workflow not in ("v1", "v2"):
         raise ValueError("Unknown workflow version")

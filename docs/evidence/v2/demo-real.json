@@ -1,0 +1,896 @@
+{
+  "id": "22ccf4b6-449c-4c56-9442-dbec22e91d60",
+  "incident_id": "case-01",
+  "mode": "multi",
+  "provider": "ollama",
+  "model": "tracemedic-qwen3:4b",
+  "status": "completed",
+  "created_at": "2026-10-15T20:59:06.931745+00:00",
+  "updated_at": "2026-10-15T20:59:24.373422+00:00",
+  "state": {
+    "run_id": "22ccf4b6-449c-4c56-9442-dbec22e91d60",
+    "incident": {
+      "id": "case-01",
+      "title": "Telemetry gateway",
+      "description": "The service cannot reach its database after a configuration change."
+    },
+    "mode": "multi",
+    "role": "end",
+    "turn": 7,
+    "status": "completed",
+    "config": {
+      "provider": "ollama",
+      "model": "tracemedic-qwen3:4b",
+      "model_url": "http://127.0.0.1:11434",
+      "model_timeout": 90,
+      "tool_timeout": 15,
+      "max_calls": 18,
+      "max_tools": 14,
+      "max_steps": 40,
+      "max_agent_turns": 10,
+      "max_output_tokens": 1200,
+      "context_tokens": 8192,
+      "seed": 17,
+      "temperature": 0
+    },
+    "delegation": {
+      "target": "verifier",
+      "task": "Validate that the service terminates immediately upon port mismatch and does not proceed to database connection attempts, using the assertion failure in service.py (E2:L2) and the port comparison logic in settings.json (E3:L3) as the mechanism.",
+      "hypothesis_ids": [
+        "H1"
+      ]
+    },
+    "delegations": [
+      {
+        "target": "investigator",
+        "task": "Analyze the captured configuration change for deviations in database connection parameters that may have caused the service to lose connectivity.",
+        "hypothesis_ids": []
+      },
+      {
+        "target": "verifier",
+        "task": "Validate that the service terminates immediately upon port mismatch and does not proceed to database connection attempts, using the assertion failure in service.py (E2:L2) and the port comparison logic in settings.json (E3:L3) as the mechanism.",
+        "hypothesis_ids": [
+          "H1"
+        ]
+      }
+    ],
+    "hypotheses": [
+      {
+        "trigger": "The service configuration changed to use port 6433 in settings.json, while the input specifies a listening port of 5432.",
+        "mechanism": "The service compares the configured port in settings.json to the listening port in input.json. When the port in settings.json (6433) does not match the listening_port (5432) in input.json, the assertion fails, causing the service to terminate before attempting a connection.",
+        "effect": "The service fails to establish a database connection and raises an AssertionError.",
+        "next_check": "Verify if the database server is configured to listen on port 6433.",
+        "claim": "The service configuration changed to use port 6433 in settings.json, while the input specifies a listening port of 5432. The service compares the configured port in settings.json to the listening port in input.json. When the port in settings.json (6433) does not match the listening_port (5432) in input.json, the assertion fails, causing the service to terminate before attempting a connection. The service fails to establish a database connection and raises an AssertionError.",
+        "id": "h-6851c03773072943f489",
+        "alias": "H1",
+        "citations": [
+          {
+            "evidence_id": "e-df50e18332a780c392b0",
+            "line": 2,
+            "quote": "    assert c[\"port\"] == d[\"listening_port\"], f\"ConnectionRefused: target port {c[chr(112)+chr(111)+chr(114)+chr(116)]}; probe listener {d[chr(108)+chr(105)+chr(115)+chr(116)+chr(101)+chr(110)+chr(105)+chr(110)+chr(103)+chr(95)+chr(112)+chr(",
+            "quote_truncated": true
+          },
+          {
+            "evidence_id": "e-e99284bdf6122e92dcf7",
+            "line": 3,
+            "quote": "  \"port\": 6433",
+            "quote_truncated": false
+          }
+        ],
+        "evidence_ids": [
+          "e-df50e18332a780c392b0",
+          "e-e99284bdf6122e92dcf7"
+        ],
+        "status": "confirmed",
+        "reason": "The assertion in service.py (E2:L2) fails when the port in settings.json (E3:L3) is 6433 and the listening_port in input.json is 5432, as specified. The error message 'ConnectionRefused: target port 6433; probe listener 5432' matches the expected failure due to port mismatch. The service terminates immediately upon assertion failure, preventing any database connection attempt. This aligns with the mechanism described in H1.",
+        "check_ids": [
+          "c-e3667c8fac6a67c48c31"
+        ],
+        "support_level": "reproduction"
+      }
+    ],
+    "observations": [
+      {
+        "role": "investigator",
+        "tool": "read_bundle",
+        "arguments": {
+          "paths": [
+            "runtime.log",
+            "service.py",
+            "settings.json",
+            "input.json",
+            "report.json"
+          ]
+        },
+        "ok": true,
+        "data": {
+          "file_errors": {},
+          "truncated_paths": [],
+          "lines_per_file": 40
+        },
+        "error": null
+      },
+      {
+        "role": "verifier",
+        "tool": "run_check",
+        "arguments": {},
+        "ok": true,
+        "data": {
+          "status": "reproduced",
+          "detail": "AssertionError: ConnectionRefused: target port 6433; probe listener 5432",
+          "fixture": "case-01",
+          "scope": "immutable synthetic fixture; no production resource contacted",
+          "check_id": "c-e3667c8fac6a67c48c31"
+        },
+        "error": null
+      }
+    ],
+    "checks": [
+      {
+        "status": "reproduced",
+        "detail": "AssertionError: ConnectionRefused: target port 6433; probe listener 5432",
+        "fixture": "case-01",
+        "scope": "immutable synthetic fixture; no production resource contacted",
+        "check_id": "c-e3667c8fac6a67c48c31"
+      }
+    ],
+    "findings": {
+      "hypotheses": [
+        {
+          "trigger": "The service configuration changed to use port 6433 in settings.json, while the input specifies a listening port of 5432.",
+          "mechanism": "The service compares the configured port in settings.json to the listening port in input.json. When the port in settings.json (6433) does not match the listening_port (5432) in input.json, the assertion fails, causing the service to terminate before attempting a connection.",
+          "effect": "The service fails to establish a database connection and raises an AssertionError.",
+          "citations": [
+            {
+              "line_ref": "E2:L2"
+            },
+            {
+              "line_ref": "E3:L3"
+            }
+          ],
+          "next_check": "Verify if the database server is configured to listen on port 6433."
+        }
+      ],
+      "unknowns": [
+        "Whether the database server is actually running on port 6433",
+        "Whether the service attempts to connect to the database after the assertion failure"
+      ]
+    },
+    "review": {
+      "verdicts": [
+        {
+          "hypothesis_id": "H1",
+          "status": "confirmed",
+          "reason": "The assertion in service.py (E2:L2) fails when the port in settings.json (E3:L3) is 6433 and the listening_port in input.json is 5432, as specified. The error message 'ConnectionRefused: target port 6433; probe listener 5432' matches the expected failure due to port mismatch. The service terminates immediately upon assertion failure, preventing any database connection attempt. This aligns with the mechanism described in H1.",
+          "check_ids": [
+            "C1"
+          ]
+        }
+      ],
+      "needs_more": false,
+      "request": ""
+    },
+    "visited": [
+      "coordinator",
+      "investigator",
+      "verifier"
+    ],
+    "agent_turns": {
+      "coordinator": 3,
+      "investigator": 2,
+      "verifier": 2
+    },
+    "feedback": "",
+    "errors": 0,
+    "diagnostic": {
+      "outcome": "supported",
+      "summary": "The service configuration changed to use port 6433 in settings.json, while the input specifies a listening port of 5432. The service compares the configured port in settings.json to the listening port in input.json. When the port in settings.json (6433) does not match the listening_port (5432) in input.json, the assertion fails, causing the service to terminate before attempting a connection. The service fails to establish a database connection and raises an AssertionError.",
+      "hypothesis_ids": [
+        "h-6851c03773072943f489"
+      ],
+      "evidence_ids": [
+        "e-df50e18332a780c392b0",
+        "e-e99284bdf6122e92dcf7"
+      ],
+      "next_actions": [
+        "Verify that the service terminates immediately after the assertion failure in service.py (E2:L2) by inspecting runtime.log (E1) for a log entry indicating termination due to port mismatch"
+      ],
+      "limitations": [
+        "Scope: captured synthetic execution; deployment history and production cause are not established.",
+        "Source references and executed checks do not guarantee that the proposed mechanism is complete or semantically correct."
+      ],
+      "support_level": "reproduction",
+      "rendered_from_reviewed_records": true
+    },
+    "engine_version": "v2",
+    "evidence_aliases": {
+      "E1": "e-9c4bec24a49696ff1e6a",
+      "E2": "e-df50e18332a780c392b0",
+      "E3": "e-e99284bdf6122e92dcf7",
+      "E4": "e-4c48213cdf6e41b4a96e",
+      "E5": "e-986b1b404c2238a99c9e"
+    },
+    "findings_turn": 2,
+    "review_turn": 5,
+    "round": 1,
+    "round_tools": 0
+  },
+  "cancel_requested": 0,
+  "events": [
+    {
+      "seq": 87,
+      "run_id": "22ccf4b6-449c-4c56-9442-dbec22e91d60",
+      "event_key": "mcp-discovery",
+      "timestamp": "2026-10-15T20:59:08.385832+00:00",
+      "role": "system",
+      "kind": "mcp_connected",
+      "message": "Discovered tools over MCP stdio in a separate process",
+      "data": {
+        "client_pid": 12632,
+        "tools": [
+          "list_files",
+          "read_file",
+          "search_trace",
+          "get_test_report",
+          "run_check",
+          "read_bundle",
+          "run_experiment"
+        ],
+        "transport": "stdio",
+        "sdk": "mcp 2.3.0"
+      }
+    },
+    {
+      "seq": 88,
+      "run_id": "22ccf4b6-449c-4c56-9442-dbec22e91d60",
+      "event_key": "attempt:0:coordinator:0",
+      "timestamp": "2026-10-15T20:59:08.412196+00:00",
+      "role": "coordinator",
+      "kind": "model_attempt",
+      "message": "Decision call 1/18",
+      "data": {
+        "attempt": 1,
+        "context_chars": 456,
+        "decoding": "json_schema_control"
+      }
+    },
+    {
+      "seq": 89,
+      "run_id": "22ccf4b6-449c-4c56-9442-dbec22e91d60",
+      "event_key": "response:attempt:0:coordinator:0",
+      "timestamp": "2026-10-15T20:59:09.555843+00:00",
+      "role": "coordinator",
+      "kind": "model_response",
+      "message": "delegate",
+      "data": {
+        "name": "delegate",
+        "arguments": {
+          "hypothesis_ids": [],
+          "target": "investigator",
+          "task": "Analyze the captured configuration change for deviations in database connection parameters that may have caused the service to lose connectivity."
+        },
+        "input_tokens": 692,
+        "output_tokens": 42,
+        "latency_ms": 1141.9
+      }
+    },
+    {
+      "seq": 90,
+      "run_id": "22ccf4b6-449c-4c56-9442-dbec22e91d60",
+      "event_key": "delegate:0",
+      "timestamp": "2026-10-15T20:59:09.569066+00:00",
+      "role": "coordinator",
+      "kind": "delegation",
+      "message": "Analyze the captured configuration change for deviations in database connection parameters that may have caused the service to lose connectivity.",
+      "data": {
+        "target": "investigator",
+        "task": "Analyze the captured configuration change for deviations in database connection parameters that may have caused the service to lose connectivity.",
+        "hypothesis_ids": []
+      }
+    },
+    {
+      "seq": 91,
+      "run_id": "22ccf4b6-449c-4c56-9442-dbec22e91d60",
+      "event_key": "cancelled:1",
+      "timestamp": "2026-10-15T20:59:09.598063+00:00",
+      "role": "system",
+      "kind": "cancelled",
+      "message": "Cancelled at a durable action boundary",
+      "data": {}
+    },
+    {
+      "seq": 92,
+      "run_id": "22ccf4b6-449c-4c56-9442-dbec22e91d60",
+      "event_key": "session:5",
+      "timestamp": "2026-10-15T20:59:09.756271+00:00",
+      "role": "system",
+      "kind": "session_end",
+      "message": "Runner session ended",
+      "data": {
+        "elapsed_ms": 2799.9
+      }
+    },
+    {
+      "seq": 93,
+      "run_id": "22ccf4b6-449c-4c56-9442-dbec22e91d60",
+      "event_key": "resume:6",
+      "timestamp": "2026-10-15T20:59:11.064330+00:00",
+      "role": "system",
+      "kind": "resumed",
+      "message": "Resumed saved V2 graph, aliases and operation keys",
+      "data": {}
+    },
+    {
+      "seq": 95,
+      "run_id": "22ccf4b6-449c-4c56-9442-dbec22e91d60",
+      "event_key": "attempt:1:investigator:1",
+      "timestamp": "2026-10-15T20:59:12.454410+00:00",
+      "role": "investigator",
+      "kind": "model_attempt",
+      "message": "Decision call 2/18",
+      "data": {
+        "attempt": 1,
+        "context_chars": 604,
+        "decoding": "native_function"
+      }
+    },
+    {
+      "seq": 96,
+      "run_id": "22ccf4b6-449c-4c56-9442-dbec22e91d60",
+      "event_key": "response:attempt:1:investigator:1",
+      "timestamp": "2026-10-15T20:59:13.567218+00:00",
+      "role": "investigator",
+      "kind": "model_response",
+      "message": "read_bundle",
+      "data": {
+        "name": "read_bundle",
+        "arguments": {
+          "paths": [
+            "runtime.log",
+            "service.py",
+            "settings.json",
+            "input.json",
+            "report.json"
+          ]
+        },
+        "input_tokens": 1215,
+        "output_tokens": 38,
+        "latency_ms": 1110.6
+      }
+    },
+    {
+      "seq": 97,
+      "run_id": "22ccf4b6-449c-4c56-9442-dbec22e91d60",
+      "event_key": "tool-start:1",
+      "timestamp": "2026-10-15T20:59:13.587493+00:00",
+      "role": "investigator",
+      "kind": "tool_call",
+      "message": "read_bundle",
+      "data": {
+        "arguments": {
+          "paths": [
+            "runtime.log",
+            "service.py",
+            "settings.json",
+            "input.json",
+            "report.json"
+          ]
+        },
+        "operation_key": "mcp:27ca95eee44d4d50284c"
+      }
+    },
+    {
+      "seq": 98,
+      "run_id": "22ccf4b6-449c-4c56-9442-dbec22e91d60",
+      "event_key": "tool-end:1",
+      "timestamp": "2026-10-15T20:59:13.616549+00:00",
+      "role": "investigator",
+      "kind": "tool_result",
+      "message": "read_bundle: ok",
+      "data": {
+        "tool": "read_bundle",
+        "ok": true,
+        "data": {
+          "file_errors": {},
+          "truncated_paths": [],
+          "lines_per_file": 40
+        },
+        "evidence": [
+          {
+            "id": "e-9c4bec24a49696ff1e6a",
+            "incident_id": "case-01",
+            "path": "runtime.log",
+            "start_line": 1,
+            "end_line": 4,
+            "excerpt": "2026-01-10T09:00:00Z INFO heartbeat healthy\n2026-01-10T09:00:01Z DEBUG metrics flush completed\n2026-01-10T09:00:02Z ERROR AssertionError: ConnectionRefused: target port 6433; probe listener 5432\n2026-01-10T09:00:03Z INFO supervisor captured incident",
+            "sha256": "fae8916453118f2f0f888426450781cd9aa1ed64f9718d7858215a629a14b476"
+          },
+          {
+            "id": "e-df50e18332a780c392b0",
+            "incident_id": "case-01",
+            "path": "service.py",
+            "start_line": 1,
+            "end_line": 3,
+            "excerpt": "def run(c, d):\n    assert c[\"port\"] == d[\"listening_port\"], f\"ConnectionRefused: target port {c[chr(112)+chr(111)+chr(114)+chr(116)]}; probe listener {d[chr(108)+chr(105)+chr(115)+chr(116)+chr(101)+chr(110)+chr(105)+chr(110)+chr(103)+chr(95)+chr(112)+chr(111)+chr(114)+chr(116)]}\"\n    return \"connected\"",
+            "sha256": "60af6cbddad06810cd4386060ff47916acde893c84768a86f41488f70f611eeb"
+          },
+          {
+            "id": "e-e99284bdf6122e92dcf7",
+            "incident_id": "case-01",
+            "path": "settings.json",
+            "start_line": 1,
+            "end_line": 4,
+            "excerpt": "{\n  \"host\": \"localhost\",\n  \"port\": 6433\n}",
+            "sha256": "933b5e2b0882b12926ff14a6477d91958fcdf1ff06b8678ffd5be248a75adde5"
+          },
+          {
+            "id": "e-4c48213cdf6e41b4a96e",
+            "incident_id": "case-01",
+            "path": "input.json",
+            "start_line": 1,
+            "end_line": 3,
+            "excerpt": "{\n  \"listening_port\": 5432\n}",
+            "sha256": "b8b7dee2c1643b4a3f91651e7145a86a274aa4471fc2d7f88b27f656c8fa138c"
+          },
+          {
+            "id": "e-986b1b404c2238a99c9e",
+            "incident_id": "case-01",
+            "path": "report.json",
+            "start_line": 1,
+            "end_line": 6,
+            "excerpt": "{\n  \"test\": \"test_service_contract\",\n  \"status\": \"failed\",\n  \"expected\": \"connected\",\n  \"observed\": \"AssertionError: ConnectionRefused: target port 6433; probe listener 5432\"\n}",
+            "sha256": "97396aeec9a50f1cd99f3210a94387fc70506927d231c0ccf4faa3a7661ddfb8"
+          }
+        ],
+        "error": null,
+        "operation_key": "mcp:27ca95eee44d4d50284c"
+      }
+    },
+    {
+      "seq": 99,
+      "run_id": "22ccf4b6-449c-4c56-9442-dbec22e91d60",
+      "event_key": "attempt:2:investigator:2",
+      "timestamp": "2026-10-15T20:59:13.649415+00:00",
+      "role": "investigator",
+      "kind": "model_attempt",
+      "message": "Decision call 3/18",
+      "data": {
+        "attempt": 1,
+        "context_chars": 2255,
+        "decoding": "json_schema_control"
+      }
+    },
+    {
+      "seq": 100,
+      "run_id": "22ccf4b6-449c-4c56-9442-dbec22e91d60",
+      "event_key": "response:attempt:2:investigator:2",
+      "timestamp": "2026-10-15T20:59:16.992770+00:00",
+      "role": "investigator",
+      "kind": "model_response",
+      "message": "submit_findings",
+      "data": {
+        "name": "submit_findings",
+        "arguments": {
+          "hypotheses": [
+            {
+              "citations": [
+                {
+                  "line_ref": "E2:L2"
+                },
+                {
+                  "line_ref": "E3:L3"
+                }
+              ],
+              "effect": "The service fails to establish a database connection and raises an AssertionError.",
+              "mechanism": "The service compares the configured port in settings.json to the listening port in input.json. When the port in settings.json (6433) does not match the listening_port (5432) in input.json, the assertion fails, causing the service to terminate before attempting a connection.",
+              "next_check": "Verify if the database server is configured to listen on port 6433.",
+              "trigger": "The service configuration changed to use port 6433 in settings.json, while the input specifies a listening port of 5432."
+            }
+          ],
+          "unknowns": [
+            "Whether the database server is actually running on port 6433",
+            "Whether the service attempts to connect to the database after the assertion failure"
+          ]
+        },
+        "input_tokens": 1858,
+        "output_tokens": 205,
+        "latency_ms": 3341.1
+      }
+    },
+    {
+      "seq": 101,
+      "run_id": "22ccf4b6-449c-4c56-9442-dbec22e91d60",
+      "event_key": "findings:2",
+      "timestamp": "2026-10-15T20:59:17.014306+00:00",
+      "role": "investigator",
+      "kind": "findings",
+      "message": "1 causal proposal(s); 2 unknown(s)",
+      "data": {
+        "hypotheses": [
+          {
+            "trigger": "The service configuration changed to use port 6433 in settings.json, while the input specifies a listening port of 5432.",
+            "mechanism": "The service compares the configured port in settings.json to the listening port in input.json. When the port in settings.json (6433) does not match the listening_port (5432) in input.json, the assertion fails, causing the service to terminate before attempting a connection.",
+            "effect": "The service fails to establish a database connection and raises an AssertionError.",
+            "next_check": "Verify if the database server is configured to listen on port 6433.",
+            "claim": "The service configuration changed to use port 6433 in settings.json, while the input specifies a listening port of 5432. The service compares the configured port in settings.json to the listening port in input.json. When the port in settings.json (6433) does not match the listening_port (5432) in input.json, the assertion fails, causing the service to terminate before attempting a connection. The service fails to establish a database connection and raises an AssertionError.",
+            "id": "h-6851c03773072943f489",
+            "alias": "H1",
+            "citations": [
+              {
+                "evidence_id": "e-df50e18332a780c392b0",
+                "line": 2,
+                "quote": "    assert c[\"port\"] == d[\"listening_port\"], f\"ConnectionRefused: target port {c[chr(112)+chr(111)+chr(114)+chr(116)]}; probe listener {d[chr(108)+chr(105)+chr(115)+chr(116)+chr(101)+chr(110)+chr(105)+chr(110)+chr(103)+chr(95)+chr(112)+chr(",
+                "quote_truncated": true
+              },
+              {
+                "evidence_id": "e-e99284bdf6122e92dcf7",
+                "line": 3,
+                "quote": "  \"port\": 6433",
+                "quote_truncated": false
+              }
+            ],
+            "evidence_ids": [
+              "e-df50e18332a780c392b0",
+              "e-e99284bdf6122e92dcf7"
+            ],
+            "status": "proposed",
+            "reason": "",
+            "check_ids": [],
+            "support_level": "unverified"
+          }
+        ],
+        "unknowns": [
+          "Whether the database server is actually running on port 6433",
+          "Whether the service attempts to connect to the database after the assertion failure"
+        ]
+      }
+    },
+    {
+      "seq": 102,
+      "run_id": "22ccf4b6-449c-4c56-9442-dbec22e91d60",
+      "event_key": "attempt:3:coordinator:3",
+      "timestamp": "2026-10-15T20:59:17.043612+00:00",
+      "role": "coordinator",
+      "kind": "model_attempt",
+      "message": "Decision call 4/18",
+      "data": {
+        "attempt": 1,
+        "context_chars": 1532,
+        "decoding": "json_schema_control"
+      }
+    },
+    {
+      "seq": 103,
+      "run_id": "22ccf4b6-449c-4c56-9442-dbec22e91d60",
+      "event_key": "response:attempt:3:coordinator:3",
+      "timestamp": "2026-10-15T20:59:18.547923+00:00",
+      "role": "coordinator",
+      "kind": "model_response",
+      "message": "delegate",
+      "data": {
+        "name": "delegate",
+        "arguments": {
+          "hypothesis_ids": [
+            "H1"
+          ],
+          "target": "verifier",
+          "task": "Validate that the service terminates immediately upon port mismatch and does not proceed to database connection attempts, using the assertion failure in service.py (E2:L2) and the port comparison logic in settings.json (E3:L3) as the mechanism."
+        },
+        "input_tokens": 1008,
+        "output_tokens": 72,
+        "latency_ms": 1502.5
+      }
+    },
+    {
+      "seq": 104,
+      "run_id": "22ccf4b6-449c-4c56-9442-dbec22e91d60",
+      "event_key": "delegate:3",
+      "timestamp": "2026-10-15T20:59:18.560571+00:00",
+      "role": "coordinator",
+      "kind": "delegation",
+      "message": "Validate that the service terminates immediately upon port mismatch and does not proceed to database connection attempts, using the assertion failure in service.py (E2:L2) and the port comparison logic in settings.json (E3:L3) as the mechanism.",
+      "data": {
+        "target": "verifier",
+        "task": "Validate that the service terminates immediately upon port mismatch and does not proceed to database connection attempts, using the assertion failure in service.py (E2:L2) and the port comparison logic in settings.json (E3:L3) as the mechanism.",
+        "hypothesis_ids": [
+          "H1"
+        ]
+      }
+    },
+    {
+      "seq": 105,
+      "run_id": "22ccf4b6-449c-4c56-9442-dbec22e91d60",
+      "event_key": "attempt:4:verifier:4",
+      "timestamp": "2026-10-15T20:59:18.594595+00:00",
+      "role": "verifier",
+      "kind": "model_attempt",
+      "message": "Decision call 5/18",
+      "data": {
+        "attempt": 1,
+        "context_chars": 3163,
+        "decoding": "native_function"
+      }
+    },
+    {
+      "seq": 106,
+      "run_id": "22ccf4b6-449c-4c56-9442-dbec22e91d60",
+      "event_key": "response:attempt:4:verifier:4",
+      "timestamp": "2026-10-15T20:59:19.453479+00:00",
+      "role": "verifier",
+      "kind": "model_response",
+      "message": "run_check",
+      "data": {
+        "name": "run_check",
+        "arguments": {},
+        "input_tokens": 1645,
+        "output_tokens": 16,
+        "latency_ms": 857.1
+      }
+    },
+    {
+      "seq": 107,
+      "run_id": "22ccf4b6-449c-4c56-9442-dbec22e91d60",
+      "event_key": "tool-start:4",
+      "timestamp": "2026-10-15T20:59:19.475075+00:00",
+      "role": "verifier",
+      "kind": "tool_call",
+      "message": "run_check",
+      "data": {
+        "arguments": {
+          "operation_key": "626af1737437f1f63e13"
+        },
+        "operation_key": "mcp:e5d84debcbfbf3b2af9d"
+      }
+    },
+    {
+      "seq": 108,
+      "run_id": "22ccf4b6-449c-4c56-9442-dbec22e91d60",
+      "event_key": "tool-end:4",
+      "timestamp": "2026-10-15T20:59:19.656074+00:00",
+      "role": "verifier",
+      "kind": "tool_result",
+      "message": "run_check: ok",
+      "data": {
+        "tool": "run_check",
+        "ok": true,
+        "data": {
+          "status": "reproduced",
+          "detail": "AssertionError: ConnectionRefused: target port 6433; probe listener 5432",
+          "fixture": "case-01",
+          "scope": "immutable synthetic fixture; no production resource contacted",
+          "check_id": "c-e3667c8fac6a67c48c31"
+        },
+        "evidence": [],
+        "error": null,
+        "operation_key": "mcp:e5d84debcbfbf3b2af9d"
+      }
+    },
+    {
+      "seq": 109,
+      "run_id": "22ccf4b6-449c-4c56-9442-dbec22e91d60",
+      "event_key": "attempt:5:verifier:5",
+      "timestamp": "2026-10-15T20:59:19.690560+00:00",
+      "role": "verifier",
+      "kind": "model_attempt",
+      "message": "Decision call 6/18",
+      "data": {
+        "attempt": 1,
+        "context_chars": 3722,
+        "decoding": "native_function"
+      }
+    },
+    {
+      "seq": 110,
+      "run_id": "22ccf4b6-449c-4c56-9442-dbec22e91d60",
+      "event_key": "response:attempt:5:verifier:5",
+      "timestamp": "2026-10-15T20:59:22.818463+00:00",
+      "role": "verifier",
+      "kind": "model_response",
+      "message": "submit_review",
+      "data": {
+        "name": "submit_review",
+        "arguments": {
+          "verdicts": [
+            {
+              "check_ids": [
+                "C1"
+              ],
+              "hypothesis_id": "H1",
+              "reason": "The assertion in service.py (E2:L2) fails when the port in settings.json (E3:L3) is 6433 and the listening_port in input.json is 5432, as specified. The error message 'ConnectionRefused: target port 6433; probe listener 5432' matches the expected failure due to port mismatch. The service terminates immediately upon assertion failure, preventing any database connection attempt. This aligns with the mechanism described in H1.",
+              "status": "confirmed"
+            }
+          ],
+          "needs_more": false,
+          "request": ""
+        },
+        "input_tokens": 2161,
+        "output_tokens": 164,
+        "latency_ms": 3125.9
+      }
+    },
+    {
+      "seq": 111,
+      "run_id": "22ccf4b6-449c-4c56-9442-dbec22e91d60",
+      "event_key": "review:5",
+      "timestamp": "2026-10-15T20:59:22.838615+00:00",
+      "role": "verifier",
+      "kind": "review",
+      "message": "Causal records reviewed against executed checks",
+      "data": {
+        "verdicts": [
+          {
+            "trigger": "The service configuration changed to use port 6433 in settings.json, while the input specifies a listening port of 5432.",
+            "mechanism": "The service compares the configured port in settings.json to the listening port in input.json. When the port in settings.json (6433) does not match the listening_port (5432) in input.json, the assertion fails, causing the service to terminate before attempting a connection.",
+            "effect": "The service fails to establish a database connection and raises an AssertionError.",
+            "next_check": "Verify if the database server is configured to listen on port 6433.",
+            "claim": "The service configuration changed to use port 6433 in settings.json, while the input specifies a listening port of 5432. The service compares the configured port in settings.json to the listening port in input.json. When the port in settings.json (6433) does not match the listening_port (5432) in input.json, the assertion fails, causing the service to terminate before attempting a connection. The service fails to establish a database connection and raises an AssertionError.",
+            "id": "h-6851c03773072943f489",
+            "alias": "H1",
+            "citations": [
+              {
+                "evidence_id": "e-df50e18332a780c392b0",
+                "line": 2,
+                "quote": "    assert c[\"port\"] == d[\"listening_port\"], f\"ConnectionRefused: target port {c[chr(112)+chr(111)+chr(114)+chr(116)]}; probe listener {d[chr(108)+chr(105)+chr(115)+chr(116)+chr(101)+chr(110)+chr(105)+chr(110)+chr(103)+chr(95)+chr(112)+chr(",
+                "quote_truncated": true
+              },
+              {
+                "evidence_id": "e-e99284bdf6122e92dcf7",
+                "line": 3,
+                "quote": "  \"port\": 6433",
+                "quote_truncated": false
+              }
+            ],
+            "evidence_ids": [
+              "e-df50e18332a780c392b0",
+              "e-e99284bdf6122e92dcf7"
+            ],
+            "status": "confirmed",
+            "reason": "The assertion in service.py (E2:L2) fails when the port in settings.json (E3:L3) is 6433 and the listening_port in input.json is 5432, as specified. The error message 'ConnectionRefused: target port 6433; probe listener 5432' matches the expected failure due to port mismatch. The service terminates immediately upon assertion failure, preventing any database connection attempt. This aligns with the mechanism described in H1.",
+            "check_ids": [
+              "c-e3667c8fac6a67c48c31"
+            ],
+            "support_level": "reproduction"
+          }
+        ],
+        "needs_more": false,
+        "request": ""
+      }
+    },
+    {
+      "seq": 112,
+      "run_id": "22ccf4b6-449c-4c56-9442-dbec22e91d60",
+      "event_key": "attempt:6:coordinator:6",
+      "timestamp": "2026-10-15T20:59:22.866084+00:00",
+      "role": "coordinator",
+      "kind": "model_attempt",
+      "message": "Decision call 7/18",
+      "data": {
+        "attempt": 1,
+        "context_chars": 2750,
+        "decoding": "json_schema_control"
+      }
+    },
+    {
+      "seq": 113,
+      "run_id": "22ccf4b6-449c-4c56-9442-dbec22e91d60",
+      "event_key": "response:attempt:6:coordinator:6",
+      "timestamp": "2026-10-15T20:59:24.352779+00:00",
+      "role": "coordinator",
+      "kind": "model_response",
+      "message": "finish",
+      "data": {
+        "name": "finish",
+        "arguments": {
+          "hypothesis_ids": [
+            "H1"
+          ],
+          "next_actions": [
+            "Verify that the service terminates immediately after the assertion failure in service.py (E2:L2) by inspecting runtime.log (E1) for a log entry indicating termination due to port mismatch"
+          ],
+          "outcome": "supported"
+        },
+        "input_tokens": 1354,
+        "output_tokens": 61,
+        "latency_ms": 1484.9
+      }
+    },
+    {
+      "seq": 114,
+      "run_id": "22ccf4b6-449c-4c56-9442-dbec22e91d60",
+      "event_key": "diagnostic:6",
+      "timestamp": "2026-10-15T20:59:24.362100+00:00",
+      "role": "coordinator",
+      "kind": "diagnostic",
+      "message": "The service configuration changed to use port 6433 in settings.json, while the input specifies a listening port of 5432. The service compares the configured port in settings.json to the listening port in input.json. When the port in settings.json (6433) does not match the listening_port (5432) in input.json, the assertion fails, causing the service to terminate before attempting a connection. The service fails to establish a database connection and raises an AssertionError.",
+      "data": {
+        "outcome": "supported",
+        "summary": "The service configuration changed to use port 6433 in settings.json, while the input specifies a listening port of 5432. The service compares the configured port in settings.json to the listening port in input.json. When the port in settings.json (6433) does not match the listening_port (5432) in input.json, the assertion fails, causing the service to terminate before attempting a connection. The service fails to establish a database connection and raises an AssertionError.",
+        "hypothesis_ids": [
+          "h-6851c03773072943f489"
+        ],
+        "evidence_ids": [
+          "e-df50e18332a780c392b0",
+          "e-e99284bdf6122e92dcf7"
+        ],
+        "next_actions": [
+          "Verify that the service terminates immediately after the assertion failure in service.py (E2:L2) by inspecting runtime.log (E1) for a log entry indicating termination due to port mismatch"
+        ],
+        "limitations": [
+          "Scope: captured synthetic execution; deployment history and production cause are not established.",
+          "Source references and executed checks do not guarantee that the proposed mechanism is complete or semantically correct."
+        ],
+        "support_level": "reproduction",
+        "rendered_from_reviewed_records": true
+      }
+    },
+    {
+      "seq": 115,
+      "run_id": "22ccf4b6-449c-4c56-9442-dbec22e91d60",
+      "event_key": "session:27",
+      "timestamp": "2026-10-15T20:59:24.533673+00:00",
+      "role": "system",
+      "kind": "session_end",
+      "message": "Runner session ended",
+      "data": {
+        "elapsed_ms": 13467.3
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "id": "e-4c48213cdf6e41b4a96e",
+      "incident_id": "case-01",
+      "path": "input.json",
+      "start_line": 1,
+      "end_line": 3,
+      "excerpt": "{\n  \"listening_port\": 5432\n}",
+      "sha256": "b8b7dee2c1643b4a3f91651e7145a86a274aa4471fc2d7f88b27f656c8fa138c"
+    },
+    {
+      "id": "e-986b1b404c2238a99c9e",
+      "incident_id": "case-01",
+      "path": "report.json",
+      "start_line": 1,
+      "end_line": 6,
+      "excerpt": "{\n  \"test\": \"test_service_contract\",\n  \"status\": \"failed\",\n  \"expected\": \"connected\",\n  \"observed\": \"AssertionError: ConnectionRefused: target port 6433; probe listener 5432\"\n}",
+      "sha256": "97396aeec9a50f1cd99f3210a94387fc70506927d231c0ccf4faa3a7661ddfb8"
+    },
+    {
+      "id": "e-9c4bec24a49696ff1e6a",
+      "incident_id": "case-01",
+      "path": "runtime.log",
+      "start_line": 1,
+      "end_line": 4,
+      "excerpt": "2026-01-10T09:00:00Z INFO heartbeat healthy\n2026-01-10T09:00:01Z DEBUG metrics flush completed\n2026-01-10T09:00:02Z ERROR AssertionError: ConnectionRefused: target port 6433; probe listener 5432\n2026-01-10T09:00:03Z INFO supervisor captured incident",
+      "sha256": "fae8916453118f2f0f888426450781cd9aa1ed64f9718d7858215a629a14b476"
+    },
+    {
+      "id": "e-df50e18332a780c392b0",
+      "incident_id": "case-01",
+      "path": "service.py",
+      "start_line": 1,
+      "end_line": 3,
+      "excerpt": "def run(c, d):\n    assert c[\"port\"] == d[\"listening_port\"], f\"ConnectionRefused: target port {c[chr(112)+chr(111)+chr(114)+chr(116)]}; probe listener {d[chr(108)+chr(105)+chr(115)+chr(116)+chr(101)+chr(110)+chr(105)+chr(110)+chr(103)+chr(95)+chr(112)+chr(111)+chr(114)+chr(116)]}\"\n    return \"connected\"",
+      "sha256": "60af6cbddad06810cd4386060ff47916acde893c84768a86f41488f70f611eeb"
+    },
+    {
+      "id": "e-e99284bdf6122e92dcf7",
+      "incident_id": "case-01",
+      "path": "settings.json",
+      "start_line": 1,
+      "end_line": 4,
+      "excerpt": "{\n  \"host\": \"localhost\",\n  \"port\": 6433\n}",
+      "sha256": "933b5e2b0882b12926ff14a6477d91958fcdf1ff06b8678ffd5be248a75adde5"
+    }
+  ],
+  "metrics": {
+    "model_calls": 7,
+    "tool_calls": 2,
+    "tool_successes": 2,
+    "input_tokens": 9933,
+    "output_tokens": 598,
+    "usage_complete": true,
+    "model_latency_ms": 12564,
+    "cost_usd": null
+  }
+}

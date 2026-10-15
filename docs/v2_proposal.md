@@ -35,4 +35,8 @@ No extra agents, RAG/vector database, SaaS deployment, open shell, arbitrary Pyt
 
 Preserve all V1 artifacts. Pass literal-citation, no-new-final-claim, unavailable-check, MCP intervention-boundary, cancellation and new-process recovery tests. Execute a real V2 CLI/browser run and all scheduled reserved trials. Promote only after the comparison is reported honestly; a loss remains a useful result.
 
+## Measured outcome
+
+The [complete 56-run comparison](../benchmarks/v2/report.md) records V1 multi **7/14**, V2 single **6/14**, V2 multi **8/14** under the common automatic rubric. V2 multi uses **99 versus 200** model calls and median **14.011s versus 37.424s**. The [post hoc source inspection](../benchmarks/v2/semantic_audit.md) exposes automatic false positives and unsupported model claims: these numbers do not establish semantic reliability improvement. All 14 V2 multi runs completed and all three ambiguous trials were correctly abstained. No benchmark run selected the optional intervention tool; its separate native-model/MCP proof is labeled as a targeted integration check. Preserve V2 multi as the default demonstrator, with both alternatives available.
+
 Development finding: character-for-character quotation generation and native control argument counts were fragile on the 4B model. V2 therefore selects stable line handles (`E2:L3`) and uses Ollama JSON-schema decoding when only one control contract is permitted. The schema is also included in the prompt. MCP collection/experiment calls and action choices remain native function calls. OpenAI-compatible endpoints keep native calls for all decisions. No model response from the new reserved cases was used to make these changes.
