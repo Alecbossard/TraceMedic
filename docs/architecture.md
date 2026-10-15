@@ -1,5 +1,7 @@
 # Architecture and reasoning boundaries
 
+This page documents the preserved **V1 reference workflow**. The default **V2** has [a separate contract, inference and tool description](v2_architecture.md). Saved V1 records continue to use this runner.
+
 TraceMedic separates orchestration, model decisions, protocol transport and durable records. The graph is intentionally small enough to explain and modify in an interview.
 
 ## State graph

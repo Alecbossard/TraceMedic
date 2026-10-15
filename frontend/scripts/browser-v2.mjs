@@ -14,6 +14,8 @@ const base = process.env.TRACE_QA_URL || 'http://127.0.0.1:8000';
 const assert = (value, message) => { if (!value) throw Error(message); };
 await page.goto(base);
 await page.getByRole('heading', { name: 'Telemetry gateway', exact: true }).waitFor();
+const labels = await page.locator('body').innerText() + await page.getByLabel('Search incidents').getAttribute('placeholder');
+assert(!/Â·|â€¦|â€“|â†/.test(labels), 'Interface contains mojibake');
 await page.getByLabel('Workflow version').selectOption('v1');
 await page.getByLabel('Workflow version').selectOption('v2');
 await page.getByLabel('Search incidents').fill('unmatched-fixture');

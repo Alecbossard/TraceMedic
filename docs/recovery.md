@@ -1,5 +1,7 @@
 # Persistence, cancellation and restart recovery
 
+Default new investigations use V2. Resume automatically selects the saved runner; records without a version are V1. V2 also checkpoints its short source/hypothesis/check aliases. Run `python scripts/prove_recovery.py --workflow v2` for the new [real-model proof](evidence/v2/real-recovery.json); `--workflow v1` preserves the original scenario. V2 experiments use their own adapter-owned operation keys and return indeterminate after an uncertain claim.
+
 Keep both `audit.db` and `checkpoints.db` in the selected data directory. A run uses its ID as the LangGraph `thread_id`. The audit database contains captured evidence, measured events and the operation ledger. Copying a JSON report alone does not reproduce resumable checkpoints.
 
 ## Reproduce a boundary pause

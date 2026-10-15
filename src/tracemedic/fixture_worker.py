@@ -8,10 +8,12 @@ from pathlib import Path
 
 
 def load_fixture(root, incident):
-    manifest = json.loads((Path(__file__).with_name("fixture_hashes.json")).read_text())
+    manifest = json.loads(
+        (Path(__file__).with_name("fixture_hashes.json")).read_text(encoding="utf-8")
+    )
     extra = Path(__file__).with_name("fixture_hashes_v2.json")
     if extra.exists():
-        manifest.update(json.loads(extra.read_text()))
+        manifest.update(json.loads(extra.read_text(encoding="utf-8")))
     if incident not in manifest:
         raise ValueError("Not an authorized fixture")
     folder = root / "corpus" / incident
@@ -38,8 +40,11 @@ def evaluate(folder, config, data):
     if not (folder / "service.py").exists():
         return {"status": "unavailable", "detail": "No authorized executable reproduction"}
     namespace = {}
-    exec(compile((folder / "service.py").read_text(), "service.py", "exec"), namespace)
-    report = json.loads((folder / "report.json").read_text())
+    exec(
+        compile((folder / "service.py").read_text(encoding="utf-8"), "service.py", "exec"),
+        namespace,
+    )
+    report = json.loads((folder / "report.json").read_text(encoding="utf-8"))
     try:
         actual = namespace["run"](config, data)
         detail = f"expected={report['expected']!r}; actual={actual!r}"
@@ -56,8 +61,8 @@ def main():
     # Finite authored fixtures; inputs are immutable and <=64 KB. No network or subprocess code.
     result = evaluate(
         folder,
-        json.loads((folder / "settings.json").read_text()),
-        json.loads((folder / "input.json").read_text()),
+        json.loads((folder / "settings.json").read_text(encoding="utf-8")),
+        json.loads((folder / "input.json").read_text(encoding="utf-8")),
     )
     if result["status"] != "unavailable":
         result.update(

@@ -105,7 +105,7 @@ async def health():
 
 @app.get("/api/incidents")
 def incidents():
-    return json.loads((settings.root / "corpus" / "v2_catalog.json").read_text())
+    return json.loads((settings.root / "corpus" / "v2_catalog.json").read_text(encoding="utf-8"))
 
 
 @app.get("/api/runs")

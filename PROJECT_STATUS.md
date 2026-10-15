@@ -4,6 +4,10 @@ Updated: 2026-10-15. This file is the resumption entry point.
 
 ## Current state
 
+- Reserved suite/protocol were frozen first at `cb6a5b4`. Initial implementation `0eecb43` was mechanically corrected after visual/portability QA found Windows cp1252 reads and UI mojibake. All 24 completed preliminary outcomes plus the interrupted trace are preserved in `benchmarks/v2/invalidated-encoding/`; they are excluded from final results. Prompts/model/cases/scorer/settings did not change. A regression test now checks isolated-process UTF-8 decoding.
+- Corrected implementation is frozen again in `benchmarks/v2/implementation.json`. Restart the entire predeclared 56-run schedule from an empty `data/v2-benchmark` (`data/v2-benchmark-progress.log`). Do not edit the listed implementation files or tune on reserved responses. The old database/log remain in `data/v2-benchmark-invalidated-encoding*`.
+- V2 deterministic/protocol suite: 32 passed / 2 opt-in real skipped, plus the newly added scorer integration test passed separately. Actual V2 model integration passed (1 test, 15.68s). Real V2 kill/new-process resume completed with five snapshots and aliases preserved, one baseline execution/event: `docs/evidence/v2/real-recovery.json`.
+
 - Inspected the existing checkout: empty Git repository, no user files or commits.
 - Remote `https://github.com/Alecbossard/TraceMedic.git` now contains the delivered project; default branch is `codex/tracemedic`.
 - V1 delivery: `aba50e7` on `codex/tracemedic`. Active V2 branch: `codex/v2-evidence`; Windows, Python 3.13.1, Node 24.11.0, RTX 4060 Laptop 8 GB, 16 GB RAM.
@@ -32,6 +36,6 @@ Updated: 2026-10-15. This file is the resumption entry point.
 
 ## Next actions
 
-User requested V2. See `docs/v2_proposal.md`: causal records with literal citations, bounded bundle reads and controlled JSON interventions, compact contexts, versioned runners/UI. Preserve all V1 frozen inputs, code and 42 results. Twelve new reserved cases and the 56-run comparison protocol are frozen in `benchmarks/v2/` before V2 prompt development. All original cases are now development/regression data for V2. Next: implement V2 MCP/contracts/runner, test recovery, tune only on original cases, freeze implementation, execute every reserved trial, inspect UI and publish results/CI. No V2 performance result exists yet.
+User requested V2. See `docs/v2_proposal.md` and `docs/v2_architecture.md`. Preserve all V1 frozen inputs, code and 42 results. Next: finish every reserved trial without prompt changes, publish comparison and semantic caveats, run actual V2 browser cancel/resume at three sizes, verify clean install, push branch and check CI. Development candidates (including failures) are retained in `docs/evidence/v2-development*.json`; their subset is not a new accuracy estimate. No final V2 performance result exists yet.
 
 The local UI uses `data/app` for its real demo trace. Restart it with `python -m tracemedic.cli --data-dir data/app serve`; open `http://127.0.0.1:8000`. The recorded completed trace can also be imported into another selected data directory with `scripts/import_demo.py`. The `.runtime/` model/runtime and local databases remain intentionally untracked.

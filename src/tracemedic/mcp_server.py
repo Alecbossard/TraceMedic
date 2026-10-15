@@ -21,7 +21,7 @@ catalog_name = "v2_catalog.json" if os.getenv("TRACE_TOOLS_VERSION") == "2" else
 catalog_path = ROOT / "corpus" / catalog_name
 if not catalog_path.exists():
     catalog_path = ROOT / "corpus" / "catalog.json"
-CATALOG = {c["id"] for c in json.loads(catalog_path.read_text())}
+CATALOG = {c["id"] for c in json.loads(catalog_path.read_text(encoding="utf-8"))}
 if INCIDENT not in CATALOG:
     raise ValueError("Unknown incident")
 if FOLDER.is_symlink() or not FOLDER.resolve().is_relative_to((ROOT / "corpus").resolve()):
@@ -92,7 +92,7 @@ def search_trace(query: str) -> ToolResult:
         target = FOLDER / name
         if not target.exists() or target.is_symlink() or target.stat().st_size > 65536:
             continue
-        for i, line in enumerate(target.read_text().splitlines(), 1):
+        for i, line in enumerate(target.read_text(encoding="utf-8").splitlines(), 1):
             if query.lower() in line.lower():
                 matches.append(read(name, max(1, i - 1), i + 1))
                 if len(matches) == 12:
@@ -167,7 +167,7 @@ if os.getenv("TRACE_TOOLS_VERSION") == "2":
             try:
                 item = read(path, 1, 40)
                 evidence.append(item)
-                if len((FOLDER / path).read_text().splitlines()) > 40:
+                if len((FOLDER / path).read_text(encoding="utf-8").splitlines()) > 40:
                     truncated.append(path)
             except (ValueError, OSError, UnicodeError) as exc:
                 errors[path] = str(exc)

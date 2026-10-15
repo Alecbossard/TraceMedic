@@ -8,7 +8,7 @@ Investigator submits one focused record per round: captured **trigger → mechan
 
 The verifier reviews that same record, with its own context and execution tools. It can reject it, leave it unresolved or request a targeted second investigation. Confirmation requires cited source plus another file and a cited **reproduced baseline** check. Passed, unavailable and indeterminate checks cannot satisfy this guard. An invalid attempt to confirm with those checks is recorded as `confirmation_blocked` and applied as unresolved. Unknown IDs, invalid line ranges and unauthorized tool calls remain hard errors.
 
-Coordinator has no file tools. It defines tasks and chooses continuation or final selection. `finish` has no free-form factual summary field: the displayed finding is assembled from selected confirmed records. This prevents a new explanation from being introduced at the final summary step. It does **not** establish semantic entailment of the original record. Proposed actions, unknowns and verifier reasons remain LLM text and can still be weak or wrong. There are no confidence percentages.
+Coordinator has no file tools. It defines tasks and chooses continuation or final selection. `finish` has no free-form factual summary or limitations field: the displayed finding is assembled from selected confirmed records, and scope limitations come from recorded check states. This prevents a new explanation from being introduced at the final summary step. It does **not** establish semantic entailment of the original record. Proposed actions, unknowns and verifier reasons remain LLM text and can still be weak or wrong. There are no confidence percentages.
 
 ## Context and inference
 

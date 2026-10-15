@@ -3,7 +3,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 
 const root=path.resolve(import.meta.dirname,'../..');
-const output=path.join(root,'docs/evidence');
+const output=path.join(root,process.env.TRACE_QA_OUTPUT||'docs/evidence');
 await fs.mkdir(output,{recursive:true});
 const browser=await chromium.launch(process.platform==='win32'?{channel:'msedge',headless:true}:{headless:true});
 const page=await browser.newPage({viewport:{width:1440,height:1000},deviceScaleFactor:1});

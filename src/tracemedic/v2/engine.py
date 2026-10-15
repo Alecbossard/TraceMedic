@@ -38,7 +38,10 @@ class Engine(V1Engine):
         path = self.settings.root / "corpus" / "v2_catalog.json"
         if not path.exists():
             path = self.settings.root / "corpus" / "catalog.json"
-        incident = next((c for c in json.loads(path.read_text()) if c["id"] == incident_id), None)
+        incident = next(
+            (c for c in json.loads(path.read_text(encoding="utf-8")) if c["id"] == incident_id),
+            None,
+        )
         if not incident:
             raise ValueError("Unknown incident")
         run_id = run_id or str(uuid.uuid4())
