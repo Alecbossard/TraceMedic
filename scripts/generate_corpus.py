@@ -324,11 +324,15 @@ def main():
             "concept_groups": concepts,
             "expected": expected,
         }
-    (ROOT / "corpus" / "catalog.json").write_text(json.dumps(catalog, indent=2) + "\n")
-    (ROOT / "src" / "tracemedic" / "fixture_hashes.json").write_text(
-        json.dumps(hashes, indent=2) + "\n"
+    (ROOT / "corpus" / "catalog.json").write_text(
+        json.dumps(catalog, indent=2) + "\n", newline="\n"
     )
-    (ROOT / "benchmarks" / "oracle.json").write_text(json.dumps(oracle, indent=2) + "\n")
+    (ROOT / "src" / "tracemedic" / "fixture_hashes.json").write_text(
+        json.dumps(hashes, indent=2) + "\n", newline="\n"
+    )
+    (ROOT / "benchmarks" / "oracle.json").write_text(
+        json.dumps(oracle, indent=2) + "\n", newline="\n"
+    )
     protocol = {
         "version": 1,
         "held_out": [k for k, v in oracle.items() if v["split"] == "test"],
@@ -340,7 +344,9 @@ def main():
         "max_output_tokens_per_call": 1200,
         "scoring": "All expected concept groups in final diagnosis and a confirmed hypothesis, with valid source evidence and successful independent fixture verification. Ambiguous cases require abstention. See protocol.md.",
     }
-    (ROOT / "benchmarks" / "protocol.json").write_text(json.dumps(protocol, indent=2) + "\n")
+    (ROOT / "benchmarks" / "protocol.json").write_text(
+        json.dumps(protocol, indent=2) + "\n", newline="\n"
+    )
     frozen = {
         str(p.relative_to(ROOT)).replace("\\", "/"): hashlib.sha256(p.read_bytes()).hexdigest()
         for p in sorted((ROOT / "corpus").rglob("*"))
@@ -352,7 +358,9 @@ def main():
     frozen["benchmarks/protocol.json"] = hashlib.sha256(
         (ROOT / "benchmarks/protocol.json").read_bytes()
     ).hexdigest()
-    (ROOT / "benchmarks" / "frozen_manifest.json").write_text(json.dumps(frozen, indent=2) + "\n")
+    (ROOT / "benchmarks" / "frozen_manifest.json").write_text(
+        json.dumps(frozen, indent=2) + "\n", newline="\n"
+    )
     print(f"Generated {len(catalog)} incidents; 12 held-out cases; manifest frozen.")
 
 

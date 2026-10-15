@@ -116,7 +116,7 @@
   "corpus/case-24/runtime.log": "fb5e9ea64c88fef10ebe94394f3457fdda70edea5e227376e7ab5980f4f1b444",
   "corpus/case-24/service.py": "723d09b2587e70a89183f5d49f9ca1eceab6394bd5fd3adca64ff51928936d49",
   "corpus/case-24/settings.json": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
-  "corpus/catalog.json": "6a907b447896889b340fddcaabf7a5ea1e67bcfb56ce7d2e07324d6c32eac9b1",
-  "benchmarks/oracle.json": "20309148bceca5c19f1960ca92f17fc594764c032f24101df0deced5e6d942c9",
-  "benchmarks/protocol.json": "3509783529dbf6ad710840cfa9ce70968312aa9e03ce79487d6fcaba0e2bb1b1"
+  "corpus/catalog.json": "8f36e5269868c26a91d8341289b3f03289149fe76ab1181eaf672954bcdb8974",
+  "benchmarks/oracle.json": "9d10f19cdd8433f235fd56cf0df4a48cfcfd46c37921549cdb54bcc073dd6555",
+  "benchmarks/protocol.json": "419ee7dec8926962298c4baccc699a159a207a91688614661f6adf2a40919ca5"
 }

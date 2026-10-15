@@ -1,0 +1,71 @@
+{
+  "files": {
+    "src/tracemedic/engine.py": "b6cfdcdef12f5dfb3a0e96224f12178b53879c6cbeb2d1b8bd52591d35c4bd8a",
+    "src/tracemedic/prompts.py": "d79d52835775d32910e8f95467d9735ed3d8b035a815669e0f7ac55499d1be93",
+    "src/tracemedic/provider.py": "41dfeadfa03d25498df033aba453b2eb1e2c0b12c33291384913e2f3eb464b99",
+    "src/tracemedic/models.py": "4a0b283172174a4600b452fa1dcac72f8e23d6574e4ce93ba46919a77e543894",
+    "src/tracemedic/benchmark.py": "ec5b4c0921b0f040944616e64268a6436b37efac01dbfa1cc644b6322515b704"
+  },
+  "model": {
+    "alias": "tracemedic-qwen3:4b",
+    "base": "qwen3:4b-instruct-2507-q4_K_M",
+    "ollama": {
+      "version": "0.40.4"
+    },
+    "models": [
+      {
+        "name": "tracemedic-qwen3:4b",
+        "model": "tracemedic-qwen3:4b",
+        "modified_at": "2026-10-15T20:15:52.9830873+02:00",
+        "size": 2497292551,
+        "digest": "4955325f82d6e570a48fb0d309967d8266d6710f3555d7ddcdf79714a2f520ab",
+        "details": {
+          "parent_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "format": "gguf",
+          "family": "qwen3",
+          "families": [
+            "qwen3"
+          ],
+          "parameter_size": "4.0B",
+          "quantization_level": "Q4_K_M",
+          "context_length": 262144,
+          "embedding_length": 2560,
+          "runner": "llamacpp"
+        },
+        "capabilities": [
+          "tools",
+          "thinking",
+          "completion"
+        ]
+      },
+      {
+        "name": "qwen3:4b-instruct-2507-q4_K_M",
+        "model": "qwen3:4b-instruct-2507-q4_K_M",
+        "modified_at": "2026-10-15T20:14:17.2858958+02:00",
+        "size": 2497293803,
+        "digest": "0edcdef34593eac1aa2be9c7d06c432dcf81945adca5eca2f27662c18f168ba0",
+        "details": {
+          "parent_model": "",
+          "format": "gguf",
+          "family": "qwen3",
+          "families": [
+            "qwen3"
+          ],
+          "parameter_size": "4.0B",
+          "quantization_level": "Q4_K_M",
+          "context_length": 262144,
+          "embedding_length": 2560,
+          "runner": "ggml"
+        },
+        "capabilities": [
+          "tools",
+          "thinking",
+          "completion"
+        ]
+      }
+    ],
+    "template_sha256": "a2e35dc0c5ccb7d832b523b6a9bf1a6bb250bf1b70037218d67eb3374c85cea1",
+    "patch": "serialize .Function through json; upstream issue https://github.com/ollama/ollama/issues/14601"
+  },
+  "tuning": "Only development cases 01 and 19 used for model-loop tuning; no held-out model results inspected before this freeze."
+}

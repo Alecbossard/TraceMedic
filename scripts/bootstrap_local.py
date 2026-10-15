@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 runtime = ROOT / ".runtime"
 runtime.mkdir(exist_ok=True)
 with urllib.request.urlopen(
-    "https://api.github.com/repos/ollama/ollama/releases/latest"
+    "https://api.github.com/repos/ollama/ollama/releases/tags/v0.40.4"
 ) as response:
     release = json.load(response)
 asset = next(a for a in release["assets"] if a["name"] == "ollama-windows-amd64.zip")
