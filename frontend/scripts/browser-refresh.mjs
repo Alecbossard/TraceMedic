@@ -15,7 +15,7 @@ const recorded = JSON.parse(
 const runId = process.env.TRACE_QA_RUN_ID || recorded.id;
 const base = process.env.TRACE_QA_URL || "http://127.0.0.1:8000";
 const browser = await chromium.launch(
-  process.platform === "win32"
+  process.platform === "win32" && process.env.TRACE_QA_BROWSER !== "chromium"
     ? { channel: "msedge", headless: true }
     : { headless: true },
 );
@@ -304,6 +304,24 @@ try {
   checks.push("Reduced-motion browser preference is supported");
 } catch (error) {
   failure = error.message;
+  const diagnostics = {
+    failure,
+    runId,
+    url: page.url(),
+    errors,
+    body: await page
+      .locator("body")
+      .innerText()
+      .catch(() => "Unavailable"),
+  };
+  console.error(JSON.stringify(diagnostics));
+  await page
+    .screenshot({ path: path.join(output, "failure.png"), fullPage: true })
+    .catch(() => {});
+  await fs.writeFile(
+    path.join(output, "failure.json"),
+    JSON.stringify(diagnostics, null, 2) + "\n",
+  );
   throw error;
 } finally {
   const proof = {

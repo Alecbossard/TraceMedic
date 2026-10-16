@@ -4522,6 +4522,9 @@ kbd {
 .command-footer kbd {
   color: #64748d;
 }
+.no-match {
+  color: #64748d;
+}
 
 .system-footnote,
 .mobile-library-toggle,

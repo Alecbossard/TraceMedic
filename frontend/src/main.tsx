@@ -52,6 +52,7 @@ function App() {
     [tab, setTab] = useState<RunTab>("overview");
   const [incidents, setIncidents] = useState<Incident[]>([]),
     [selected, setSelected] = useState("case-01");
+  const [incidentsLoading, setIncidentsLoading] = useState(true);
   const [search, setSearch] = useState(""),
     [libraryFilter, setLibraryFilter] = useState("all");
   const [health, setHealth] = useState<Health | null>(null),
@@ -75,19 +76,36 @@ function App() {
     [libraryOpen, setLibraryOpen] = useState(false);
 
   useEffect(() => {
-    Promise.all([
-      api<Incident[]>("/incidents"),
-      api<Health>("/health"),
-      api<Run[]>("/runs"),
-      api<Benchmark>("/benchmark"),
-    ])
-      .then(([items, status, history, results]) => {
-        setIncidents(items);
-        setHealth(status);
-        setRuns(history);
-        setBenchmark(results);
+    let disposed = false;
+    const failed = (error: Error) => {
+      if (!disposed) setError(error.message);
+    };
+    void api<Incident[]>("/incidents")
+      .then((items) => {
+        if (!disposed) setIncidents(items);
       })
-      .catch((e) => setError(e.message));
+      .catch(failed)
+      .finally(() => {
+        if (!disposed) setIncidentsLoading(false);
+      });
+    void api<Health>("/health")
+      .then((status) => {
+        if (!disposed) setHealth(status);
+      })
+      .catch(failed);
+    void api<Run[]>("/runs")
+      .then((history) => {
+        if (!disposed) setRuns(history);
+      })
+      .catch(failed);
+    void api<Benchmark>("/benchmark")
+      .then((results) => {
+        if (!disposed) setBenchmark(results);
+      })
+      .catch(failed);
+    return () => {
+      disposed = true;
+    };
   }, []);
   useEffect(() => {
     const url = new URL(location.href);
@@ -451,7 +469,12 @@ function App() {
                             {selected === item.id && <ChevronRight size={13} />}
                           </button>
                         ))}
-                        {!filteredIncidents.length && (
+                        {incidentsLoading && (
+                          <p className="no-match" role="status">
+                            Loading incidents…
+                          </p>
+                        )}
+                        {!incidentsLoading && !filteredIncidents.length && (
                           <p className="no-match">No matching incidents.</p>
                         )}
                       </div>
