@@ -1,79 +1,801 @@
-import React, { useEffect, useState } from 'react';
-import { createRoot } from 'react-dom/client';
-import { Activity, ArrowDownToLine, ArrowRight, ArrowUpRight, BookOpen, Check, ChevronDown, ChevronRight, Circle, FileCode2, Fingerprint, FlaskConical, FolderOpen, GitBranch, Layers3, ListFilter, LoaderCircle, Play, RotateCcw, Search, ShieldCheck, Square, Terminal, X } from 'lucide-react';
-import './style.css';
-import { CausalRecord, type CausalHypothesis } from './CausalRecord';
-import { FindingPreview } from './FindingPreview';
+import React, { useEffect, useState } from "react";
+import { createRoot } from "react-dom/client";
+import * as Tooltip from "@radix-ui/react-tooltip";
+import { AnimatePresence, LazyMotion, MotionConfig } from "motion/react";
+import * as m from "motion/react-m";
+import {
+  Activity,
+  ArrowDownToLine,
+  ArrowUpRight,
+  Check,
+  ChevronDown,
+  ChevronRight,
+  FileCode2,
+  FlaskConical,
+  GitBranch,
+  Layers3,
+  LoaderCircle,
+  Menu,
+  PanelLeft,
+  Play,
+  RotateCcw,
+  Search,
+  Square,
+  X,
+} from "lucide-react";
+import "./style.css";
+import {
+  CommandMenu,
+  destinations,
+  Hint,
+  IncidentNumber,
+  Mark,
+  MobileNavigation,
+  shortcutLabel,
+  Sidebar,
+} from "./Chrome";
+import { BenchmarkPage, HistoryPage, SystemPage } from "./Pages";
+import { EvidencePanel, Overview, Timeline } from "./RunPanels";
+import { activeStatuses, api, repo, statusLabel } from "./lib";
+import type { Benchmark, Health, Incident, Run, RunTab, View } from "./types";
 
-type Incident = {id:string;title:string;description:string};
-type Evidence = {id:string;path:string;start_line:number;end_line:number;excerpt:string;sha256:string};
-type Hypothesis = CausalHypothesis;
-type ExecutedCheck = {check_id:string;status:string;detail:string;kind?:string;baseline?:{status:string;detail:string};trial?:{status:string;detail:string};changes?:{path:string;value:unknown}[]};
-type Event = {seq:number;timestamp:string;role:string;kind:string;message:string;data:Record<string,unknown>};
-type Run = {id:string;incident_id:string;mode:string;provider:string;model:string;status:string;created_at:string;updated_at:string;engine_version?:string;cancel_requested:number;state:{engine_version?:string;role?:string;turn?:number;hypotheses?:Hypothesis[];checks?:ExecutedCheck[];diagnostic?:{outcome:string;summary:string;hypothesis_ids?:string[];next_actions:string[];limitations:string[];evidence_ids:string[];support_level?:string;rendered_from_reviewed_records?:boolean}};events:Event[];evidence:Evidence[];metrics:{model_calls:number;tool_calls:number;tool_successes:number;input_tokens:number|null;output_tokens:number|null;usage_complete:boolean}};
-type Health = {model:string;provider:string;available:boolean;detail:string;transport:string;persistence:string;limits:{model_calls:number;tool_calls:number}};
-type Benchmark = {status:string;message?:string;model?:string;total_runs?:number;scheduled_runs?:number;methods?:{method:string;runs:number;correct?:number;correct_total?:number;correct_supported:number;unsupported:number;abstention_correct:number;median_latency_s:number;model_calls:number;tool_calls:number;input_tokens:number|null;output_tokens:number|null}[]};
+const loadMotion = () =>
+  import("./motion-features").then((module) => module.default);
+const runTabs: { id: RunTab; label: string; icon: typeof Layers3 }[] = [
+  { id: "overview", label: "Overview", icon: Layers3 },
+  { id: "activity", label: "Activity", icon: Activity },
+  { id: "evidence", label: "Sources", icon: FileCode2 },
+];
 
-async function api<T>(path:string, body?:unknown):Promise<T>{
-  const response=await fetch('/api'+path,body!==undefined?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}:undefined);
-  const data=await response.json(); if(!response.ok)throw new Error(data.detail||'The request failed.'); return data;
+function App() {
+  const [view, setView] = useState<View>("workbench"),
+    [tab, setTab] = useState<RunTab>("overview");
+  const [incidents, setIncidents] = useState<Incident[]>([]),
+    [selected, setSelected] = useState("case-01");
+  const [search, setSearch] = useState(""),
+    [libraryFilter, setLibraryFilter] = useState("all");
+  const [health, setHealth] = useState<Health | null>(null),
+    [runs, setRuns] = useState<Run[]>([]),
+    [run, setRun] = useState<Run | null>(null);
+  const [runId, setRunId] = useState<string | null>(
+    new URLSearchParams(location.search).get("run") ||
+      localStorage.getItem("tracemedic.run"),
+  );
+  const [workflow, setWorkflow] = useState("v2"),
+    [mode, setMode] = useState("multi");
+  const [busy, setBusy] = useState(false),
+    [error, setError] = useState(""),
+    [refresh, setRefresh] = useState(0);
+  const [evidenceId, setEvidenceId] = useState<string | null>(null),
+    [focusedLine, setFocusedLine] = useState<number | null>(null);
+  const [benchmark, setBenchmark] = useState<Benchmark | null>(null),
+    [benchmarkVersion, setBenchmarkVersion] = useState("v2");
+  const [commandOpen, setCommandOpen] = useState(false),
+    [mobileOpen, setMobileOpen] = useState(false),
+    [libraryOpen, setLibraryOpen] = useState(false);
+
+  useEffect(() => {
+    Promise.all([
+      api<Incident[]>("/incidents"),
+      api<Health>("/health"),
+      api<Run[]>("/runs"),
+      api<Benchmark>("/benchmark"),
+    ])
+      .then(([items, status, history, results]) => {
+        setIncidents(items);
+        setHealth(status);
+        setRuns(history);
+        setBenchmark(results);
+      })
+      .catch((e) => setError(e.message));
+  }, []);
+  useEffect(() => {
+    const url = new URL(location.href);
+    if (runId) url.searchParams.set("run", runId);
+    else url.searchParams.delete("run");
+    history.replaceState(null, "", url);
+  }, [runId]);
+  useEffect(() => {
+    if (!runId) return;
+    let disposed = false,
+      first = true,
+      lastStatus = "",
+      terminalPolls = 0;
+    let timer: ReturnType<typeof setTimeout>;
+    const load = async () => {
+      try {
+        const saved = await api<Run>("/runs/" + encodeURIComponent(runId));
+        if (disposed) return;
+        setRun(saved);
+        setSelected(saved.incident_id);
+        if (first) {
+          setWorkflow(saved.state.engine_version || "v1");
+          setMode(saved.mode);
+          first = false;
+        }
+        if (saved.status === "completed" && activeStatuses.includes(lastStatus))
+          setTab("overview");
+        lastStatus = saved.status;
+        localStorage.setItem("tracemedic.run", saved.id);
+        if (
+          activeStatuses.includes(saved.status) ||
+          (saved.events.at(-1)?.kind !== "session_end" && terminalPolls++ < 3)
+        )
+          timer = setTimeout(load, 1200);
+        else
+          api<Run[]>("/runs")
+            .then((items) => {
+              if (!disposed) setRuns(items);
+            })
+            .catch(() => {});
+      } catch (e) {
+        if (!disposed) setError((e as Error).message);
+      }
+    };
+    void load();
+    return () => {
+      disposed = true;
+      clearTimeout(timer);
+    };
+  }, [runId, refresh]);
+  useEffect(() => {
+    const shortcut = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement;
+      const typing =
+        ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName) ||
+        target.isContentEditable;
+      if (
+        ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") ||
+        (!typing && e.key === "/")
+      ) {
+        e.preventDefault();
+        setCommandOpen((open) => !open);
+      }
+    };
+    window.addEventListener("keydown", shortcut);
+    return () => window.removeEventListener("keydown", shortcut);
+  }, []);
+
+  function navigate(next: View) {
+    setView(next);
+    setMobileOpen(false);
+    window.scrollTo({ top: 0 });
+    if (next === "history")
+      api<Run[]>("/runs")
+        .then(setRuns)
+        .catch((e) => setError(e.message));
+    if (next === "benchmark") changeBenchmark(benchmarkVersion);
+    if (next === "system")
+      api<Health>("/health")
+        .then(setHealth)
+        .catch((e) => setError(e.message));
+  }
+  function pickIncident(id: string) {
+    setSelected(id);
+    if (id.startsWith("sample-")) setWorkflow("v2");
+    setRunId(null);
+    setRun(null);
+    setEvidenceId(null);
+    setFocusedLine(null);
+    setTab("overview");
+    setLibraryOpen(false);
+    localStorage.removeItem("tracemedic.run");
+    navigate("workbench");
+  }
+  function openRun(id: string) {
+    setRun(null);
+    setRunId(id);
+    setRefresh((value) => value + 1);
+    setTab("overview");
+    setEvidenceId(null);
+    setFocusedLine(null);
+    navigate("workbench");
+  }
+  function openSource(id: string, line?: number) {
+    setEvidenceId(id);
+    setFocusedLine(line ?? null);
+    setTab("evidence");
+  }
+  function changeBenchmark(version: string) {
+    setBenchmarkVersion(version);
+    api<Benchmark>("/benchmark?version=" + version)
+      .then(setBenchmark)
+      .catch((e) => setError(e.message));
+  }
+  async function launch() {
+    setBusy(true);
+    setError("");
+    try {
+      const created = await api<{ id: string }>("/runs", {
+        incident_id: selected,
+        mode,
+        workflow,
+      });
+      setRun(null);
+      setEvidenceId(null);
+      setFocusedLine(null);
+      setRunId(created.id);
+      setTab("activity");
+    } catch (e) {
+      setError((e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  }
+  async function control(action: string) {
+    if (!run) return;
+    setBusy(true);
+    setError("");
+    try {
+      await api("/runs/" + run.id + "/" + action, {});
+      setRun(await api<Run>("/runs/" + run.id));
+      setRefresh((value) => value + 1);
+      if (action === "resume") setTab("activity");
+    } catch (e) {
+      setError((e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  }
+  function exportRun() {
+    if (!run) return;
+    const url = URL.createObjectURL(
+      new Blob([JSON.stringify(run, null, 2)], { type: "application/json" }),
+    );
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = "tracemedic-" + run.id + ".json";
+    anchor.click();
+    URL.revokeObjectURL(url);
+  }
+  const incident = incidents.find((item) => item.id === selected);
+  const active = !!run && activeStatuses.includes(run.status),
+    canResume =
+      !!run && ["interrupted", "cancelled", "error"].includes(run.status);
+  const elapsed =
+    (run?.events
+      .filter((e) => e.kind === "session_end")
+      .reduce((sum, event) => sum + Number(event.data.elapsed_ms || 0), 0) ||
+      0) / 1000;
+  const filteredIncidents = incidents.filter(
+    (item) =>
+      (libraryFilter === "all" ||
+        (libraryFilter === "v2"
+          ? item.id.startsWith("sample-")
+          : item.id.startsWith("case-"))) &&
+      (item.title + " " + item.id).toLowerCase().includes(search.toLowerCase()),
+  );
+  const sidebar = (
+    <Sidebar
+      view={view}
+      navigate={navigate}
+      health={health}
+      count={runs.length}
+      openSearch={() => {
+        setMobileOpen(false);
+        setCommandOpen(true);
+      }}
+    />
+  );
+
+  return (
+    <div className="app-shell">
+      <a className="skip-link" href="#main-content">
+        Skip to content
+      </a>
+      <aside className="sidebar">{sidebar}</aside>
+      <MobileNavigation open={mobileOpen} onOpenChange={setMobileOpen}>
+        {sidebar}
+      </MobileNavigation>
+      <main id="main-content" tabIndex={-1}>
+        <header className="topbar">
+          <button
+            className="icon-button mobile-menu"
+            aria-label="Open navigation"
+            onClick={() => setMobileOpen(true)}
+          >
+            <Menu size={19} />
+          </button>
+          <span className="mobile-brand">
+            <Mark small />
+          </span>
+          <div className="breadcrumbs">
+            <span>Workspace</span>
+            <ChevronRight size={12} />
+            <strong>
+              {destinations.find((item) => item.id === view)?.name}
+            </strong>
+            {view === "workbench" && (
+              <>
+                <ChevronRight size={12} />
+                <span className="breadcrumb-id">{selected.toUpperCase()}</span>
+              </>
+            )}
+          </div>
+          <div className="topbar-actions">
+            <CommandMenu
+              open={commandOpen}
+              onOpenChange={setCommandOpen}
+              incidents={incidents}
+              navigate={navigate}
+              selectIncident={pickIncident}
+            />
+            <a
+              className="repo-link"
+              href={repo}
+              target="_blank"
+              rel="noreferrer"
+            >
+              View source
+              <ArrowUpRight size={13} />
+            </a>
+            <span className="topbar-avatar" title="Local workspace">
+              L
+            </span>
+          </div>
+        </header>
+        <div className="page-content">
+          <AnimatePresence>
+            {error && (
+              <m.div
+                className="error-banner"
+                role="alert"
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+              >
+                <span>{error}</span>
+                <button aria-label="Dismiss error" onClick={() => setError("")}>
+                  <X size={16} />
+                </button>
+              </m.div>
+            )}
+          </AnimatePresence>
+          <AnimatePresence mode="wait" initial={false}>
+            <m.div
+              key={view}
+              className={"page-view view-" + view}
+              initial={{ opacity: 0, y: 5 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.16 }}
+            >
+              {view === "workbench" && (
+                <>
+                  <div className="page-heading">
+                    <div>
+                      <h1>Incident workbench</h1>
+                      <p>Local incident investigation and evidence review.</p>
+                    </div>
+                    <span className="workspace-context">
+                      <span className="dot live" />
+                      Local environment<kbd>{shortcutLabel}</kbd>
+                    </span>
+                  </div>
+                  <button
+                    className="mobile-library-toggle secondary"
+                    onClick={() => setLibraryOpen((value) => !value)}
+                    aria-expanded={libraryOpen}
+                  >
+                    <PanelLeft size={15} />
+                    Browse incidents<span>{incidents.length}</span>
+                    <ChevronDown size={14} />
+                  </button>
+                  <div className="workbench-grid">
+                    <section
+                      className={
+                        "incident-library surface " +
+                        (libraryOpen ? "rail-mobile-open" : "")
+                      }
+                    >
+                      <div className="library-title">
+                        <h2>Incidents</h2>
+                        <span className="count">{incidents.length}</span>
+                        <Hint label="Search all workspace pages and incidents">
+                          <button
+                            className="icon-button"
+                            aria-label="Find an incident"
+                            onClick={() => setCommandOpen(true)}
+                          >
+                            <Search size={15} />
+                          </button>
+                        </Hint>
+                      </div>
+                      <label className="search library-search">
+                        <Search size={14} />
+                        <input
+                          aria-label="Search incidents"
+                          placeholder="Filter incidents…"
+                          value={search}
+                          onChange={(e) => setSearch(e.target.value)}
+                        />
+                        <kbd>/</kbd>
+                      </label>
+                      <div
+                        className="library-filters"
+                        aria-label="Incident collection"
+                      >
+                        {[
+                          ["all", "All"],
+                          ["v1", "Original"],
+                          ["v2", "V2 suite"],
+                        ].map(([value, label]) => (
+                          <button
+                            key={value}
+                            className={libraryFilter === value ? "on" : ""}
+                            aria-pressed={libraryFilter === value}
+                            onClick={() => setLibraryFilter(value)}
+                          >
+                            {label}
+                          </button>
+                        ))}
+                      </div>
+                      <div className="incident-list">
+                        {filteredIncidents.map((item) => (
+                          <button
+                            key={item.id}
+                            className={
+                              "incident-button " +
+                              (selected === item.id ? "chosen" : "")
+                            }
+                            aria-current={
+                              selected === item.id ? "true" : undefined
+                            }
+                            onClick={() => pickIncident(item.id)}
+                          >
+                            <IncidentNumber id={item.id} />
+                            <span>
+                              <strong>{item.title}</strong>
+                              <small>{item.description}</small>
+                            </span>
+                            {selected === item.id && <ChevronRight size={13} />}
+                          </button>
+                        ))}
+                        {!filteredIncidents.length && (
+                          <p className="no-match">No matching incidents.</p>
+                        )}
+                      </div>
+                      <div className="library-footer">
+                        <FlaskConical size={12} />
+                        Synthetic fixtures
+                        <span>
+                          {filteredIncidents.length} / {incidents.length}
+                        </span>
+                      </div>
+                    </section>
+                    <div className="investigation-column surface">
+                      <section className="case-card">
+                        <div className="case-top">
+                          <span className="case-id">
+                            <span className="case-id-icon">
+                              <GitBranch size={12} />
+                            </span>
+                            <span className="case-number">
+                              {selected.toUpperCase()}
+                            </span>
+                            <span className="case-collection">
+                              {selected.startsWith("sample-")
+                                ? "V2 reserved suite"
+                                : "Original corpus"}
+                            </span>
+                          </span>
+                          <span
+                            className={"status " + (run?.status || "ready")}
+                          >
+                            {active ? (
+                              <LoaderCircle className="spin" size={12} />
+                            ) : (
+                              <span className="dot" />
+                            )}
+                            {run
+                              ? statusLabel[run.status] || run.status
+                              : "Ready"}
+                          </span>
+                        </div>
+                        <h2>{incident?.title || "Choose an incident"}</h2>
+                        <p>{incident?.description}</p>
+                        <div className="case-controls">
+                          <div
+                            className="segmented"
+                            aria-label="Investigation mode"
+                          >
+                            <button
+                              className={mode === "multi" ? "on" : ""}
+                              aria-pressed={mode === "multi"}
+                              onClick={() => setMode("multi")}
+                              disabled={active}
+                            >
+                              <GitBranch size={13} />
+                              Multi-agent
+                            </button>
+                            <button
+                              className={mode === "single" ? "on" : ""}
+                              aria-pressed={mode === "single"}
+                              onClick={() => setMode("single")}
+                              disabled={active}
+                            >
+                              Single agent
+                            </button>
+                          </div>
+                          <label className="workflow-select">
+                            <select
+                              aria-label="Workflow version"
+                              value={workflow}
+                              onChange={(e) => setWorkflow(e.target.value)}
+                              disabled={active}
+                            >
+                              <option value="v2">V2 · Causal records</option>
+                              <option
+                                value="v1"
+                                disabled={selected.startsWith("sample-")}
+                              >
+                                V1 · Reference
+                              </option>
+                            </select>
+                          </label>
+                          <div className="run-actions">
+                            {active ? (
+                              <button
+                                className="secondary"
+                                onClick={() => control("cancel")}
+                                disabled={busy || !!run?.cancel_requested}
+                              >
+                                <Square size={12} />
+                                {run?.cancel_requested
+                                  ? "Stopping…"
+                                  : "Cancel investigation"}
+                              </button>
+                            ) : canResume ? (
+                              <>
+                                <button
+                                  className="secondary"
+                                  onClick={launch}
+                                  disabled={busy}
+                                >
+                                  New run
+                                </button>
+                                <button
+                                  className="primary"
+                                  onClick={() => control("resume")}
+                                  disabled={busy}
+                                >
+                                  <RotateCcw size={14} />
+                                  Resume investigation
+                                </button>
+                              </>
+                            ) : (
+                              <button
+                                className="primary"
+                                onClick={launch}
+                                disabled={
+                                  busy || !incident || !health?.available
+                                }
+                              >
+                                {busy ? (
+                                  <LoaderCircle className="spin" size={14} />
+                                ) : (
+                                  <Play size={13} fill="currentColor" />
+                                )}
+                                Start investigation
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                        {run && (
+                          <div className="run-meta">
+                            <span className="run-id">
+                              RUN{" "}
+                              <span title={run.id}>{run.id.slice(0, 8)}</span>
+                            </span>
+                            <span>
+                              {(run.state.engine_version || "v1").toUpperCase()}
+                              <span className="meta-separator">·</span>
+                              {run.provider === "scripted"
+                                ? "Test double"
+                                : run.provider === "ollama"
+                                  ? "Local model"
+                                  : run.provider}
+                            </span>
+                            <Hint label="Export full audit JSON">
+                              <button
+                                className="icon-button"
+                                aria-label="Export full audit JSON"
+                                onClick={exportRun}
+                              >
+                                <ArrowDownToLine size={14} />
+                              </button>
+                            </Hint>
+                          </div>
+                        )}
+                      </section>
+                      <div className="metrics-row">
+                        <div>
+                          <span>Model calls</span>
+                          <strong>
+                            {run?.metrics.model_calls ?? "—"}
+                            <small> / {health?.limits.model_calls ?? 18}</small>
+                          </strong>
+                        </div>
+                        <div>
+                          <span>Tool calls</span>
+                          <strong>
+                            {run?.metrics.tool_calls ?? "—"}
+                            <small> / {health?.limits.tool_calls ?? 14}</small>
+                          </strong>
+                        </div>
+                        <div>
+                          <span>Reported tokens</span>
+                          <strong>
+                            {run?.metrics.usage_complete
+                              ? (
+                                  (run.metrics.input_tokens || 0) +
+                                  (run.metrics.output_tokens || 0)
+                                ).toLocaleString()
+                              : "—"}
+                          </strong>
+                        </div>
+                        <div>
+                          <span>Finished session time</span>
+                          <strong>
+                            {elapsed ? elapsed.toFixed(1) : "—"}
+                            <small>{elapsed ? " s" : ""}</small>
+                          </strong>
+                        </div>
+                      </div>
+                      <div
+                        className="run-tabs"
+                        role="tablist"
+                        aria-label="Investigation views"
+                      >
+                        {runTabs.map((item, index) => (
+                          <button
+                            key={item.id}
+                            id={"tab-" + item.id}
+                            role="tab"
+                            aria-selected={tab === item.id}
+                            tabIndex={tab === item.id ? 0 : -1}
+                            aria-controls={"panel-" + item.id}
+                            className={tab === item.id ? "active" : ""}
+                            onClick={() => setTab(item.id)}
+                            onKeyDown={(e) => {
+                              if (
+                                [
+                                  "ArrowRight",
+                                  "ArrowLeft",
+                                  "Home",
+                                  "End",
+                                ].includes(e.key)
+                              ) {
+                                e.preventDefault();
+                                const next =
+                                  e.key === "Home"
+                                    ? 0
+                                    : e.key === "End"
+                                      ? 2
+                                      : (index +
+                                          (e.key === "ArrowRight" ? 1 : -1) +
+                                          3) %
+                                        3;
+                                setTab(runTabs[next].id);
+                                document
+                                  .getElementById("tab-" + runTabs[next].id)
+                                  ?.focus();
+                              }
+                            }}
+                          >
+                            <item.icon size={14} />
+                            {item.label}
+                            {item.id === "activity" && !!run?.events.length && (
+                              <span>
+                                {
+                                  run.events.filter(
+                                    (event) =>
+                                      ![
+                                        "model_response",
+                                        "session_end",
+                                        "model_reused",
+                                      ].includes(event.kind),
+                                  ).length
+                                }
+                              </span>
+                            )}
+                            {item.id === "evidence" &&
+                              !!run?.evidence.length && (
+                                <span>{run.evidence.length}</span>
+                              )}
+                          </button>
+                        ))}
+                        <span className="tab-saved">
+                          {run && (
+                            <>
+                              <Check size={11} />
+                              Saved locally
+                            </>
+                          )}
+                        </span>
+                      </div>
+                      <div
+                        id={"panel-" + tab}
+                        role="tabpanel"
+                        aria-labelledby={"tab-" + tab}
+                        className="run-panel"
+                      >
+                        <AnimatePresence mode="wait" initial={false}>
+                          <m.div
+                            key={tab + ":" + (run?.id || "empty")}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.12 }}
+                          >
+                            {tab === "overview" && (
+                              <Overview
+                                run={run}
+                                openSource={openSource}
+                                showActivity={() => setTab("activity")}
+                              />
+                            )}
+                            {tab === "activity" && <Timeline run={run} />}
+                            {tab === "evidence" && (
+                              <EvidencePanel
+                                run={run}
+                                evidenceId={evidenceId}
+                                focusedLine={focusedLine}
+                                choose={(id) => {
+                                  setEvidenceId(id);
+                                  setFocusedLine(null);
+                                }}
+                                exportRun={exportRun}
+                              />
+                            )}
+                          </m.div>
+                        </AnimatePresence>
+                      </div>
+                    </div>
+                  </div>
+                  <footer className="page-footer">
+                    <span>
+                      <span className="dot live" />
+                      Audit stored in your local workspace
+                    </span>
+                    <span>
+                      Synthetic corpus<span>·</span>V1 / V2 compatible
+                    </span>
+                  </footer>
+                </>
+              )}
+              {view === "history" && (
+                <HistoryPage
+                  runs={runs}
+                  incidents={incidents}
+                  openRun={openRun}
+                  newRun={() => navigate("workbench")}
+                />
+              )}
+              {view === "benchmark" && (
+                <BenchmarkPage
+                  benchmark={benchmark}
+                  version={benchmarkVersion}
+                  changeVersion={changeBenchmark}
+                />
+              )}
+              {view === "system" && <SystemPage health={health} />}
+            </m.div>
+          </AnimatePresence>
+        </div>
+      </main>
+    </div>
+  );
 }
-const roles:Record<string,string>={coordinator:'Coordinator',investigator:'Investigator',verifier:'Verifier',single:'Single agent',system:'System'};
-const activeStatuses=['running','queued'];
-const statusLabel:Record<string,string>={running:'Investigating',queued:'Queued',completed:'Completed',interrupted:'Interrupted',cancelled:'Cancelled',error:'Error · resumable',failed:'Stopped · error',budget_exhausted:'Budget reached'};
-const time=(s:string)=>new Date(s).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
 
-function App(){
-  const [workflow,setWorkflow]=useState('v2'),[focusedLine,setFocusedLine]=useState<number|null>(null),[benchmarkVersion,setBenchmarkVersion]=useState('v2');
-  const [incidents,setIncidents]=useState<Incident[]>([]),[selected,setSelected]=useState('case-01'),[search,setSearch]=useState('');
-  const [health,setHealth]=useState<Health|null>(null),[runs,setRuns]=useState<Run[]>([]),[run,setRun]=useState<Run|null>(null),[runId,setRunId]=useState<string|null>(new URLSearchParams(location.search).get('run')||localStorage.getItem('tracemedic.run'));
-  useEffect(()=>{const url=new URL(location.href);if(runId)url.searchParams.set('run',runId);else url.searchParams.delete('run');history.replaceState(null,'',url)},[runId]);
-  const [mode,setMode]=useState('multi'),[view,setView]=useState('workbench'),[busy,setBusy]=useState(false),[error,setError]=useState(''),[evidenceId,setEvidenceId]=useState<string|null>(null),[expanded,setExpanded]=useState<number|null>(null),[benchmark,setBenchmark]=useState<Benchmark|null>(null);
-  useEffect(()=>{Promise.all([api<Incident[]>('/incidents'),api<Health>('/health'),api<Run[]>('/runs'),api<Benchmark>('/benchmark')]).then(([i,h,r,b])=>{setIncidents(i);setHealth(h);setRuns(r);setBenchmark(b)}).catch(e=>setError(e.message));},[]);
-  useEffect(()=>{if(!runId)return;let disposed=false,firstLoad=true;const load=()=>api<Run>('/runs/'+encodeURIComponent(runId)).then(r=>{if(disposed)return;setRun(r);setSelected(r.incident_id);if(firstLoad){setWorkflow(r.state.engine_version||'v1');setMode(r.mode);setFocusedLine(null);firstLoad=false}localStorage.setItem('tracemedic.run',r.id)}).catch(e=>{if(!disposed)setError(e.message)});void load();const timer=setInterval(load,1200);return()=>{disposed=true;clearInterval(timer)}},[runId]);
-  useEffect(()=>{if(run?.status&&!activeStatuses.includes(run.status))api<Run[]>('/runs').then(setRuns).catch(()=>{});},[run?.status]);
-  const incident=incidents.find(i=>i.id===selected),active=!!run&&activeStatuses.includes(run.status),canResume=!!run&&['interrupted','cancelled','error'].includes(run.status);
-  const evidence=run?.evidence.find(e=>e.id===evidenceId)||run?.evidence[0];
-  const visibleEvents=run?.events.filter(e=>!['model_response','session_end','model_reused'].includes(e.kind))||[];
-  const diagnostic=run?.state.diagnostic;
-  const lastAttempt=run?.events.filter(e=>e.kind==='model_attempt').at(-1);
-  const lastResponse=run?.events.filter(e=>e.kind==='model_response'||e.kind==='error').at(-1);
-  const waiting=active&&!!lastAttempt&&(!lastResponse||lastAttempt.seq>lastResponse.seq);
-  const elapsed=(run?.events.filter(e=>e.kind==='session_end').reduce((s,e)=>s+Number(e.data.elapsed_ms||0),0)||0)/1000;
-  async function launch(){setBusy(true);setError('');try{const r=await api<{id:string}>('/runs',{incident_id:selected,mode,workflow});setRun(null);setEvidenceId(null);setFocusedLine(null);setRunId(r.id)}catch(e){setError((e as Error).message)}finally{setBusy(false)}}
-  async function control(action:string){if(!run)return;setBusy(true);try{await api('/runs/'+run.id+'/'+action,{});setRun(await api<Run>('/runs/'+run.id))}catch(e){setError((e as Error).message)}finally{setBusy(false)}}
-  function pickIncident(id:string){setSelected(id);if(id.startsWith('sample-'))setWorkflow('v2');setRunId(null);setRun(null);setEvidenceId(null);setFocusedLine(null);localStorage.removeItem('tracemedic.run')}
-  function exportRun(){if(!run)return;const url=URL.createObjectURL(new Blob([JSON.stringify(run,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='tracemedic-'+run.id+'.json';a.click();URL.revokeObjectURL(url)}
-  function citations(ids:string[]){return <div className="citations">{ids.map(id=>{const e=run?.evidence.find(v=>v.id===id);return e&&<button key={id} onClick={()=>{setEvidenceId(id);setFocusedLine(null)}}><FileCode2 size={12}/>{e.path}:{e.start_line}{e.end_line!==e.start_line?'–'+e.end_line:''}</button>})}</div>}
-  return <div className="app-shell">
-    <aside className="sidebar"><a className="brand" href="#" onClick={e=>{e.preventDefault();setView('workbench')}}><span className="brand-mark"><Activity size={24}/></span><span>TraceMedic<span className="brand-caption">INCIDENT INTELLIGENCE</span></span></a>
-      <div className="workspace-label">WORKSPACE <span>LOCAL</span></div>
-      <nav aria-label="Main navigation"><button className={view==='workbench'?'selected':''} onClick={()=>setView('workbench')}><Layers3 size={18}/>Incident workbench<ChevronRight size={14}/></button><button className={view==='history'?'selected':''} onClick={()=>{setView('history');api<Run[]>('/runs').then(setRuns).catch(e=>setError(e.message))}}><GitBranch size={18}/>Investigations<span className="nav-count">{runs.length}</span></button><button className={view==='benchmark'?'selected':''} onClick={()=>{setView('benchmark');api<Benchmark>('/benchmark?version='+benchmarkVersion).then(setBenchmark).catch(e=>setError(e.message))}}><FlaskConical size={18}/>Benchmark</button><button className={view==='system'?'selected':''} onClick={()=>setView('system')}><Terminal size={18}/>System & setup</button></nav>
-      <div className="sidebar-note"><Fingerprint size={24}/><strong>Every claim leaves a trace.</strong><p>Inspect the evidence.<br/>Challenge the hypothesis.<br/>Keep the uncertainty.</p></div>
-      <div className="model-card"><span className={'dot '+(health?.available?'live':'')}/><div><strong>{health?.model||'Checking model…'}</strong><span>{health?.available?'Local inference available':'Model unavailable'}</span></div><span className="local-tag">LOCAL</span></div>
-      <div className="sidebar-bottom">TraceMedic <span>v0.2 / Research build</span></div>
-    </aside>
-    <main><header className="topbar"><div><span className="breadcrumb">Workspace</span><ChevronRight size={13}/><span>{view==='workbench'?'Incident workbench':view==='history'?'Investigations':view==='benchmark'?'Benchmark':'System & setup'}</span></div><span className="environment"><span className="dot live"/>LOCAL WORKSPACE</span><a className="repo-link" href="https://github.com/Alecbossard/TraceMedic/tree/codex/v2-evidence" target="_blank" rel="noreferrer">View source<ArrowUpRight size={14}/></a></header>
-    <div className="page-content">{error&&<div className="error-banner" role="alert"><span>{error}</span><button aria-label="Dismiss error" onClick={()=>setError('')}><X size={16}/></button></div>}
-    {view==='workbench'&&<>
-      <div className="page-heading"><div><div className="eyebrow">OBSERVE. INVESTIGATE. VERIFY.</div><h1>Incident workbench<span>.</span></h1><p>A clear path from a failure to a defensible finding.</p></div><span className="pill"><ShieldCheck size={14}/>Evidence first</span></div>
-      <div className="intro-strip"><div><span className="intro-icon"><GitBranch size={22}/></span><div><strong>Three perspectives. One evidence trail.</strong><span>Agents delegate, investigate, and challenge findings through real tools.</span></div></div><div className="agent-flow"><span><i className="role-dot coordinator"/>Coordinate</span><ArrowRight size={14}/><span><i className="role-dot investigator"/>Investigate</span><ArrowRight size={14}/><span><i className="role-dot verifier"/>Verify</span></div></div>
-      <div className="workbench-grid"><section className="incident-library panel"><div className="panel-heading"><h2><FolderOpen size={16}/>Incident library</h2><span className="count">{incidents.length}</span></div><label className="search"><Search size={15}/><input aria-label="Search incidents" placeholder="Search incidents…" value={search} onChange={e=>setSearch(e.target.value)}/></label><div className="library-meta"><span>SYNTHETIC FIXTURES</span><ListFilter size={13}/></div><div className="incident-list">{incidents.filter(i=>(i.title+' '+i.id).toLowerCase().includes(search.toLowerCase())).map(i=><button key={i.id} className={'incident-button '+(selected===i.id?'chosen':'')} onClick={()=>pickIncident(i.id)}><span className="incident-number">{i.id.replace('case-','#')}</span><strong>{i.title}</strong><span>{i.description}</span>{selected===i.id&&<ChevronRight size={15}/>}</button>)}{search&&!incidents.some(i=>(i.title+' '+i.id).toLowerCase().includes(search.toLowerCase()))&&<p className="no-match">No matching incidents.</p>}</div><div className="library-footer"><FlaskConical size={13}/>Reproducible bugs · no customer data</div></section>
-      <div className="investigation-column"><section className="case-card panel"><div className="case-top"><span className="case-id">{selected.toUpperCase()}</span><span className={'status '+(run?.status||'ready')}>{active?<LoaderCircle className="spin" size={12}/>:<span className="dot"/>}{run?statusLabel[run.status]||run.status:'Ready to investigate'}</span></div><h2>{incident?.title||'Choose an incident'}</h2><p>{incident?.description}</p><div className="workflow-row"><label>Workflow<select aria-label="Workflow version" value={workflow} onChange={e=>setWorkflow(e.target.value)} disabled={active}><option value="v2">V2 · causal records</option><option value="v1" disabled={selected.startsWith('sample-')}>V1 · reference</option></select></label>{run&&<span className="version-note">Saved with {(run.state.engine_version||'v1').toUpperCase()}</span>}</div><div className="case-actions"><div className="segmented" aria-label="Investigation mode"><button className={mode==='multi'?'on':''} onClick={()=>setMode('multi')} disabled={active}><GitBranch size={13}/>Multi-agent</button><button className={mode==='single'?'on':''} onClick={()=>setMode('single')} disabled={active}>Single agent</button></div>{active?<button className="secondary action" onClick={()=>control('cancel')} disabled={busy||!!run?.cancel_requested}><Square size={13}/>{run?.cancel_requested?'Stopping after current action…':'Cancel investigation'}</button>:canResume?<div className="button-group"><button className="secondary" onClick={launch} disabled={busy}>New run</button><button className="primary" onClick={()=>control('resume')} disabled={busy}><RotateCcw size={14}/>Resume investigation</button></div>:<button className="primary" onClick={launch} disabled={busy||!incident||!health?.available}>{busy?<LoaderCircle className="spin" size={15}/>:<Play size={14}/>}Start investigation</button>}</div>{run&&<div className="run-id"><Fingerprint size={12}/>{run.id}<button onClick={exportRun} title="Export full audit JSON" aria-label="Export full audit JSON"><ArrowDownToLine size={14}/></button></div>}</section>
-      <div className="metrics-row"><div><span>MODEL CALLS</span><strong>{run?.metrics.model_calls??'—'}<small> / {health?.limits.model_calls??18}</small></strong></div><div><span>TOOL CALLS</span><strong>{run?.metrics.tool_calls??'—'}<small> / {health?.limits.tool_calls??14}</small></strong></div><div><span>REPORTED TOKENS</span><strong>{run?.metrics.usage_complete?((run.metrics.input_tokens||0)+(run.metrics.output_tokens||0)).toLocaleString():'—'}</strong></div><div><span>FINISHED SESSION TIME</span><strong>{elapsed?elapsed.toFixed(1):'—'}<small>{elapsed?' s':''}</small></strong></div></div>
-      <>{diagnostic&&<FindingPreview outcome={diagnostic.outcome} text={run?.state.hypotheses?.find(h=>diagnostic.hypothesis_ids?.includes(h.id))?.mechanism||diagnostic.summary}/>}</><div className="detail-grid"><section className="timeline-panel panel"><div className="panel-heading"><h2><Activity size={16}/>Investigation timeline</h2><span className="subtle">{visibleEvents.length?visibleEvents.length+' events':'Awaiting a run'}</span></div><div className="agent-lanes">{(run?.mode==='single'?['single']:['coordinator','investigator','verifier']).map(r=><span key={r} className={active&&lastAttempt?.role===r?'lane-active':''}><i className={'role-dot '+r}/>{roles[r]}{active&&lastAttempt?.role===r&&waiting&&<LoaderCircle className="spin" size={11}/>}</span>)}</div>{!run?<div className="empty-state"><div className="empty-orbit"><Search size={27}/></div><h3>The investigation starts here.</h3><p>Choose a fixture and start a run. Decisions, delegations, and tool results will appear as they happen.</p><span><Circle size={10}/>No simulated activity</span></div>:<div className="timeline">{visibleEvents.map(e=><div className={'timeline-event '+e.role} key={e.seq}><span className="event-marker">{e.kind==='tool_result'?<FileCode2 size={12}/>:e.kind==='review'?<ShieldCheck size={12}/>:e.kind==='delegation'?<GitBranch size={12}/>:e.kind==='diagnostic'?<Check size={12}/>:<Circle size={8}/>}</span><button className="event-body" onClick={()=>setExpanded(expanded===e.seq?null:e.seq)}><div className="event-top"><span>{roles[e.role]||e.role}</span><span>{time(e.timestamp)}<ChevronDown size={12}/></span></div><div className="event-kind">{e.kind.replaceAll('_',' ')}</div><p>{e.message}</p>{expanded===e.seq&&<pre>{JSON.stringify(e.data,null,2)}</pre>}</button></div>)}{waiting&&<div className="actual-wait"><LoaderCircle className="spin" size={13}/>{roles[lastAttempt?.role||'system']} is awaiting the local model.</div>}{run.status==='cancelled'&&<div className="inline-note">Saved at an action boundary. Resume to continue with the same evidence.</div>}{run.status==='error'&&<div className="inline-note">The run stopped on an error. Expand the event for details, then resume after resolving it.</div>}</div>}</section>
-      <section className="evidence-panel panel"><div className="panel-heading"><h2><FileCode2 size={16}/>Evidence inspector</h2><span className="count">{run?.evidence.length||0}</span></div>{!evidence?<div className="empty-evidence"><BookOpen size={25}/><h3>Sources, not guesses.</h3><p>Open captured evidence here to inspect the exact file and line numbers behind a claim.</p><span>READ-ONLY · INCIDENT SANDBOX</span></div>:<><label className="source-select"><select aria-label="Select captured evidence" value={evidence.id} onChange={e=>{setEvidenceId(e.target.value);setFocusedLine(null)}}>{run?.evidence.map(e=><option key={e.id} value={e.id}>{e.path} · L{e.start_line}–{e.end_line}</option>)}</select><ChevronDown size={14}/></label><div className="source-heading"><FileCode2 size={13}/><strong>{evidence.path}</strong><span>L{evidence.start_line}–{evidence.end_line}</span></div><div className="source-code">{evidence.excerpt.split('\n').map((line,i)=><div className={'source-line '+(focusedLine===i+evidence.start_line?'cited-line':'')} key={i}><span>{i+evidence.start_line}</span><code>{line||' '}</code></div>)}</div><div className="source-hash"><Fingerprint size={12}/><span title={evidence.sha256}>SHA-256 {evidence.sha256.slice(0,14)}…</span><ShieldCheck size={13}/></div><div className="source-notice">Captured source content is untrusted data. It cannot change agent permissions.</div></>}</section></div>
-      {(run?.state.hypotheses?.length||0)>0&&<section className="hypotheses-panel panel"><div className="panel-heading"><h2><GitBranch size={16}/>Hypotheses under review</h2><span className="count">{run?.state.hypotheses?.length}</span></div><div className="hypotheses">{run?.state.hypotheses?.map((h,i)=><article key={h.id}><div className="hypothesis-top"><span>{h.alias||'H'+String(i+1).padStart(2,'0')}</span><span className={'status '+h.status}>{h.status}</span></div><CausalRecord hypothesis={h} sources={run?.evidence||[]} onCitation={(id,line)=>{setEvidenceId(id);setFocusedLine(line);document.querySelector('.evidence-panel')?.scrollIntoView({behavior:'smooth',block:'center'})}}/>{h.reason&&<p>{h.reason}</p>}{citations(h.evidence_ids)}</article>)}</div></section>}
-      {!!run?.state.checks?.length&&<section className="checks panel"><div className="panel-heading"><h2><FlaskConical size={16}/>Executed checks</h2></div>{run.state.checks.map(c=><div key={c.check_id}><span className="status">{c.kind==='intervention'?'Isolated experiment':c.status}</span><div className="check-detail">{c.kind==='intervention'&&<><p>Baseline: <strong>{c.baseline?.status}</strong> → trial: <strong>{c.trial?.status}</strong></p>{c.changes?.map((change,i)=><code key={i}>{change.path} = {JSON.stringify(change.value)}</code>)}</>}<code>{c.detail}</code></div><span className="subtle">{c.check_id}</span></div>)}</section>}
-      {diagnostic&&<section id="final-finding" tabIndex={-1} className={'diagnostic-card '+diagnostic.outcome}><div className="diagnostic-label"><ShieldCheck size={18}/>{diagnostic.outcome==='supported'?'Evidence-supported finding':'Cause not established'}<span>{run?.status==='completed'?'Investigation complete':statusLabel[run?.status||'']}</span></div><h2>{diagnostic.summary}</h2>{diagnostic.rendered_from_reviewed_records&&<div className="reviewed-record-note"><ShieldCheck size={13}/>{diagnostic.support_level==='controlled_intervention'?'Reproduced + isolated intervention':diagnostic.support_level==='reproduction'?'Reproduced behavior · causal record reviewed':'Explicit uncertainty'} · Finding assembled from reviewed records</div>}{citations(diagnostic.evidence_ids)}<div className="diagnostic-bottom"><div><h3>PROPOSED NEXT ACTIONS</h3>{diagnostic.next_actions.map((a,i)=><p key={i}><ArrowRight size={14}/>{a}</p>)}</div><div><h3>LIMITATIONS</h3>{diagnostic.limitations.map((l,i)=><p key={i}>{l}</p>)}<p>No correction has been applied.</p></div></div></section>}
-      </div></div>
-      <footer className="page-footer"><span><ShieldCheck size={13}/>Evidence-linked conclusions. Explicit uncertainty.</span><span>LangGraph orchestration <i/> MCP tools <i/> Durable checkpoints</span></footer>
-    </>}
-    {view==='history'&&<><div className="page-heading"><div><div className="eyebrow">DURABLE BY DESIGN</div><h1>Investigations<span>.</span></h1><p>Reopen an audit trail or resume from the last saved action.</p></div></div><div className="history-list panel">{!runs.length&&<div className="empty-state"><GitBranch size={28}/><h3>No investigations yet.</h3><p>Start an incident from the workbench to create the first durable trace.</p><button className="primary" onClick={()=>setView('workbench')}>Open workbench<ArrowRight size={14}/></button></div>}{runs.map(r=><button key={r.id} onClick={()=>{setRunId(r.id);setView('workbench')}}><span className="history-icon"><GitBranch size={19}/></span><div><strong>{incidents.find(i=>i.id===r.incident_id)?.title||r.incident_id}</strong><span>{r.id} · {(r.engine_version||'v1').toUpperCase()} · {r.provider==='scripted'?'TEST DOUBLE':r.model} · {r.mode}</span></div><span className={'status '+r.status}>{statusLabel[r.status]||r.status}</span><ArrowUpRight size={17}/></button>)}</div></>}
-    {view==='benchmark'&&<><div className="page-heading"><div><div className="eyebrow">MEASURE, THEN COMPARE</div><h1>Benchmark<span>.</span></h1><p>A versioned comparison, with every scheduled outcome published.</p></div></div><label className="benchmark-version">Experiment<select aria-label="Benchmark version" value={benchmarkVersion} onChange={e=>{setBenchmarkVersion(e.target.value);api<Benchmark>('/benchmark?version='+e.target.value).then(setBenchmark).catch(e=>setError(e.message))}}><option value="v2">V2 · fresh reserved suite</option><option value="v1">V1 · original study</option></select></label><div className="benchmark-intro panel"><FlaskConical size={28}/><h2>A comparison you can inspect.</h2><p>{benchmarkVersion==='v2'?'12 fresh reserved incidents. Deterministic rules, V1 multi-agent, V2 single-agent and V2 multi-agent. The same local model and call budgets; V2 has improved tools.':'Original V1 study: 24 synthetic incidents, 12 reserved cases, three methods.'} The protocol, raw runs and limitations are published. Hardware and electricity costs are not measured.</p><span className="pill">{benchmark?.total_runs?benchmark.total_runs+'/'+(benchmark.scheduled_runs||benchmark.total_runs)+' recorded runs'+(benchmark.status==='complete'?'':' · partial results'):'No recorded benchmark yet'}</span></div>{benchmark?.methods&&<div className="table-wrap panel"><table><thead><tr><th>Method</th><th>Runs</th><th>Correct outcomes</th><th>Supported correct</th><th>Unsupported by rubric</th><th>Correct abstentions</th><th>Median latency</th><th>Model calls</th></tr></thead><tbody>{benchmark.methods.map(m=><tr key={m.method}><td><strong>{m.method}</strong></td><td>{m.runs}</td><td>{m.correct??m.correct_total??m.correct_supported}</td><td>{m.correct_supported}</td><td>{m.unsupported}</td><td>{m.abstention_correct}</td><td>{m.median_latency_s.toFixed(1)} s</td><td>{m.model_calls}</td></tr>)}</tbody></table></div>}<a className="text-link" href="https://github.com/Alecbossard/TraceMedic/tree/codex/v2-evidence/benchmarks" target="_blank" rel="noreferrer">Inspect protocol and raw results<ArrowUpRight size={15}/></a></>}
-    {view==='system'&&<><div className="page-heading"><div><div className="eyebrow">SMALL STACK. VISIBLE BOUNDARIES.</div><h1>System & setup<span>.</span></h1><p>Local inference, constrained tools, and a persistent investigation graph.</p></div></div><div className="system-grid">{[['Model',health?.model||'Unavailable',health?.detail||'Checking endpoint'],['Tools','MCP over stdio','A separate subprocess, bound to one incident. No general shell.'],['Persistence','SQLite + LangGraph','Graph checkpoints, evidence snapshots, operation ledger and events.'],['Budgets',`${health?.limits.model_calls||18} model / ${health?.limits.tool_calls||14} tool calls`,'Bounded turns, retries, timeouts and explicit termination.']].map(([label,value,detail])=><section className="panel system-card" key={label}><span className="eyebrow">{label}</span><h2>{value}</h2><p>{detail}</p></section>)}</div><div className="panel setup-card"><h2>Reproduce a run</h2><pre>.venv\Scripts\tracemedic run case-01{`\n`}.venv\Scripts\tracemedic resume &lt;run-id&gt;</pre><p>The README covers installation, local model setup, restart recovery, failure cases and the limits of synthetic validation.</p><a className="text-link" href="https://github.com/Alecbossard/TraceMedic/tree/codex/v2-evidence#readme" target="_blank" rel="noreferrer">Read the reproduction guide<ArrowUpRight size={15}/></a></div></>}
-    </div></main>
-  </div>
-}
-
-createRoot(document.getElementById('root')!).render(<React.StrictMode><App/></React.StrictMode>);
+createRoot(document.getElementById("root")!).render(
+  <React.StrictMode>
+    <MotionConfig reducedMotion="user" transition={{ duration: 0.18 }}>
+      <LazyMotion features={loadMotion} strict>
+        <Tooltip.Provider delayDuration={350}>
+          <App />
+        </Tooltip.Provider>
+      </LazyMotion>
+    </MotionConfig>
+  </React.StrictMode>,
+);

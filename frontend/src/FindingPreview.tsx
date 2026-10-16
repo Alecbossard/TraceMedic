@@ -1,15 +1,44 @@
-import { ArrowDown, ShieldCheck } from 'lucide-react';
+import { ArrowDownRight, CircleCheck, CircleHelp } from "lucide-react";
+import { reducedScroll } from "./lib";
 
-export function FindingPreview({outcome, text}: {outcome: string; text: string}) {
-  return <section className="finding-preview" aria-label="Investigation outcome">
-    <ShieldCheck size={21}/>
-    <div><h2>{outcome === 'supported' ? 'Finding supported in the captured fixture' : 'Cause not established'}</h2>
-      <p>{text}</p>
-    </div>
-    <button onClick={() => {
-      const target = document.getElementById('final-finding');
-      target?.scrollIntoView({behavior: 'smooth', block: 'center'});
-      target?.focus({preventScroll: true});
-    }}>Review finding<ArrowDown size={14}/></button>
-  </section>;
+export function FindingPreview({
+  outcome,
+  text,
+}: {
+  outcome: string;
+  text: string;
+}) {
+  const supported = outcome === "supported";
+  return (
+    <section
+      className={"finding-preview " + (supported ? "supported" : "unresolved")}
+      aria-label="Investigation outcome"
+    >
+      <div className="finding-symbol">
+        {supported ? <CircleCheck size={20} /> : <CircleHelp size={20} />}
+      </div>
+      <div>
+        <div className="finding-kicker">
+          {supported
+            ? "SUPPORTED IN CAPTURED FIXTURE"
+            : "INSUFFICIENT EVIDENCE"}
+        </div>
+        <h2>{supported ? "Reviewed finding" : "Cause not established"}</h2>
+        <p>{text}</p>
+        <button
+          onClick={() => {
+            const target = document.getElementById("final-finding");
+            target?.scrollIntoView({
+              behavior: reducedScroll(),
+              block: "start",
+            });
+            target?.focus({ preventScroll: true });
+          }}
+        >
+          Review finding & next steps
+          <ArrowDownRight size={14} />
+        </button>
+      </div>
+    </section>
+  );
 }

@@ -4,7 +4,9 @@
 
 TraceMedic takes a captured incident and explains a proposed **trigger → mechanism → observed effect**, or returns explicit uncertainty. Every causal record links to captured source lines and executed checks. The workbench exposes delegation, challenges, isolated experiments and durable recovery. Next actions remain proposals; no repair is applied.
 
-![V2 workbench with a real Qwen3 investigation](docs/evidence/v2/workbench.png)
+![Redesigned workbench with a real Qwen3 investigation](docs/evidence/ui-refresh/desktop.png)
+
+The redesigned interface separates **Overview**, **Activity** and **Sources**, with a keyboard command menu, source-line navigation, searchable run history and interactive benchmark comparisons. It uses Motion, Radix primitives and locally hosted Geist fonts. See the [UI design and verification notes](docs/ui_refresh.md).
 
 ## What changed in V2
 

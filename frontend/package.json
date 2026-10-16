@@ -6,18 +6,28 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "build": "tsc -b && vite build",
-    "preview": "vite preview --host 127.0.0.1"
+    "preview": "vite preview --host 127.0.0.1",
+    "test:ui": "node scripts/browser-refresh.mjs",
+    "format": "prettier --write src scripts/browser*.mjs index.html vite.config.ts",
+    "format:check": "prettier --check src scripts/browser*.mjs index.html vite.config.ts"
   },
   "dependencies": {
+    "@fontsource-variable/geist": "5.3.0",
+    "@fontsource-variable/geist-mono": "5.3.0",
+    "@radix-ui/react-dialog": "1.3.1",
+    "@radix-ui/react-tooltip": "1.4.1",
     "lucide-react": "0.468.0",
+    "motion": "14.3.0",
     "react": "19.2.0",
     "react-dom": "19.2.0"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.14.0",
     "@playwright/test": "1.64.1",
     "@types/react": "19.2.2",
     "@types/react-dom": "19.2.2",
     "@vitejs/plugin-react": "6.1.2",
+    "prettier": "3.9.10",
     "typescript": "5.9.3",
     "vite": "8.3.4"
   }
