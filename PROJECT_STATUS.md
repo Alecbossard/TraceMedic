@@ -1,6 +1,6 @@
 # TraceMedic project status
 
-Updated: 2026-10-15. This file is the resumption entry point.
+Updated: 2026-10-16. This file is the resumption entry point.
 
 ## Current state
 
@@ -8,7 +8,8 @@ Updated: 2026-10-15. This file is the resumption entry point.
 - Corrected implementation frozen at `f56fc7b`: **56/56 scheduled runs complete**, no prompt/model/scorer changes. Rules **3/14**, V1 multi **7/14**, V2 single **6/14**, V2 multi **8/14** automatic outcomes. Median wall seconds **1.917 / 37.424 / 11.528 / 14.011**; model calls **0 / 200 / 73 / 99**. All raw outcomes, failures and a post hoc semantic audit are in `benchmarks/v2/`. The audit identifies false positives; semantic reliability improvement is not established.
 - V2 multi completed all 14 runs and correctly abstained on all three ambiguous trials. V2 single failed one citation-validation sequence. One V1 provider retry leaves its token aggregate incomplete. No benchmark run selected the optional experiment tool; its separate real native MCP integration passed with reproduced baseline and passing trial (`docs/evidence/v2/real-experiment.json`).
 - Actual V2 browser run `22ccf4b6-449c-4c56-9442-dbec22e91d60`: cancelled/resumed same ID, all three real roles, source-line highlighting, no JS errors or overflow at 1440/900/390px. Fresh inference proof and separate replay metadata are in `docs/evidence/v2/`. The first browser trace is also preserved. V1 replay compatibility passes.
-- V2 deterministic/protocol suite: 32 passed / 2 opt-in real skipped, plus the newly added scorer integration test passed separately. Actual V2 model integration passed (1 test, 15.68s). Real V2 kill/new-process resume completed with five snapshots and aliases preserved, one baseline execution/event: `docs/evidence/v2/real-recovery.json`.
+- Fresh Git archive/new environment validation on `d0d8698`: **37 passed, 2 opt-in real skipped**; Ruff checks/formatting, pip check, npm ci/build/audit and both recorded-trace imports passed. The actual V2 model test then passed from that fresh environment (**1 passed, 1 deselected in 22.97s**). The initial attempt found the external provider stopped after session interruption; its failure is retained alongside the successful retry and verified model digest in `docs/evidence/v2/clean-install.json`.
+- Real V2 kill/new-process resume completed with five snapshots and aliases preserved, one baseline execution/event: `docs/evidence/v2/real-recovery.json`.
 
 - Inspected the existing checkout: empty Git repository, no user files or commits.
 - Remote `https://github.com/Alecbossard/TraceMedic.git` now contains the delivered project; default branch is `codex/tracemedic`.
@@ -32,12 +33,12 @@ Updated: 2026-10-15. This file is the resumption entry point.
 ## Known limits
 
 - Shipped synthetic corpus only; no general incident-directory ingestion or production-resource checks.
-- Semantic unsupported claims can survive typed/reference guards; keyword evaluation has false negatives and does not prove entailment. Multi-agent did not outperform the simpler agent here.
+- Semantic unsupported claims can survive typed/reference guards; keyword evaluation has false positives and false negatives and does not prove entailment. V1's original multi-agent study scored below its single agent; the new V2 automatic scores do not establish a semantic reliability improvement. The author-assisted semantic audit is not an independent blind review.
 - One transient provider-unavailable retry leaves one run's token total incomplete. Known usage is retained, missing usage is not estimated. Monetary/hardware costs are unmeasured.
 - Cooperative cancellation, separate SQLite transactions, and explicit indeterminate fixture operations; no universal exactly-once or Windows OS memory-sandbox claim.
 
-## Next actions
+## Delivery and review
 
-User requested V2. See `docs/v2_proposal.md` and `docs/v2_architecture.md`. Preserve all V1 artifacts and the frozen V2 implementation/results. Next: fresh Git archive/new environment validation, opt-in real V2 test from that environment, push branch and create a reviewable PR, verify CI. Development candidates (including failures) remain in `docs/evidence/v2-development*.json`; their subset is not a new accuracy estimate. Recommendations remain unvalidated model text; exact citations do not establish entailment.
+The requested V2 implementation and local validation are complete. Review branch: `codex/v2-evidence`, targeting the preserved V1 default `codex/tracemedic`; V1 is also tagged `v0.1.0`. See `docs/v2_proposal.md`, `docs/v2_architecture.md`, the full benchmark and semantic audit. Current-head hosted checks are tracked by [GitHub Actions](https://github.com/Alecbossard/TraceMedic/actions/workflows/ci.yml) and checked at handoff. Review the causal explanations and limitations before extending beyond the shipped synthetic corpus. Development candidates (including failures) remain in `docs/evidence/v2-development*.json`; their subset is not a new accuracy estimate. Recommendations remain unvalidated model text; exact citations do not establish entailment.
 
-The local UI uses `data/app`; server PID 12632 at the last restart. Restart with `python -m tracemedic.cli --data-dir data/app serve`; open `http://127.0.0.1:8000/?run=22ccf4b6-449c-4c56-9442-dbec22e91d60`. Import the completed V2 audit elsewhere with `scripts/import_demo.py --workflow v2` (not resumable checkpoints). The `.runtime/` model/runtime and local databases remain intentionally untracked.
+The local UI uses `data/app`; server PID 9280 and portable Ollama PID 8044 at the last restart. Restart the UI with `python -m tracemedic.cli --data-dir data/app serve`; open `http://127.0.0.1:8000/?run=22ccf4b6-449c-4c56-9442-dbec22e91d60`. Import the completed V2 audit elsewhere with `scripts/import_demo.py --workflow v2` (not resumable checkpoints). The `.runtime/` model/runtime and local databases remain intentionally untracked.
