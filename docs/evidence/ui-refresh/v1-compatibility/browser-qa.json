@@ -1,0 +1,27 @@
+{
+  "browser": "155.0.4283.45",
+  "base": "http://127.0.0.1:8000",
+  "run_id": "16f5146c-d649-40e4-8baa-fce5381c373f",
+  "real_run": false,
+  "layouts": [
+    {
+      "name": "tablet",
+      "width": 900,
+      "scrollWidth": 900
+    },
+    {
+      "name": "mobile",
+      "width": 390,
+      "scrollWidth": 390
+    }
+  ],
+  "errors": [],
+  "links": [
+    "http://127.0.0.1:8000/?run=16f5146c-d649-40e4-8baa-fce5381c373f#main-content",
+    "http://127.0.0.1:8000/?run=16f5146c-d649-40e4-8baa-fce5381c373f#",
+    "https://github.com/Alecbossard/TraceMedic/tree/codex/v2-evidence",
+    "https://github.com/Alecbossard/TraceMedic/tree/codex/v2-evidence",
+    "https://github.com/Alecbossard/TraceMedic/tree/codex/v2-evidence/benchmarks/v2/report.md",
+    "https://github.com/Alecbossard/TraceMedic/tree/codex/v2-evidence/benchmarks/v2/semantic_audit.md"
+  ]
+}

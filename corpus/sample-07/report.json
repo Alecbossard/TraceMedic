@@ -1,0 +1,13 @@
+{
+  "suite": "captured-behavior",
+  "expected": {
+    "name": "Lina",
+    "email": ""
+  },
+  "actual": {
+    "name": "Lina",
+    "email": "FR"
+  },
+  "error": null,
+  "status": "failed"
+}

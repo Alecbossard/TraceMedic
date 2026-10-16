@@ -5,7 +5,7 @@ import os
 from pathlib import Path
 
 from tracemedic.config import Settings
-from tracemedic.engine import Engine
+from tracemedic.factory import build_engine as select_engine
 from tracemedic.mcp_client import connect_tools
 
 
@@ -16,12 +16,7 @@ def build_engine(args):
     if args.provider:
         changes["provider"] = args.provider
     settings = Settings(**changes)
-    provider = None
-    if settings.provider == "scripted":
-        from tracemedic.testing import ScriptedProvider
-
-        provider = ScriptedProvider()
-    return Engine(settings, provider)
+    return select_engine(settings, args.workflow, args.run_id if args.command == "resume" else None)
 
 
 async def execute(args):
@@ -61,7 +56,10 @@ async def execute(args):
         print(json.dumps(engine.store.runs(), indent=2))
     if args.command == "tools":
         run = engine.create(args.incident)
-        async with connect_tools(engine.settings, engine.store, run, args.incident) as tools:
+        version = 2 if engine.store.run(run)["state"].get("engine_version") == "v2" else 1
+        async with connect_tools(
+            engine.settings, engine.store, run, args.incident, version=version
+        ) as tools:
             output = {
                 "schemas": tools.schemas,
                 "discovery": (await tools.call("list_files", {}, "system", 0)).model_dump(),
@@ -77,6 +75,11 @@ async def execute(args):
 def main():
     parser = argparse.ArgumentParser(description="TraceMedic evidence-first incident investigation")
     parser.add_argument("--data-dir")
+    parser.add_argument(
+        "--workflow",
+        choices=["v1", "v2"],
+        help="New runs default to V2 (scripted test double defaults V1); resume uses saved version",
+    )
     parser.add_argument(
         "--provider",
         choices=["ollama", "openai-compatible", "scripted"],
@@ -108,6 +111,8 @@ def main():
     if args.command == "serve":
         if args.data_dir:
             os.environ["TRACEMEDIC_DATA_DIR"] = str(Path(args.data_dir).resolve())
+        if args.provider:
+            os.environ["TRACEMEDIC_PROVIDER"] = args.provider
         import uvicorn
 
         uvicorn.run("tracemedic.api:app", host="127.0.0.1", port=args.port)

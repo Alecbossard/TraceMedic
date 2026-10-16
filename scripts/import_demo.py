@@ -1,11 +1,18 @@
 """Import an actual recorded, completed trace for inspection without new inference."""
 
+import argparse
 import json
 
 from tracemedic.config import ROOT, Settings
 from tracemedic.store import Store
 
-source = ROOT / "docs" / "evidence" / "demo-real.json"
+parser = argparse.ArgumentParser()
+parser.add_argument("--workflow", choices=["v1", "v2"], default="v2")
+args = parser.parse_args()
+source = ROOT / "docs" / "evidence"
+if args.workflow == "v2":
+    source = source / "v2"
+source = source / "demo-real.json"
 record = json.loads(source.read_text(encoding="utf-8"))
 assert record["provider"] != "scripted" and record["status"] == "completed"
 store = Store(Settings().audit_db)

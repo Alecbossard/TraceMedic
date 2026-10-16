@@ -1,0 +1,4 @@
+INFO worker initialized
+DEBUG health probe: ok
+ERROR captured check: RuntimeError: Plugin version rejected
+WARN optional metrics exporter not configured

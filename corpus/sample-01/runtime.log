@@ -1,0 +1,4 @@
+INFO worker initialized
+DEBUG health probe: ok
+ERROR captured check: expected={'sent': False}; actual={'sent': True}
+WARN optional metrics exporter not configured

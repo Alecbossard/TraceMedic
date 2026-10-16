@@ -11,6 +11,7 @@ from pydantic import BaseModel
 
 from tracemedic.config import Settings
 from tracemedic.engine import Engine
+from tracemedic.factory import build_engine
 
 settings = Settings()
 engine = Engine(settings)
@@ -30,7 +31,7 @@ async def lifespan(app):
         await asyncio.gather(*tasks.values(), return_exceptions=True)
 
 
-app = FastAPI(title="TraceMedic", version="0.1.0", lifespan=lifespan)
+app = FastAPI(title="TraceMedic", version="0.2.0", lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
@@ -42,6 +43,7 @@ app.add_middleware(
 class CreateRun(BaseModel):
     incident_id: str
     mode: Literal["multi", "single"] = "multi"
+    workflow: Literal["v1", "v2"] = "v2"
 
 
 def get_run(run_id):
@@ -58,7 +60,7 @@ def dispatch(run_id):
     async def work():
         # A fresh Engine per runner keeps each run's saved configuration isolated.
         try:
-            await Engine(settings).run(run_id)
+            await build_engine(settings, run_id=run_id).run(run_id)
         except Exception as exc:
             engine.store.event(run_id, "dispatch-error", "system", "error", str(exc)[:500])
 
@@ -96,23 +98,31 @@ async def health():
         "transport": "MCP · stdio",
         "persistence": "SQLite checkpoints",
         "limits": {"model_calls": settings.max_calls, "tool_calls": settings.max_tools},
+        "workflows": ["v1", "v2"],
+        "default_workflow": "v2",
     }
 
 
 @app.get("/api/incidents")
 def incidents():
-    return json.loads((settings.root / "corpus" / "catalog.json").read_text())
+    return json.loads((settings.root / "corpus" / "v2_catalog.json").read_text(encoding="utf-8"))
 
 
 @app.get("/api/runs")
 def list_runs():
-    return [{k: v for k, v in r.items() if k != "state"} for r in engine.store.runs()]
+    return [
+        {
+            **{k: v for k, v in r.items() if k != "state"},
+            "engine_version": r["state"].get("engine_version", "v1"),
+        }
+        for r in engine.store.runs()
+    ]
 
 
 @app.post("/api/runs", status_code=201)
 async def create_run(body: CreateRun):
     try:
-        run_id = engine.create(body.incident_id, body.mode)
+        run_id = build_engine(settings, body.workflow).create(body.incident_id, body.mode)
     except ValueError as exc:
         raise HTTPException(400, str(exc)) from exc
     dispatch(run_id)
@@ -148,8 +158,11 @@ async def resume(run_id: str):
 
 
 @app.get("/api/benchmark")
-def benchmark():
-    path = settings.root / "benchmarks" / "results" / "summary.json"
+def benchmark(version: Literal["v1", "v2"] = "v2"):
+    folder = settings.root / "benchmarks"
+    if version == "v2":
+        folder = folder / "v2"
+    path = folder / "results" / "summary.json"
     return (
         json.loads(path.read_text())
         if path.exists()

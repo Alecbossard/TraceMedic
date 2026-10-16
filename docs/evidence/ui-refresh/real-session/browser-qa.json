@@ -1,0 +1,24 @@
+{
+  "run_id": "05b6e162-4d7b-4e8b-8e01-e29ece068e57",
+  "browser": "155.0.4283.45",
+  "base": "http://127.0.0.1:8000",
+  "fresh_inference": true,
+  "layouts": [
+    {
+      "name": "desktop",
+      "width": 1440,
+      "scrollWidth": 1440
+    },
+    {
+      "name": "tablet",
+      "width": 900,
+      "scrollWidth": 900
+    },
+    {
+      "name": "mobile",
+      "width": 390,
+      "scrollWidth": 390
+    }
+  ],
+  "errors": []
+}

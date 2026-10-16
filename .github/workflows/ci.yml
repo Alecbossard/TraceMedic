@@ -36,6 +36,7 @@ jobs:
           cache: npm
           cache-dependency-path: frontend/package-lock.json
       - run: npm ci
+      - run: npm run format:check
       - run: npm run build
       - run: npm audit --audit-level=high
   browser:
@@ -56,9 +57,20 @@ jobs:
       - run: npm ci --prefix frontend
       - run: npm run build --prefix frontend
       - run: cd frontend && npx playwright install --with-deps chromium
-      - run: python scripts/import_demo.py
+      - run: python scripts/import_demo.py --workflow v1
+      - run: python scripts/import_demo.py --workflow v2
       - name: Inspect real saved trace in browser (no new inference)
         run: |
           python -m tracemedic.cli serve > server.log 2>&1 &
           for i in $(seq 1 30); do curl -s http://127.0.0.1:8000/api/incidents && break; sleep 1; done
           node frontend/scripts/browser-qa.mjs --replay
+          node frontend/scripts/browser-v2.mjs --replay
+          node frontend/scripts/browser-refresh.mjs
+          node frontend/scripts/browser-cold-start.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: browser-evidence
+          path: |
+            docs/evidence/ui-refresh/
+            server.log
