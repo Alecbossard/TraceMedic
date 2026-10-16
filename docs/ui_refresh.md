@@ -11,7 +11,7 @@ The workbench is an investigation tool. Its visual hierarchy now prioritizes the
 - Activity filters and expandable event payloads reveal actual decisions and tool results. The latest running action is shown without simulated activity.
 - Searchable run history; benchmark latency/call comparison charts plus the full outcome table and existing semantic limits; a compact system environment view.
 - `Ctrl+K` on Windows/Linux, `⌘K` on macOS, or `/` outside inputs opens quick navigation. Search, arrows, Enter and Escape work. Mobile navigation traps focus and restores it when dismissed.
-- Brief route/tab fades and animated chart changes. The operating system's reduced-motion preference disables transforms and CSS dialog/drawer animations. Source/finding navigation avoids smooth scrolling under that preference.
+- Brief entry transitions and animated chart changes. Data updates and tab navigation render immediately, without waiting for an exit animation. The operating system's reduced-motion preference disables transforms and CSS dialog/drawer animations. Source/finding navigation avoids smooth scrolling under that preference.
 
 ## Selected libraries
 
@@ -36,6 +36,8 @@ The local production build reports approximately **117.5 kB gzip** for initial J
 - A separate fresh Qwen investigation was created, actually cancelled, resumed under the same ID and completed. Its full trace and `fresh_inference: true` browser proof are in [`evidence/ui-refresh/real-session/`](evidence/ui-refresh/real-session/). The first completed real run is also retained: its capture script initially asserted a citation before the new tab finished entering; the assertion now awaits the highlighted line.
 
 The main [`browser-qa.json`](evidence/ui-refresh/browser-qa.json) is explicitly a replay/interaction check, not fresh inference. Historical V1/V2 evidence and all frozen benchmark outcomes remain unchanged. The refresh does not establish any additional diagnostic accuracy.
+
+CI exposed a cold-load transition race: the run header/metrics updated while an exit animation retained the old empty panel. Panels now render immediately. `browser-cold-start.mjs` deliberately blocks the deferred Motion feature request and requires both the reviewed finding and exact-line source navigation to work before releasing it. It passes in Edge and Chromium, including an imported-trace workspace with the provider offline. Incident/history/result loading is also independent of provider health. CI retains browser screenshots, failure diagnostics and server logs as workflow artifacts.
 
 With the API serving on port 8000:
 

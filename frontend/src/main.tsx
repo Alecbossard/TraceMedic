@@ -369,442 +369,430 @@ function App() {
               </m.div>
             )}
           </AnimatePresence>
-          <AnimatePresence mode="wait" initial={false}>
-            <m.div
-              key={view}
-              className={"page-view view-" + view}
-              initial={{ opacity: 0, y: 5 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.16 }}
-            >
-              {view === "workbench" && (
-                <>
-                  <div className="page-heading">
-                    <div>
-                      <h1>Incident workbench</h1>
-                      <p>Local incident investigation and evidence review.</p>
-                    </div>
-                    <span className="workspace-context">
-                      <span className="dot live" />
-                      Local environment<kbd>{shortcutLabel}</kbd>
-                    </span>
+          <m.div
+            key={view}
+            className={"page-view view-" + view}
+            initial={{ opacity: 0.96, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.16 }}
+          >
+            {view === "workbench" && (
+              <>
+                <div className="page-heading">
+                  <div>
+                    <h1>Incident workbench</h1>
+                    <p>Local incident investigation and evidence review.</p>
                   </div>
-                  <button
-                    className="mobile-library-toggle secondary"
-                    onClick={() => setLibraryOpen((value) => !value)}
-                    aria-expanded={libraryOpen}
+                  <span className="workspace-context">
+                    <span className="dot live" />
+                    Local environment<kbd>{shortcutLabel}</kbd>
+                  </span>
+                </div>
+                <button
+                  className="mobile-library-toggle secondary"
+                  onClick={() => setLibraryOpen((value) => !value)}
+                  aria-expanded={libraryOpen}
+                >
+                  <PanelLeft size={15} />
+                  Browse incidents<span>{incidents.length}</span>
+                  <ChevronDown size={14} />
+                </button>
+                <div className="workbench-grid">
+                  <section
+                    className={
+                      "incident-library surface " +
+                      (libraryOpen ? "rail-mobile-open" : "")
+                    }
                   >
-                    <PanelLeft size={15} />
-                    Browse incidents<span>{incidents.length}</span>
-                    <ChevronDown size={14} />
-                  </button>
-                  <div className="workbench-grid">
-                    <section
-                      className={
-                        "incident-library surface " +
-                        (libraryOpen ? "rail-mobile-open" : "")
-                      }
+                    <div className="library-title">
+                      <h2>Incidents</h2>
+                      <span className="count">{incidents.length}</span>
+                      <Hint label="Search all workspace pages and incidents">
+                        <button
+                          className="icon-button"
+                          aria-label="Find an incident"
+                          onClick={() => setCommandOpen(true)}
+                        >
+                          <Search size={15} />
+                        </button>
+                      </Hint>
+                    </div>
+                    <label className="search library-search">
+                      <Search size={14} />
+                      <input
+                        aria-label="Search incidents"
+                        placeholder="Filter incidents…"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                      />
+                      <kbd>/</kbd>
+                    </label>
+                    <div
+                      className="library-filters"
+                      aria-label="Incident collection"
                     >
-                      <div className="library-title">
-                        <h2>Incidents</h2>
-                        <span className="count">{incidents.length}</span>
-                        <Hint label="Search all workspace pages and incidents">
-                          <button
-                            className="icon-button"
-                            aria-label="Find an incident"
-                            onClick={() => setCommandOpen(true)}
-                          >
-                            <Search size={15} />
-                          </button>
-                        </Hint>
-                      </div>
-                      <label className="search library-search">
-                        <Search size={14} />
-                        <input
-                          aria-label="Search incidents"
-                          placeholder="Filter incidents…"
-                          value={search}
-                          onChange={(e) => setSearch(e.target.value)}
-                        />
-                        <kbd>/</kbd>
-                      </label>
-                      <div
-                        className="library-filters"
-                        aria-label="Incident collection"
-                      >
-                        {[
-                          ["all", "All"],
-                          ["v1", "Original"],
-                          ["v2", "V2 suite"],
-                        ].map(([value, label]) => (
-                          <button
-                            key={value}
-                            className={libraryFilter === value ? "on" : ""}
-                            aria-pressed={libraryFilter === value}
-                            onClick={() => setLibraryFilter(value)}
-                          >
-                            {label}
-                          </button>
-                        ))}
-                      </div>
-                      <div className="incident-list">
-                        {filteredIncidents.map((item) => (
-                          <button
-                            key={item.id}
-                            className={
-                              "incident-button " +
-                              (selected === item.id ? "chosen" : "")
-                            }
-                            aria-current={
-                              selected === item.id ? "true" : undefined
-                            }
-                            onClick={() => pickIncident(item.id)}
-                          >
-                            <IncidentNumber id={item.id} />
-                            <span>
-                              <strong>{item.title}</strong>
-                              <small>{item.description}</small>
-                            </span>
-                            {selected === item.id && <ChevronRight size={13} />}
-                          </button>
-                        ))}
-                        {incidentsLoading && (
-                          <p className="no-match" role="status">
-                            Loading incidents…
-                          </p>
-                        )}
-                        {!incidentsLoading && !filteredIncidents.length && (
-                          <p className="no-match">No matching incidents.</p>
-                        )}
-                      </div>
-                      <div className="library-footer">
-                        <FlaskConical size={12} />
-                        Synthetic fixtures
-                        <span>
-                          {filteredIncidents.length} / {incidents.length}
+                      {[
+                        ["all", "All"],
+                        ["v1", "Original"],
+                        ["v2", "V2 suite"],
+                      ].map(([value, label]) => (
+                        <button
+                          key={value}
+                          className={libraryFilter === value ? "on" : ""}
+                          aria-pressed={libraryFilter === value}
+                          onClick={() => setLibraryFilter(value)}
+                        >
+                          {label}
+                        </button>
+                      ))}
+                    </div>
+                    <div className="incident-list">
+                      {filteredIncidents.map((item) => (
+                        <button
+                          key={item.id}
+                          className={
+                            "incident-button " +
+                            (selected === item.id ? "chosen" : "")
+                          }
+                          aria-current={
+                            selected === item.id ? "true" : undefined
+                          }
+                          onClick={() => pickIncident(item.id)}
+                        >
+                          <IncidentNumber id={item.id} />
+                          <span>
+                            <strong>{item.title}</strong>
+                            <small>{item.description}</small>
+                          </span>
+                          {selected === item.id && <ChevronRight size={13} />}
+                        </button>
+                      ))}
+                      {incidentsLoading && (
+                        <p className="no-match" role="status">
+                          Loading incidents…
+                        </p>
+                      )}
+                      {!incidentsLoading && !filteredIncidents.length && (
+                        <p className="no-match">No matching incidents.</p>
+                      )}
+                    </div>
+                    <div className="library-footer">
+                      <FlaskConical size={12} />
+                      Synthetic fixtures
+                      <span>
+                        {filteredIncidents.length} / {incidents.length}
+                      </span>
+                    </div>
+                  </section>
+                  <div className="investigation-column surface">
+                    <section className="case-card">
+                      <div className="case-top">
+                        <span className="case-id">
+                          <span className="case-id-icon">
+                            <GitBranch size={12} />
+                          </span>
+                          <span className="case-number">
+                            {selected.toUpperCase()}
+                          </span>
+                          <span className="case-collection">
+                            {selected.startsWith("sample-")
+                              ? "V2 reserved suite"
+                              : "Original corpus"}
+                          </span>
+                        </span>
+                        <span className={"status " + (run?.status || "ready")}>
+                          {active ? (
+                            <LoaderCircle className="spin" size={12} />
+                          ) : (
+                            <span className="dot" />
+                          )}
+                          {run
+                            ? statusLabel[run.status] || run.status
+                            : "Ready"}
                         </span>
                       </div>
-                    </section>
-                    <div className="investigation-column surface">
-                      <section className="case-card">
-                        <div className="case-top">
-                          <span className="case-id">
-                            <span className="case-id-icon">
-                              <GitBranch size={12} />
-                            </span>
-                            <span className="case-number">
-                              {selected.toUpperCase()}
-                            </span>
-                            <span className="case-collection">
-                              {selected.startsWith("sample-")
-                                ? "V2 reserved suite"
-                                : "Original corpus"}
-                            </span>
-                          </span>
-                          <span
-                            className={"status " + (run?.status || "ready")}
+                      <h2>{incident?.title || "Choose an incident"}</h2>
+                      <p>{incident?.description}</p>
+                      <div className="case-controls">
+                        <div
+                          className="segmented"
+                          aria-label="Investigation mode"
+                        >
+                          <button
+                            className={mode === "multi" ? "on" : ""}
+                            aria-pressed={mode === "multi"}
+                            onClick={() => setMode("multi")}
+                            disabled={active}
                           >
-                            {active ? (
-                              <LoaderCircle className="spin" size={12} />
-                            ) : (
-                              <span className="dot" />
-                            )}
-                            {run
-                              ? statusLabel[run.status] || run.status
-                              : "Ready"}
-                          </span>
+                            <GitBranch size={13} />
+                            Multi-agent
+                          </button>
+                          <button
+                            className={mode === "single" ? "on" : ""}
+                            aria-pressed={mode === "single"}
+                            onClick={() => setMode("single")}
+                            disabled={active}
+                          >
+                            Single agent
+                          </button>
                         </div>
-                        <h2>{incident?.title || "Choose an incident"}</h2>
-                        <p>{incident?.description}</p>
-                        <div className="case-controls">
-                          <div
-                            className="segmented"
-                            aria-label="Investigation mode"
+                        <label className="workflow-select">
+                          <select
+                            aria-label="Workflow version"
+                            value={workflow}
+                            onChange={(e) => setWorkflow(e.target.value)}
+                            disabled={active}
                           >
+                            <option value="v2">V2 · Causal records</option>
+                            <option
+                              value="v1"
+                              disabled={selected.startsWith("sample-")}
+                            >
+                              V1 · Reference
+                            </option>
+                          </select>
+                        </label>
+                        <div className="run-actions">
+                          {active ? (
                             <button
-                              className={mode === "multi" ? "on" : ""}
-                              aria-pressed={mode === "multi"}
-                              onClick={() => setMode("multi")}
-                              disabled={active}
+                              className="secondary"
+                              onClick={() => control("cancel")}
+                              disabled={busy || !!run?.cancel_requested}
                             >
-                              <GitBranch size={13} />
-                              Multi-agent
+                              <Square size={12} />
+                              {run?.cancel_requested
+                                ? "Stopping…"
+                                : "Cancel investigation"}
                             </button>
-                            <button
-                              className={mode === "single" ? "on" : ""}
-                              aria-pressed={mode === "single"}
-                              onClick={() => setMode("single")}
-                              disabled={active}
-                            >
-                              Single agent
-                            </button>
-                          </div>
-                          <label className="workflow-select">
-                            <select
-                              aria-label="Workflow version"
-                              value={workflow}
-                              onChange={(e) => setWorkflow(e.target.value)}
-                              disabled={active}
-                            >
-                              <option value="v2">V2 · Causal records</option>
-                              <option
-                                value="v1"
-                                disabled={selected.startsWith("sample-")}
-                              >
-                                V1 · Reference
-                              </option>
-                            </select>
-                          </label>
-                          <div className="run-actions">
-                            {active ? (
+                          ) : canResume ? (
+                            <>
                               <button
                                 className="secondary"
-                                onClick={() => control("cancel")}
-                                disabled={busy || !!run?.cancel_requested}
+                                onClick={launch}
+                                disabled={busy}
                               >
-                                <Square size={12} />
-                                {run?.cancel_requested
-                                  ? "Stopping…"
-                                  : "Cancel investigation"}
+                                New run
                               </button>
-                            ) : canResume ? (
-                              <>
-                                <button
-                                  className="secondary"
-                                  onClick={launch}
-                                  disabled={busy}
-                                >
-                                  New run
-                                </button>
-                                <button
-                                  className="primary"
-                                  onClick={() => control("resume")}
-                                  disabled={busy}
-                                >
-                                  <RotateCcw size={14} />
-                                  Resume investigation
-                                </button>
-                              </>
-                            ) : (
                               <button
                                 className="primary"
-                                onClick={launch}
-                                disabled={
-                                  busy || !incident || !health?.available
-                                }
+                                onClick={() => control("resume")}
+                                disabled={busy}
                               >
-                                {busy ? (
-                                  <LoaderCircle className="spin" size={14} />
-                                ) : (
-                                  <Play size={13} fill="currentColor" />
-                                )}
-                                Start investigation
+                                <RotateCcw size={14} />
+                                Resume investigation
                               </button>
-                            )}
-                          </div>
-                        </div>
-                        {run && (
-                          <div className="run-meta">
-                            <span className="run-id">
-                              RUN{" "}
-                              <span title={run.id}>{run.id.slice(0, 8)}</span>
-                            </span>
-                            <span>
-                              {(run.state.engine_version || "v1").toUpperCase()}
-                              <span className="meta-separator">·</span>
-                              {run.provider === "scripted"
-                                ? "Test double"
-                                : run.provider === "ollama"
-                                  ? "Local model"
-                                  : run.provider}
-                            </span>
-                            <Hint label="Export full audit JSON">
-                              <button
-                                className="icon-button"
-                                aria-label="Export full audit JSON"
-                                onClick={exportRun}
-                              >
-                                <ArrowDownToLine size={14} />
-                              </button>
-                            </Hint>
-                          </div>
-                        )}
-                      </section>
-                      <div className="metrics-row">
-                        <div>
-                          <span>Model calls</span>
-                          <strong>
-                            {run?.metrics.model_calls ?? "—"}
-                            <small> / {health?.limits.model_calls ?? 18}</small>
-                          </strong>
-                        </div>
-                        <div>
-                          <span>Tool calls</span>
-                          <strong>
-                            {run?.metrics.tool_calls ?? "—"}
-                            <small> / {health?.limits.tool_calls ?? 14}</small>
-                          </strong>
-                        </div>
-                        <div>
-                          <span>Reported tokens</span>
-                          <strong>
-                            {run?.metrics.usage_complete
-                              ? (
-                                  (run.metrics.input_tokens || 0) +
-                                  (run.metrics.output_tokens || 0)
-                                ).toLocaleString()
-                              : "—"}
-                          </strong>
-                        </div>
-                        <div>
-                          <span>Finished session time</span>
-                          <strong>
-                            {elapsed ? elapsed.toFixed(1) : "—"}
-                            <small>{elapsed ? " s" : ""}</small>
-                          </strong>
-                        </div>
-                      </div>
-                      <div
-                        className="run-tabs"
-                        role="tablist"
-                        aria-label="Investigation views"
-                      >
-                        {runTabs.map((item, index) => (
-                          <button
-                            key={item.id}
-                            id={"tab-" + item.id}
-                            role="tab"
-                            aria-selected={tab === item.id}
-                            tabIndex={tab === item.id ? 0 : -1}
-                            aria-controls={"panel-" + item.id}
-                            className={tab === item.id ? "active" : ""}
-                            onClick={() => setTab(item.id)}
-                            onKeyDown={(e) => {
-                              if (
-                                [
-                                  "ArrowRight",
-                                  "ArrowLeft",
-                                  "Home",
-                                  "End",
-                                ].includes(e.key)
-                              ) {
-                                e.preventDefault();
-                                const next =
-                                  e.key === "Home"
-                                    ? 0
-                                    : e.key === "End"
-                                      ? 2
-                                      : (index +
-                                          (e.key === "ArrowRight" ? 1 : -1) +
-                                          3) %
-                                        3;
-                                setTab(runTabs[next].id);
-                                document
-                                  .getElementById("tab-" + runTabs[next].id)
-                                  ?.focus();
-                              }
-                            }}
-                          >
-                            <item.icon size={14} />
-                            {item.label}
-                            {item.id === "activity" && !!run?.events.length && (
-                              <span>
-                                {
-                                  run.events.filter(
-                                    (event) =>
-                                      ![
-                                        "model_response",
-                                        "session_end",
-                                        "model_reused",
-                                      ].includes(event.kind),
-                                  ).length
-                                }
-                              </span>
-                            )}
-                            {item.id === "evidence" &&
-                              !!run?.evidence.length && (
-                                <span>{run.evidence.length}</span>
-                              )}
-                          </button>
-                        ))}
-                        <span className="tab-saved">
-                          {run && (
-                            <>
-                              <Check size={11} />
-                              Saved locally
                             </>
+                          ) : (
+                            <button
+                              className="primary"
+                              onClick={launch}
+                              disabled={busy || !incident || !health?.available}
+                            >
+                              {busy ? (
+                                <LoaderCircle className="spin" size={14} />
+                              ) : (
+                                <Play size={13} fill="currentColor" />
+                              )}
+                              Start investigation
+                            </button>
                           )}
-                        </span>
+                        </div>
                       </div>
-                      <div
-                        id={"panel-" + tab}
-                        role="tabpanel"
-                        aria-labelledby={"tab-" + tab}
-                        className="run-panel"
-                      >
-                        <AnimatePresence mode="wait" initial={false}>
-                          <m.div
-                            key={tab + ":" + (run?.id || "empty")}
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.12 }}
-                          >
-                            {tab === "overview" && (
-                              <Overview
-                                run={run}
-                                openSource={openSource}
-                                showActivity={() => setTab("activity")}
-                              />
-                            )}
-                            {tab === "activity" && <Timeline run={run} />}
-                            {tab === "evidence" && (
-                              <EvidencePanel
-                                run={run}
-                                evidenceId={evidenceId}
-                                focusedLine={focusedLine}
-                                choose={(id) => {
-                                  setEvidenceId(id);
-                                  setFocusedLine(null);
-                                }}
-                                exportRun={exportRun}
-                              />
-                            )}
-                          </m.div>
-                        </AnimatePresence>
+                      {run && (
+                        <div className="run-meta">
+                          <span className="run-id">
+                            RUN <span title={run.id}>{run.id.slice(0, 8)}</span>
+                          </span>
+                          <span>
+                            {(run.state.engine_version || "v1").toUpperCase()}
+                            <span className="meta-separator">·</span>
+                            {run.provider === "scripted"
+                              ? "Test double"
+                              : run.provider === "ollama"
+                                ? "Local model"
+                                : run.provider}
+                          </span>
+                          <Hint label="Export full audit JSON">
+                            <button
+                              className="icon-button"
+                              aria-label="Export full audit JSON"
+                              onClick={exportRun}
+                            >
+                              <ArrowDownToLine size={14} />
+                            </button>
+                          </Hint>
+                        </div>
+                      )}
+                    </section>
+                    <div className="metrics-row">
+                      <div>
+                        <span>Model calls</span>
+                        <strong>
+                          {run?.metrics.model_calls ?? "—"}
+                          <small> / {health?.limits.model_calls ?? 18}</small>
+                        </strong>
+                      </div>
+                      <div>
+                        <span>Tool calls</span>
+                        <strong>
+                          {run?.metrics.tool_calls ?? "—"}
+                          <small> / {health?.limits.tool_calls ?? 14}</small>
+                        </strong>
+                      </div>
+                      <div>
+                        <span>Reported tokens</span>
+                        <strong>
+                          {run?.metrics.usage_complete
+                            ? (
+                                (run.metrics.input_tokens || 0) +
+                                (run.metrics.output_tokens || 0)
+                              ).toLocaleString()
+                            : "—"}
+                        </strong>
+                      </div>
+                      <div>
+                        <span>Finished session time</span>
+                        <strong>
+                          {elapsed ? elapsed.toFixed(1) : "—"}
+                          <small>{elapsed ? " s" : ""}</small>
+                        </strong>
                       </div>
                     </div>
+                    <div
+                      className="run-tabs"
+                      role="tablist"
+                      aria-label="Investigation views"
+                    >
+                      {runTabs.map((item, index) => (
+                        <button
+                          key={item.id}
+                          id={"tab-" + item.id}
+                          role="tab"
+                          aria-selected={tab === item.id}
+                          tabIndex={tab === item.id ? 0 : -1}
+                          aria-controls={"panel-" + item.id}
+                          className={tab === item.id ? "active" : ""}
+                          onClick={() => setTab(item.id)}
+                          onKeyDown={(e) => {
+                            if (
+                              [
+                                "ArrowRight",
+                                "ArrowLeft",
+                                "Home",
+                                "End",
+                              ].includes(e.key)
+                            ) {
+                              e.preventDefault();
+                              const next =
+                                e.key === "Home"
+                                  ? 0
+                                  : e.key === "End"
+                                    ? 2
+                                    : (index +
+                                        (e.key === "ArrowRight" ? 1 : -1) +
+                                        3) %
+                                      3;
+                              setTab(runTabs[next].id);
+                              document
+                                .getElementById("tab-" + runTabs[next].id)
+                                ?.focus();
+                            }
+                          }}
+                        >
+                          <item.icon size={14} />
+                          {item.label}
+                          {item.id === "activity" && !!run?.events.length && (
+                            <span>
+                              {
+                                run.events.filter(
+                                  (event) =>
+                                    ![
+                                      "model_response",
+                                      "session_end",
+                                      "model_reused",
+                                    ].includes(event.kind),
+                                ).length
+                              }
+                            </span>
+                          )}
+                          {item.id === "evidence" && !!run?.evidence.length && (
+                            <span>{run.evidence.length}</span>
+                          )}
+                        </button>
+                      ))}
+                      <span className="tab-saved">
+                        {run && (
+                          <>
+                            <Check size={11} />
+                            Saved locally
+                          </>
+                        )}
+                      </span>
+                    </div>
+                    <div
+                      id={"panel-" + tab}
+                      role="tabpanel"
+                      aria-labelledby={"tab-" + tab}
+                      className="run-panel"
+                    >
+                      <m.div
+                        key={tab}
+                        initial={{ opacity: 0.96 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.12 }}
+                      >
+                        {tab === "overview" && (
+                          <Overview
+                            run={run}
+                            openSource={openSource}
+                            showActivity={() => setTab("activity")}
+                          />
+                        )}
+                        {tab === "activity" && <Timeline run={run} />}
+                        {tab === "evidence" && (
+                          <EvidencePanel
+                            run={run}
+                            evidenceId={evidenceId}
+                            focusedLine={focusedLine}
+                            choose={(id) => {
+                              setEvidenceId(id);
+                              setFocusedLine(null);
+                            }}
+                            exportRun={exportRun}
+                          />
+                        )}
+                      </m.div>
+                    </div>
                   </div>
-                  <footer className="page-footer">
-                    <span>
-                      <span className="dot live" />
-                      Audit stored in your local workspace
-                    </span>
-                    <span>
-                      Synthetic corpus<span>·</span>V1 / V2 compatible
-                    </span>
-                  </footer>
-                </>
-              )}
-              {view === "history" && (
-                <HistoryPage
-                  runs={runs}
-                  incidents={incidents}
-                  openRun={openRun}
-                  newRun={() => navigate("workbench")}
-                />
-              )}
-              {view === "benchmark" && (
-                <BenchmarkPage
-                  benchmark={benchmark}
-                  version={benchmarkVersion}
-                  changeVersion={changeBenchmark}
-                />
-              )}
-              {view === "system" && <SystemPage health={health} />}
-            </m.div>
-          </AnimatePresence>
+                </div>
+                <footer className="page-footer">
+                  <span>
+                    <span className="dot live" />
+                    Audit stored in your local workspace
+                  </span>
+                  <span>
+                    Synthetic corpus<span>·</span>V1 / V2 compatible
+                  </span>
+                </footer>
+              </>
+            )}
+            {view === "history" && (
+              <HistoryPage
+                runs={runs}
+                incidents={incidents}
+                openRun={openRun}
+                newRun={() => navigate("workbench")}
+              />
+            )}
+            {view === "benchmark" && (
+              <BenchmarkPage
+                benchmark={benchmark}
+                version={benchmarkVersion}
+                changeVersion={changeBenchmark}
+              />
+            )}
+            {view === "system" && <SystemPage health={health} />}
+          </m.div>
         </div>
       </main>
     </div>

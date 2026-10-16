@@ -1,0 +1,8 @@
+{
+  "status": "passed",
+  "run_id": "05b6e162-4d7b-4e8b-8e01-e29ece068e57",
+  "browser": "155.0.4283.45",
+  "fresh_inference": false,
+  "scope": "Cold deep link and exact-line navigation succeed while the lazy animation feature request is deliberately blocked.",
+  "errors": []
+}
