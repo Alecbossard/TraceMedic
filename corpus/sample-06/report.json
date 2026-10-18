@@ -1,0 +1,7 @@
+{
+  "suite": "captured-behavior",
+  "expected": false,
+  "actual": true,
+  "error": null,
+  "status": "failed"
+}

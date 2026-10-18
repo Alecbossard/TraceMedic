@@ -1,0 +1,36 @@
+{
+  "version": 2,
+  "held_out": [
+    "sample-01",
+    "sample-02",
+    "sample-03",
+    "sample-04",
+    "sample-05",
+    "sample-06",
+    "sample-07",
+    "sample-08",
+    "sample-09",
+    "sample-10",
+    "sample-11",
+    "sample-12"
+  ],
+  "repetitions": 1,
+  "repeated_cases": [
+    "sample-02",
+    "sample-11"
+  ],
+  "methods": [
+    "deterministic",
+    "v1-multi",
+    "v2-single",
+    "v2-multi"
+  ],
+  "seed": 17,
+  "llm_call_limit": 18,
+  "tool_call_limit": 14,
+  "max_output_tokens_per_call": 1200,
+  "model": "tracemedic-qwen3:4b",
+  "scoring": "Same scorer for all methods: all concept groups in final supported explanation, valid captured source references, at least one confirmed causal hypothesis and reproduced baseline check. Explicit abstention on ambiguous cases. Failures/budget stops are incorrect. Literal quote validity additionally reported for V2; do not equate it with semantic entailment.",
+  "development": "All original 24 cases are seen regression/development data. Do not tune on sample-* responses. Freeze implementation before executing reserved runs. Publish every scheduled run, including failures.",
+  "comparison": "V1 uses its unchanged five-tool interface and original prompts/engine; V2 single and multi share all seven V2 tools. Architectural comparison, including tool ergonomics; not a pure agent-count experiment across versions."
+}

@@ -2,6 +2,8 @@
 
 This is a robotics/AI portfolio learning artifact. These links show implemented and exercised work, not prior mastery or production validation.
 
+V2 adds [causal-record contracts and a versioned runner](../src/tracemedic/v2/), source-line selection with host-rendered quotations, structured control decoding, compact source contexts, bundle reads and isolated JSON interventions. `tests/test_v2.py` and `tests/test_v2_provider.py` exercise the new boundaries. Its separate [reserved protocol](../benchmarks/v2/protocol.json) compares V1 and V2 rather than recycling seen cases as new held-out evidence. V1 artifacts below remain unchanged reference evidence.
+
 | Skill | Implementation | Executed evidence | Limit |
 |---|---|---|---|
 | LangGraph orchestration | `engine.py`: typed state, conditional edges, bounded role visits | `tests/test_engine.py`; native delegation events in `evidence/demo-real.json` | Constrained policy, small graph |

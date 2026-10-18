@@ -1,0 +1,7 @@
+{
+  "suite": "captured-behavior",
+  "expected": "delivered",
+  "actual": null,
+  "error": "TimeoutError",
+  "status": "failed"
+}

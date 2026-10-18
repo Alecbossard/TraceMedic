@@ -1,0 +1,11 @@
+{
+  "suite": "captured-behavior",
+  "expected": {
+    "indexed": 2
+  },
+  "actual": {
+    "indexed": 2
+  },
+  "error": null,
+  "status": "passed"
+}

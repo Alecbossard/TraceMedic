@@ -1,0 +1,9 @@
+{
+  "status": "passed",
+  "run_id": "22ccf4b6-449c-4c56-9442-dbec22e91d60",
+  "browser": "156.0.8078.4",
+  "fresh_inference": false,
+  "scope": "Cold deep link and exact-line navigation succeed while the lazy animation feature request is deliberately blocked.",
+  "errors": [],
+  "workspace": "Imported V1/V2 real traces in an isolated SQLite store. Provider endpoint intentionally unavailable."
+}

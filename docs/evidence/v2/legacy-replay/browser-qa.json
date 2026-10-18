@@ -1,0 +1,24 @@
+{
+  "browser": "155.0.4283.45",
+  "base": "http://127.0.0.1:8000",
+  "run_id": "16f5146c-d649-40e4-8baa-fce5381c373f",
+  "real_run": false,
+  "layouts": [
+    {
+      "name": "tablet",
+      "width": 900,
+      "scrollWidth": 900
+    },
+    {
+      "name": "mobile",
+      "width": 390,
+      "scrollWidth": 390
+    }
+  ],
+  "errors": [],
+  "links": [
+    "http://127.0.0.1:8000/#",
+    "https://github.com/Alecbossard/TraceMedic",
+    "https://github.com/Alecbossard/TraceMedic#readme"
+  ]
+}

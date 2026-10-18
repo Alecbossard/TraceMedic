@@ -1,0 +1,563 @@
+[
+  {
+    "id": "v2-v1-multi-sample-08-r1",
+    "incident_id": "sample-08",
+    "mode": "multi",
+    "provider": "ollama",
+    "model": "tracemedic-qwen3:4b",
+    "status": "running",
+    "created_at": "2026-10-15T20:33:00.332789+00:00",
+    "updated_at": "2026-10-15T20:33:06.654457+00:00",
+    "state": {
+      "run_id": "v2-v1-multi-sample-08-r1",
+      "incident": {
+        "id": "sample-08",
+        "title": "Delivery worker",
+        "description": "A delivery aborts after one transient failure despite its retry budget."
+      },
+      "mode": "multi",
+      "role": "investigator",
+      "turn": 5,
+      "status": "running",
+      "config": {
+        "provider": "ollama",
+        "model": "tracemedic-qwen3:4b",
+        "model_url": "http://127.0.0.1:11434",
+        "model_timeout": 90.0,
+        "tool_timeout": 15.0,
+        "max_calls": 18,
+        "max_tools": 14,
+        "max_steps": 40,
+        "max_agent_turns": 10,
+        "max_output_tokens": 1200,
+        "context_tokens": 8192,
+        "seed": 17,
+        "temperature": 0.0
+      },
+      "delegation": {
+        "target": "investigator",
+        "task": "Analyze the delivery abort logs to identify the root cause of the transient failure and its impact on retry budget exhaustion.",
+        "hypothesis_ids": []
+      },
+      "delegations": [
+        {
+          "target": "investigator",
+          "task": "Analyze the delivery abort logs to identify the root cause of the transient failure and its impact on retry budget exhaustion.",
+          "hypothesis_ids": []
+        }
+      ],
+      "hypotheses": [],
+      "observations": [
+        {
+          "role": "investigator",
+          "tool": "list_files",
+          "arguments": {},
+          "result": {
+            "ok": true,
+            "data": {
+              "files": [
+                {
+                  "path": "input.json",
+                  "bytes": 30
+                },
+                {
+                  "path": "report.json",
+                  "bytes": 129
+                },
+                {
+                  "path": "runtime.log",
+                  "bytes": 147
+                },
+                {
+                  "path": "service.py",
+                  "bytes": 292
+                },
+                {
+                  "path": "settings.json",
+                  "bytes": 20
+                }
+              ],
+              "server_pid": 3360
+            },
+            "evidence": [],
+            "error": null
+          }
+        },
+        {
+          "role": "investigator",
+          "tool": "read_file",
+          "arguments": {
+            "path": "runtime.log"
+          },
+          "result": {
+            "ok": true,
+            "data": {},
+            "evidence": [
+              {
+                "id": "e-1fa667f8461916b385a3",
+                "incident_id": "sample-08",
+                "path": "runtime.log",
+                "start_line": 1,
+                "end_line": 4,
+                "excerpt": "INFO worker initialized\nDEBUG health probe: ok\nERROR captured check: TimeoutError: temporary failure\nWARN optional metrics exporter not configured",
+                "sha256": "f393995703018f5870c21f7bc26215286c9521daf18f5f7df1c5edf4432f8ead"
+              }
+            ],
+            "error": null
+          }
+        },
+        {
+          "role": "investigator",
+          "tool": "search_trace",
+          "arguments": {
+            "query": "retry budget exhaustion"
+          },
+          "result": {
+            "ok": true,
+            "data": {
+              "truncated": false
+            },
+            "evidence": [],
+            "error": null
+          }
+        },
+        {
+          "role": "investigator",
+          "tool": "read_file",
+          "arguments": {
+            "path": "settings.json"
+          },
+          "result": {
+            "ok": true,
+            "data": {},
+            "evidence": [
+              {
+                "id": "e-104d57dac6292570de43",
+                "incident_id": "sample-08",
+                "path": "settings.json",
+                "start_line": 1,
+                "end_line": 3,
+                "excerpt": "{\n  \"attempts\": 3\n}",
+                "sha256": "dab59209d1e1e5a3117a024e709473438ab25e8f310795675b6f38530b3d7e9e"
+              }
+            ],
+            "error": null
+          }
+        }
+      ],
+      "checks": [],
+      "visited": [
+        "coordinator",
+        "investigator"
+      ],
+      "agent_turns": {
+        "coordinator": 1,
+        "investigator": 4
+      },
+      "feedback": "",
+      "errors": 0
+    },
+    "cancel_requested": 0,
+    "events": [
+      {
+        "seq": 537,
+        "run_id": "v2-v1-multi-sample-08-r1",
+        "event_key": "mcp-discovery",
+        "timestamp": "2026-10-15T20:33:01.670976+00:00",
+        "role": "system",
+        "kind": "mcp_connected",
+        "message": "Discovered tools over MCP stdio in a separate process",
+        "data": {
+          "client_pid": 8556,
+          "tools": [
+            "list_files",
+            "read_file",
+            "search_trace",
+            "get_test_report",
+            "run_check"
+          ],
+          "transport": "stdio",
+          "sdk": "mcp 2.3.0"
+        }
+      },
+      {
+        "seq": 538,
+        "run_id": "v2-v1-multi-sample-08-r1",
+        "event_key": "attempt:0:coordinator:0",
+        "timestamp": "2026-10-15T20:33:01.697130+00:00",
+        "role": "coordinator",
+        "kind": "model_attempt",
+        "message": "Decision call 1/18",
+        "data": {
+          "attempt": 1
+        }
+      },
+      {
+        "seq": 539,
+        "run_id": "v2-v1-multi-sample-08-r1",
+        "event_key": "response:attempt:0:coordinator:0",
+        "timestamp": "2026-10-15T20:33:03.189289+00:00",
+        "role": "coordinator",
+        "kind": "model_response",
+        "message": "delegate",
+        "data": {
+          "name": "delegate",
+          "arguments": {
+            "target": "investigator",
+            "task": "Analyze the delivery abort logs to identify the root cause of the transient failure and its impact on retry budget exhaustion.",
+            "hypothesis_ids": []
+          },
+          "input_tokens": 892,
+          "output_tokens": 55,
+          "latency_ms": 1481.1
+        }
+      },
+      {
+        "seq": 540,
+        "run_id": "v2-v1-multi-sample-08-r1",
+        "event_key": "delegate:0",
+        "timestamp": "2026-10-15T20:33:03.201997+00:00",
+        "role": "coordinator",
+        "kind": "delegation",
+        "message": "Analyze the delivery abort logs to identify the root cause of the transient failure and its impact on retry budget exhaustion.",
+        "data": {
+          "target": "investigator",
+          "task": "Analyze the delivery abort logs to identify the root cause of the transient failure and its impact on retry budget exhaustion.",
+          "hypothesis_ids": []
+        }
+      },
+      {
+        "seq": 541,
+        "run_id": "v2-v1-multi-sample-08-r1",
+        "event_key": "attempt:1:investigator:1",
+        "timestamp": "2026-10-15T20:33:03.233993+00:00",
+        "role": "investigator",
+        "kind": "model_attempt",
+        "message": "Decision call 2/18",
+        "data": {
+          "attempt": 1
+        }
+      },
+      {
+        "seq": 542,
+        "run_id": "v2-v1-multi-sample-08-r1",
+        "event_key": "response:attempt:1:investigator:1",
+        "timestamp": "2026-10-15T20:33:03.823685+00:00",
+        "role": "investigator",
+        "kind": "model_response",
+        "message": "list_files",
+        "data": {
+          "name": "list_files",
+          "arguments": {},
+          "input_tokens": 1061,
+          "output_tokens": 16,
+          "latency_ms": 577.7
+        }
+      },
+      {
+        "seq": 543,
+        "run_id": "v2-v1-multi-sample-08-r1",
+        "event_key": "tool-start:1",
+        "timestamp": "2026-10-15T20:33:03.843502+00:00",
+        "role": "investigator",
+        "kind": "tool_call",
+        "message": "list_files",
+        "data": {
+          "arguments": {},
+          "operation_key": "mcp:f402e47dab16c4ccf52b"
+        }
+      },
+      {
+        "seq": 544,
+        "run_id": "v2-v1-multi-sample-08-r1",
+        "event_key": "tool-end:1",
+        "timestamp": "2026-10-15T20:33:03.860458+00:00",
+        "role": "investigator",
+        "kind": "tool_result",
+        "message": "list_files: ok",
+        "data": {
+          "tool": "list_files",
+          "ok": true,
+          "data": {
+            "files": [
+              {
+                "path": "input.json",
+                "bytes": 30
+              },
+              {
+                "path": "report.json",
+                "bytes": 129
+              },
+              {
+                "path": "runtime.log",
+                "bytes": 147
+              },
+              {
+                "path": "service.py",
+                "bytes": 292
+              },
+              {
+                "path": "settings.json",
+                "bytes": 20
+              }
+            ],
+            "server_pid": 3360
+          },
+          "evidence": [],
+          "error": null,
+          "operation_key": "mcp:f402e47dab16c4ccf52b"
+        }
+      },
+      {
+        "seq": 545,
+        "run_id": "v2-v1-multi-sample-08-r1",
+        "event_key": "attempt:2:investigator:2",
+        "timestamp": "2026-10-15T20:33:03.889031+00:00",
+        "role": "investigator",
+        "kind": "model_attempt",
+        "message": "Decision call 3/18",
+        "data": {
+          "attempt": 1
+        }
+      },
+      {
+        "seq": 546,
+        "run_id": "v2-v1-multi-sample-08-r1",
+        "event_key": "response:attempt:2:investigator:2",
+        "timestamp": "2026-10-15T20:33:04.550868+00:00",
+        "role": "investigator",
+        "kind": "model_response",
+        "message": "read_file",
+        "data": {
+          "name": "read_file",
+          "arguments": {
+            "path": "runtime.log"
+          },
+          "input_tokens": 1136,
+          "output_tokens": 21,
+          "latency_ms": 651.6
+        }
+      },
+      {
+        "seq": 547,
+        "run_id": "v2-v1-multi-sample-08-r1",
+        "event_key": "tool-start:2",
+        "timestamp": "2026-10-15T20:33:04.570109+00:00",
+        "role": "investigator",
+        "kind": "tool_call",
+        "message": "read_file",
+        "data": {
+          "arguments": {
+            "path": "runtime.log"
+          },
+          "operation_key": "mcp:ed62dd690411dcddaeae"
+        }
+      },
+      {
+        "seq": 548,
+        "run_id": "v2-v1-multi-sample-08-r1",
+        "event_key": "tool-end:2",
+        "timestamp": "2026-10-15T20:33:04.593702+00:00",
+        "role": "investigator",
+        "kind": "tool_result",
+        "message": "read_file: ok",
+        "data": {
+          "tool": "read_file",
+          "ok": true,
+          "data": {},
+          "evidence": [
+            {
+              "id": "e-1fa667f8461916b385a3",
+              "incident_id": "sample-08",
+              "path": "runtime.log",
+              "start_line": 1,
+              "end_line": 4,
+              "excerpt": "INFO worker initialized\nDEBUG health probe: ok\nERROR captured check: TimeoutError: temporary failure\nWARN optional metrics exporter not configured",
+              "sha256": "f393995703018f5870c21f7bc26215286c9521daf18f5f7df1c5edf4432f8ead"
+            }
+          ],
+          "error": null,
+          "operation_key": "mcp:ed62dd690411dcddaeae"
+        }
+      },
+      {
+        "seq": 549,
+        "run_id": "v2-v1-multi-sample-08-r1",
+        "event_key": "attempt:3:investigator:3",
+        "timestamp": "2026-10-15T20:33:04.624287+00:00",
+        "role": "investigator",
+        "kind": "model_attempt",
+        "message": "Decision call 4/18",
+        "data": {
+          "attempt": 1
+        }
+      },
+      {
+        "seq": 550,
+        "run_id": "v2-v1-multi-sample-08-r1",
+        "event_key": "response:attempt:3:investigator:3",
+        "timestamp": "2026-10-15T20:33:05.530954+00:00",
+        "role": "investigator",
+        "kind": "model_response",
+        "message": "search_trace",
+        "data": {
+          "name": "search_trace",
+          "arguments": {
+            "query": "retry budget exhaustion"
+          },
+          "input_tokens": 1532,
+          "output_tokens": 22,
+          "latency_ms": 897.7
+        }
+      },
+      {
+        "seq": 551,
+        "run_id": "v2-v1-multi-sample-08-r1",
+        "event_key": "tool-start:3",
+        "timestamp": "2026-10-15T20:33:05.550102+00:00",
+        "role": "investigator",
+        "kind": "tool_call",
+        "message": "search_trace",
+        "data": {
+          "arguments": {
+            "query": "retry budget exhaustion"
+          },
+          "operation_key": "mcp:5530d7c082a35860bf49"
+        }
+      },
+      {
+        "seq": 552,
+        "run_id": "v2-v1-multi-sample-08-r1",
+        "event_key": "tool-end:3",
+        "timestamp": "2026-10-15T20:33:05.568280+00:00",
+        "role": "investigator",
+        "kind": "tool_result",
+        "message": "search_trace: ok",
+        "data": {
+          "tool": "search_trace",
+          "ok": true,
+          "data": {
+            "truncated": false
+          },
+          "evidence": [],
+          "error": null,
+          "operation_key": "mcp:5530d7c082a35860bf49"
+        }
+      },
+      {
+        "seq": 553,
+        "run_id": "v2-v1-multi-sample-08-r1",
+        "event_key": "attempt:4:investigator:4",
+        "timestamp": "2026-10-15T20:33:05.598727+00:00",
+        "role": "investigator",
+        "kind": "model_attempt",
+        "message": "Decision call 5/18",
+        "data": {
+          "attempt": 1
+        }
+      },
+      {
+        "seq": 554,
+        "run_id": "v2-v1-multi-sample-08-r1",
+        "event_key": "response:attempt:4:investigator:4",
+        "timestamp": "2026-10-15T20:33:06.311281+00:00",
+        "role": "investigator",
+        "kind": "model_response",
+        "message": "read_file",
+        "data": {
+          "name": "read_file",
+          "arguments": {
+            "path": "settings.json"
+          },
+          "input_tokens": 1584,
+          "output_tokens": 21,
+          "latency_ms": 701.0
+        }
+      },
+      {
+        "seq": 555,
+        "run_id": "v2-v1-multi-sample-08-r1",
+        "event_key": "tool-start:4",
+        "timestamp": "2026-10-15T20:33:06.620482+00:00",
+        "role": "investigator",
+        "kind": "tool_call",
+        "message": "read_file",
+        "data": {
+          "arguments": {
+            "path": "settings.json"
+          },
+          "operation_key": "mcp:a9620bdb877d8b75920d"
+        }
+      },
+      {
+        "seq": 556,
+        "run_id": "v2-v1-multi-sample-08-r1",
+        "event_key": "tool-end:4",
+        "timestamp": "2026-10-15T20:33:06.641602+00:00",
+        "role": "investigator",
+        "kind": "tool_result",
+        "message": "read_file: ok",
+        "data": {
+          "tool": "read_file",
+          "ok": true,
+          "data": {},
+          "evidence": [
+            {
+              "id": "e-104d57dac6292570de43",
+              "incident_id": "sample-08",
+              "path": "settings.json",
+              "start_line": 1,
+              "end_line": 3,
+              "excerpt": "{\n  \"attempts\": 3\n}",
+              "sha256": "dab59209d1e1e5a3117a024e709473438ab25e8f310795675b6f38530b3d7e9e"
+            }
+          ],
+          "error": null,
+          "operation_key": "mcp:a9620bdb877d8b75920d"
+        }
+      },
+      {
+        "seq": 557,
+        "run_id": "v2-v1-multi-sample-08-r1",
+        "event_key": "attempt:5:investigator:5",
+        "timestamp": "2026-10-15T20:33:06.677815+00:00",
+        "role": "investigator",
+        "kind": "model_attempt",
+        "message": "Decision call 6/18",
+        "data": {
+          "attempt": 1
+        }
+      }
+    ],
+    "evidence": [
+      {
+        "id": "e-104d57dac6292570de43",
+        "incident_id": "sample-08",
+        "path": "settings.json",
+        "start_line": 1,
+        "end_line": 3,
+        "excerpt": "{\n  \"attempts\": 3\n}",
+        "sha256": "dab59209d1e1e5a3117a024e709473438ab25e8f310795675b6f38530b3d7e9e"
+      },
+      {
+        "id": "e-1fa667f8461916b385a3",
+        "incident_id": "sample-08",
+        "path": "runtime.log",
+        "start_line": 1,
+        "end_line": 4,
+        "excerpt": "INFO worker initialized\nDEBUG health probe: ok\nERROR captured check: TimeoutError: temporary failure\nWARN optional metrics exporter not configured",
+        "sha256": "f393995703018f5870c21f7bc26215286c9521daf18f5f7df1c5edf4432f8ead"
+      }
+    ],
+    "metrics": {
+      "model_calls": 6,
+      "tool_calls": 4,
+      "tool_successes": 4,
+      "input_tokens": 6205,
+      "output_tokens": 135,
+      "usage_complete": false,
+      "model_latency_ms": 4309.1,
+      "cost_usd": null
+    }
+  }
+]

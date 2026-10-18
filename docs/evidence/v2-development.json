@@ -1,0 +1,183 @@
+[
+  {
+    "id": "7ca28dfd-24dc-4b0b-a1ec-a58816789c0a",
+    "incident_id": "case-16",
+    "mode": "multi",
+    "status": "completed",
+    "diagnostic": {
+      "outcome": "supported",
+      "summary": "Client cannot resolve resource name 'service-db' when input specifies 'service_db' in the hosts registry. The input JSON specifies a host name 'service_db' in lowercase, but the settings.json defines the host as 'service-db' with a hyphen. The service.py checks if the host from settings.json exists in the hosts registry, but the registry key uses 'service_db' (all lowercase), causing a mismatch in name parsing. ConnectionError: DNS lookup failed for service-db; registry=['service_db']",
+      "hypothesis_ids": [
+        "h-b39f48644756abb5becf"
+      ],
+      "evidence_ids": [
+        "e-1aa5e0c5090a3402a527",
+        "e-5430e11383451f8e7be5"
+      ],
+      "next_actions": [
+        "Verify that the service.py line E2:L3 performs exact string comparison between input host and registry keys using the provided line_ref E2:L3"
+      ],
+      "limitations": [
+        "The immutable fixture does not simulate production environment name normalization or DNS resolver behavior",
+        "Scope: captured synthetic execution; deployment history and production cause are not established."
+      ],
+      "support_level": "reproduction",
+      "rendered_from_reviewed_records": true
+    },
+    "metrics": {
+      "model_calls": 7,
+      "tool_calls": 2,
+      "tool_successes": 2,
+      "input_tokens": 9644,
+      "output_tokens": 617,
+      "usage_complete": true,
+      "model_latency_ms": 13184.6,
+      "cost_usd": null
+    },
+    "rejections": []
+  },
+  {
+    "id": "786636f0-e10c-4795-9885-2ad8ffe1951d",
+    "incident_id": "case-04",
+    "mode": "multi",
+    "status": "completed",
+    "diagnostic": {
+      "outcome": "supported",
+      "summary": "Input payload 'hello' is processed by the packet exporter, which invokes decode_bytes on an Encoder instance, resulting in an AttributeError The service attempts to call decode_bytes on an Encoder instance, but the Encoder class does not define a decode_bytes method; the only implemented method is loads. The configuration specifies 'available_methods' as ['loads'], implying decode_bytes is not supported, yet the code still tries to invoke it. Export fails with AttributeError: 'Encoder' object has no attribute 'decode_bytes'",
+      "hypothesis_ids": [
+        "h-581e98592edbbf5b7a05"
+      ],
+      "evidence_ids": [
+        "e-b2f4ea36cbd17fab0f34",
+        "e-0954a9a68a7dbc6be3bc"
+      ],
+      "next_actions": [
+        "Verify that the Encoder class in service.py has only the 'loads' method and no 'decode_bytes' method by inspecting the source code at E2:L6",
+        "Confirm that settings.json specifies 'available_methods' as ['loads'] and not including 'decode_bytes'",
+        "Validate that the packet exporter code correctly checks the available_methods configuration before attempting to invoke decode_bytes"
+      ],
+      "limitations": [
+        "Unknown whether decode_bytes was present in a previous version of the Encoder class",
+        "Unknown whether settings.json was updated to include decode_bytes in available_methods",
+        "Scope: captured synthetic execution; deployment history and production cause are not established."
+      ],
+      "support_level": "reproduction",
+      "rendered_from_reviewed_records": true
+    },
+    "metrics": {
+      "model_calls": 7,
+      "tool_calls": 2,
+      "tool_successes": 2,
+      "input_tokens": 9549,
+      "output_tokens": 655,
+      "usage_complete": true,
+      "model_latency_ms": 12957.3,
+      "cost_usd": null
+    },
+    "rejections": []
+  },
+  {
+    "id": "b189fd36-ca5f-4d93-af2b-f6a4cb1831eb",
+    "incident_id": "case-20",
+    "mode": "multi",
+    "status": "failed",
+    "diagnostic": {
+      "outcome": "insufficient",
+      "summary": "Three consecutive invalid actions; inspect audit events.",
+      "hypothesis_ids": [],
+      "evidence_ids": [],
+      "next_actions": [
+        "Inspect the audit trail and resolve the reported limit or error before starting a new investigation."
+      ],
+      "limitations": [
+        "Three consecutive invalid actions; inspect audit events.",
+        "This is a controlled system termination, not a successful LLM diagnosis."
+      ]
+    },
+    "metrics": {
+      "model_calls": 8,
+      "tool_calls": 2,
+      "tool_successes": 2,
+      "input_tokens": 10690,
+      "output_tokens": 628,
+      "usage_complete": true,
+      "model_latency_ms": 12524.6,
+      "cost_usd": null
+    },
+    "rejections": [
+      "Action rejected: Unknown or duplicate hypothesis alias in review",
+      "Action rejected: Unknown or duplicate hypothesis alias in review",
+      "Action rejected: Unknown or duplicate hypothesis alias in review"
+    ]
+  },
+  {
+    "id": "c145a3a6-b6d1-4c07-8a5e-2dc02aa9bdf1",
+    "incident_id": "case-22",
+    "mode": "single",
+    "status": "completed",
+    "diagnostic": {
+      "outcome": "insufficient",
+      "summary": "The captured evidence and executed checks do not establish a causal mechanism for this incident.",
+      "hypothesis_ids": [],
+      "evidence_ids": [],
+      "next_actions": [
+        "Verify that the error log in E1:L3 correctly reflects the expected vs actual behavior by cross-checking the input and configuration values with the service.py logic.",
+        "Confirm whether the 'freshness' condition is being inverted in the code or error reporting, by comparing E2:L3 with E5:L4 and E5:L5.",
+        "Check if the 'max_age_seconds' value is being interpreted in milliseconds or seconds in the service.py function execution."
+      ],
+      "limitations": [
+        "The error log shows expected=False and actual=True, but the mechanism in service.py correctly computes age_ms as 500 ms (0.5 seconds), which is less than max_age_seconds=2. No unit mismatch or configuration error is evident in the provided files. The discrepancy suggests a misinterpretation of freshness in the error log, but no causal record with a second file using existing line_ref handles is established. The mechanism in E2:L3 evaluates age_ms > max_age_seconds, which should return false for the given inputs. The error log implies a mismatch in expected vs actual behavior, but no second file or line_ref supports a causal record. Thus, a precise causal record cannot be formed with existing data.",
+        "Scope: captured synthetic execution; deployment history and production cause are not established."
+      ],
+      "support_level": "insufficient",
+      "rendered_from_reviewed_records": true
+    },
+    "metrics": {
+      "model_calls": 5,
+      "tool_calls": 2,
+      "tool_successes": 2,
+      "input_tokens": 7952,
+      "output_tokens": 736,
+      "usage_complete": true,
+      "model_latency_ms": 14161.4,
+      "cost_usd": null
+    },
+    "rejections": []
+  },
+  {
+    "id": "a84790cd-de9f-4cb3-b4e5-2ac0ebbdb70b",
+    "incident_id": "case-19",
+    "mode": "single",
+    "status": "failed",
+    "diagnostic": {
+      "outcome": "insufficient",
+      "summary": "Three consecutive invalid actions; inspect audit events.",
+      "hypothesis_ids": [],
+      "evidence_ids": [],
+      "next_actions": [
+        "Inspect the audit trail and resolve the reported limit or error before starting a new investigation."
+      ],
+      "limitations": [
+        "Three consecutive invalid actions; inspect audit events.",
+        "This is a controlled system termination, not a successful LLM diagnosis."
+      ]
+    },
+    "metrics": {
+      "model_calls": 9,
+      "tool_calls": 3,
+      "tool_successes": 2,
+      "input_tokens": 13491,
+      "output_tokens": 863,
+      "usage_complete": true,
+      "model_latency_ms": 16616.6,
+      "cost_usd": null
+    },
+    "rejections": [
+      "Action rejected: Unknown or duplicate hypothesis alias in review",
+      "Action rejected: Unknown or duplicate hypothesis alias in review",
+      "Action rejected: Unknown or duplicate hypothesis alias in review",
+      "Action rejected: Unknown or duplicate hypothesis alias in review",
+      "Action rejected: Unknown or duplicate hypothesis alias in review"
+    ]
+  }
+]

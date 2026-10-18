@@ -1,5 +1,7 @@
 # Model configuration
 
+V2 uses the same tested alias/digest as the V1 reference. Native function calling selects MCP operations and action choices. For an Ollama phase with exactly one permitted control contract, `v2/provider.py` also supplies its JSON schema in the prompt and `format` field, then validates the result in the runner. This improves output form, not factual correctness. OpenAI-compatible providers keep native function calls for every phase. No additional model, paid endpoint or API key was introduced by V2.
+
 The tested provider is Ollama **0.40.4**, with **Qwen3 4B Instruct 2507 Q4_K_M** and an 8,192-token context. `benchmarks/implementation.json` records exact model digests and the template hash. The same alias serves all three roles and the single-agent comparator. Temperature is zero and the requested seed is 17; deterministic settings do not guarantee bit-identical GPU generation.
 
 ## Tested local setup

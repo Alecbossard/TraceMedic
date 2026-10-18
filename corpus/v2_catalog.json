@@ -1,0 +1,182 @@
+[
+  {
+    "id": "case-01",
+    "title": "Telemetry gateway",
+    "description": "The service cannot reach its database after a configuration change."
+  },
+  {
+    "id": "case-02",
+    "title": "Nightly ingestion",
+    "description": "A scheduled import stops during startup."
+  },
+  {
+    "id": "case-03",
+    "title": "Worker rollout",
+    "description": "The worker rejects its startup settings."
+  },
+  {
+    "id": "case-04",
+    "title": "Packet exporter",
+    "description": "Export fails following a dependency update."
+  },
+  {
+    "id": "case-05",
+    "title": "Planner bootstrap",
+    "description": "A planner component fails its startup compatibility check."
+  },
+  {
+    "id": "case-06",
+    "title": "Archive writer",
+    "description": "The storage backend cannot be initialized."
+  },
+  {
+    "id": "case-07",
+    "title": "Measurement import",
+    "description": "A valid-looking measurement file fails parsing."
+  },
+  {
+    "id": "case-08",
+    "title": "Event scheduler",
+    "description": "A comparison fails when scheduling a new event."
+  },
+  {
+    "id": "case-09",
+    "title": "Order reconciliation",
+    "description": "The reconciled collection contains fewer rows than the input."
+  },
+  {
+    "id": "case-10",
+    "title": "Signal statistics",
+    "description": "A statistics request crashes for an idle sensor."
+  },
+  {
+    "id": "case-11",
+    "title": "Callback handler",
+    "description": "One webhook payload causes the request handler to crash."
+  },
+  {
+    "id": "case-12",
+    "title": "Batch consumer",
+    "description": "The consumer crashes after processing the last element."
+  },
+  {
+    "id": "case-13",
+    "title": "Inference proxy",
+    "description": "The inference request consistently times out in the fixture."
+  },
+  {
+    "id": "case-14",
+    "title": "Transient fetch",
+    "description": "A retrying client gives up before the service recovers."
+  },
+  {
+    "id": "case-15",
+    "title": "Shared queue",
+    "description": "Queue access stalls even with no active producer."
+  },
+  {
+    "id": "case-16",
+    "title": "Resource resolver",
+    "description": "A client cannot resolve a resource name."
+  },
+  {
+    "id": "case-17",
+    "title": "Secure uplink",
+    "description": "A fixture TLS handshake is rejected."
+  },
+  {
+    "id": "case-18",
+    "title": "Ledger sink",
+    "description": "Writes fail although the datastore accepts the connection."
+  },
+  {
+    "id": "case-19",
+    "title": "Remote snapshot",
+    "description": "A remote snapshot request timed out once. No configuration or downstream capture is available."
+  },
+  {
+    "id": "case-20",
+    "title": "Partner callback",
+    "description": "An upstream returned HTTP 500. The supplied capture has no upstream stack or deployment information."
+  },
+  {
+    "id": "case-21",
+    "title": "Fleet latency",
+    "description": "A dashboard reports a latency spike. Only one aggregate sample is available."
+  },
+  {
+    "id": "case-22",
+    "title": "Sensor watchdog",
+    "description": "Fresh sensor messages are incorrectly treated as stale."
+  },
+  {
+    "id": "case-23",
+    "title": "Frame transform",
+    "description": "A robot fixture maps a forward point behind the origin."
+  },
+  {
+    "id": "case-24",
+    "title": "Tenant cache",
+    "description": "Two tenants receive the same cached record for a shared item number."
+  },
+  {
+    "id": "sample-01",
+    "title": "Notification worker",
+    "description": "Notifications are sent despite a disabled deployment setting."
+  },
+  {
+    "id": "sample-02",
+    "title": "Plugin loader",
+    "description": "A supported plugin is rejected during initialization."
+  },
+  {
+    "id": "sample-03",
+    "title": "Session service",
+    "description": "A session remains valid much longer than the configured duration."
+  },
+  {
+    "id": "sample-04",
+    "title": "Batch collector",
+    "description": "A fresh collection unexpectedly contains an earlier request's item."
+  },
+  {
+    "id": "sample-05",
+    "title": "Queue processor",
+    "description": "A request to process zero items unexpectedly processes ten."
+  },
+  {
+    "id": "sample-06",
+    "title": "Access service",
+    "description": "A disabled account passes an access decision in a local test."
+  },
+  {
+    "id": "sample-07",
+    "title": "Contact importer",
+    "description": "An imported record assigns a country value to the email field."
+  },
+  {
+    "id": "sample-08",
+    "title": "Delivery worker",
+    "description": "A delivery aborts after one transient failure despite its retry budget."
+  },
+  {
+    "id": "sample-09",
+    "title": "Stream adapter",
+    "description": "An adapter fails while opening a stream."
+  },
+  {
+    "id": "sample-10",
+    "title": "Label registry",
+    "description": "A visually matching label cannot be retrieved."
+  },
+  {
+    "id": "sample-11",
+    "title": "Gateway monitor",
+    "description": "Two collected reports disagree about a gateway failure; their capture times are absent."
+  },
+  {
+    "id": "sample-12",
+    "title": "Index worker",
+    "description": "A historical alarm reports intermittent indexing failures; the captured request now succeeds."
+  }
+]

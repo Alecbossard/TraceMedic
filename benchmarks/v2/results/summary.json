@@ -1,0 +1,107 @@
+{
+  "status": "complete",
+  "version": "v2",
+  "model": "tracemedic-qwen3:4b",
+  "total_runs": 56,
+  "scheduled_runs": 56,
+  "methods": [
+    {
+      "method": "deterministic",
+      "runs": 14,
+      "correct": 3,
+      "correct_supported": 0,
+      "abstention_correct": 3,
+      "unsupported": 0,
+      "completed": 14,
+      "median_latency_s": 1.917,
+      "model_calls": 0,
+      "tool_calls": 84,
+      "tool_successes": 82,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "known_input_tokens": 0,
+      "known_output_tokens": 0,
+      "usage_complete": true,
+      "cost_usd": null,
+      "invalid_actions": 0,
+      "blocked_confirmations": 0,
+      "statuses": {
+        "completed": 14
+      }
+    },
+    {
+      "method": "v1-multi",
+      "runs": 14,
+      "correct": 7,
+      "correct_supported": 5,
+      "abstention_correct": 2,
+      "unsupported": 3,
+      "completed": 13,
+      "median_latency_s": 37.424,
+      "model_calls": 200,
+      "tool_calls": 120,
+      "tool_successes": 118,
+      "input_tokens": null,
+      "output_tokens": null,
+      "known_input_tokens": 437805,
+      "known_output_tokens": 23149,
+      "usage_complete": false,
+      "cost_usd": null,
+      "invalid_actions": 4,
+      "blocked_confirmations": 0,
+      "statuses": {
+        "completed": 13,
+        "failed": 1
+      }
+    },
+    {
+      "method": "v2-single",
+      "runs": 14,
+      "correct": 6,
+      "correct_supported": 3,
+      "abstention_correct": 3,
+      "unsupported": 7,
+      "completed": 13,
+      "median_latency_s": 11.528,
+      "model_calls": 73,
+      "tool_calls": 27,
+      "tool_successes": 27,
+      "input_tokens": 107706,
+      "output_tokens": 6884,
+      "known_input_tokens": 107706,
+      "known_output_tokens": 6884,
+      "usage_complete": true,
+      "cost_usd": null,
+      "invalid_actions": 7,
+      "blocked_confirmations": 1,
+      "statuses": {
+        "completed": 13,
+        "failed": 1
+      }
+    },
+    {
+      "method": "v2-multi",
+      "runs": 14,
+      "correct": 8,
+      "correct_supported": 5,
+      "abstention_correct": 3,
+      "unsupported": 2,
+      "completed": 14,
+      "median_latency_s": 14.011,
+      "model_calls": 99,
+      "tool_calls": 28,
+      "tool_successes": 28,
+      "input_tokens": 129409,
+      "output_tokens": 7974,
+      "known_input_tokens": 129409,
+      "known_output_tokens": 7974,
+      "usage_complete": true,
+      "cost_usd": null,
+      "invalid_actions": 1,
+      "blocked_confirmations": 1,
+      "statuses": {
+        "completed": 14
+      }
+    }
+  ]
+}

@@ -12,6 +12,7 @@
 ```powershell
 git clone https://github.com/Alecbossard/TraceMedic.git
 cd TraceMedic
+git switch codex/v2-evidence
 py -3.13 -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements.lock
 .\.venv\Scripts\python.exe -m pip install --no-deps -e .
@@ -37,9 +38,13 @@ $env:TRACEMEDIC_REAL_TESTS='1'
 .\.venv\Scripts\python.exe -m tracemedic.cli serve
 ```
 
-The local clean-environment verification is recorded in `docs/evidence/clean-install.json`. CI results belong to the delivered commit. A skipped real test is not a passed real test.
+The original clean-environment verification is recorded in `docs/evidence/clean-install.json`; V2 has a separate `docs/evidence/v2/clean-install.json`. CI results belong to the delivered commit. A skipped real test is not a passed real test.
 
 ## Recompute the benchmark
+
+V2 is a separate experiment: `benchmarks/v2/{protocol,oracle,frozen_manifest,implementation}.json` preserve the twelve new reserved cases, common rubric, model digest and exact shuffled schedule. Run `python -m tracemedic.v2.benchmark` after starting the tested model. The runner constructs a local dataset view with identical case bytes for all four methods so the original V1 catalog can stay unchanged. It refuses changed implementation/case hashes, enforces saved budgets and skips already recorded jobs. The first partial attempt is archived and excluded after a Windows encoding correction; all jobs were restarted, not selected failures. `python scripts/report_v2_benchmark.py` checks the complete ledger and regenerates the report without inference.
+
+The following paragraph describes the preserved V1 study:
 
 `benchmarks/protocol.json`, `oracle.json` and `frozen_manifest.json` define evaluation. `implementation.json` records agent/provider hashes and model digests. Start the model, run `python scripts/verify_model.py`, then `python -m tracemedic.benchmark`. A changed model digest requires a new experiment label. The actual served identities for the delivered experiment are saved in `docs/evidence/model-identity.json`.
 
@@ -48,6 +53,8 @@ The runner skips existing rows identified by method, incident and repetition; it
 ## Regenerate for a new corpus version
 
 `python scripts/generate_corpus.py` regenerates all 24 authored fixtures and freezes metadata. This is a development operation, never an agent tool. A changed incident/oracle invalidates prior results. Preserve old results and label a new protocol instead of treating a changed test set as held out.
+
+`scripts/generate_v2_suite.py` authored the V2 cases before prompt development and now refuses to overwrite a frozen suite. Do not modify either reserved suite to improve a reported score. The original 24 cases were seen development data for V2.
 
 ## Durable files
 

@@ -22,6 +22,10 @@ class IncidentTools:
         # Model cannot choose another run's operation key. One pure fixture operation per run.
         if name == "run_check":
             arguments["operation_key"] = stable_id(self.run_id, "fixture-check")
+        elif name == "run_experiment":
+            arguments["operation_key"] = stable_id(
+                self.run_id, "experiment", arguments.get("changes")
+            )
         key = "mcp:" + stable_id(name, arguments)
         cached = self.store.cached(self.run_id, key)
         if cached and cached["status"] == "completed":
@@ -69,7 +73,7 @@ class IncidentTools:
 
 
 @asynccontextmanager
-async def connect_tools(settings: Settings, store: Store, run_id: str, incident_id: str):
+async def connect_tools(settings: Settings, store: Store, run_id: str, incident_id: str, version=1):
     env = {
         k: v
         for k, v in os.environ.items()
@@ -82,6 +86,8 @@ async def connect_tools(settings: Settings, store: Store, run_id: str, incident_
         TRACE_AUDIT_DB=str(settings.audit_db),
         PYTHONUTF8="1",
     )
+    if version == 2:
+        env["TRACE_TOOLS_VERSION"] = "2"
     server = StdioServerParameters(
         command=sys.executable,
         args=["-m", "tracemedic.mcp_server"],
@@ -108,6 +114,25 @@ async def connect_tools(settings: Settings, store: Store, run_id: str, incident_
                     "type": "object",
                     "properties": {},
                     "additionalProperties": False,
+                }
+            if schema["function"]["name"] == "run_experiment":
+                schema["function"]["parameters"] = {
+                    "type": "object",
+                    "additionalProperties": False,
+                    "properties": {
+                        "changes": {
+                            "type": "array",
+                            "minItems": 1,
+                            "maxItems": 2,
+                            "items": {
+                                "type": "object",
+                                "additionalProperties": False,
+                                "properties": {"path": {"type": "string"}, "value": {}},
+                                "required": ["path", "value"],
+                            },
+                        }
+                    },
+                    "required": ["changes"],
                 }
         store.event(
             run_id,

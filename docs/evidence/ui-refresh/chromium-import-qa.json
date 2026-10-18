@@ -1,0 +1,122 @@
+{
+  "status": "passed",
+  "failure": null,
+  "run_id": "22ccf4b6-449c-4c56-9442-dbec22e91d60",
+  "browser": "156.0.8078.4",
+  "base": "http://127.0.0.1:8001",
+  "fresh_inference": false,
+  "scope": "Interactive UI checks using a previously completed real-model trace. No new inference is performed by this script.",
+  "checks": [
+    "Citation selects the correct captured file and exact line",
+    "Source copy matches captured text, allowing native clipboard line endings",
+    "Export downloads the complete current run",
+    "Activity filters and event disclosure work",
+    "Finding link scrolls and transfers focus",
+    "Keyboard command menu searches incidents and opens the selected result",
+    "History search reopens the same saved run",
+    "Benchmark chart and V1/V2 switching retain published values",
+    "Mobile navigation traps focus, closes with Escape and restores focus",
+    "Mobile incident browser, collection filters and empty search state work",
+    "Reduced-motion browser preference is supported"
+  ],
+  "layouts": [
+    {
+      "name": "tablet-overview",
+      "width": 900,
+      "scrollWidth": 900
+    },
+    {
+      "name": "tablet-sources",
+      "width": 900,
+      "scrollWidth": 900
+    },
+    {
+      "name": "mobile-overview",
+      "width": 390,
+      "scrollWidth": 390
+    },
+    {
+      "name": "mobile-sources",
+      "width": 390,
+      "scrollWidth": 390
+    },
+    {
+      "name": "small-mobile-overview",
+      "width": 360,
+      "scrollWidth": 360
+    },
+    {
+      "name": "small-mobile-sources",
+      "width": 360,
+      "scrollWidth": 360
+    },
+    {
+      "name": "small-mobile-library",
+      "width": 360,
+      "scrollWidth": 360
+    },
+    {
+      "name": "small-mobile-benchmark",
+      "width": 360,
+      "scrollWidth": 360
+    },
+    {
+      "name": "small-mobile-system",
+      "width": 360,
+      "scrollWidth": 360
+    },
+    {
+      "name": "small-mobile-history",
+      "width": 360,
+      "scrollWidth": 360
+    }
+  ],
+  "errors": [],
+  "accessibility": [
+    {
+      "name": "desktop-overview",
+      "violations": []
+    },
+    {
+      "name": "desktop-sources",
+      "violations": []
+    },
+    {
+      "name": "desktop-activity",
+      "violations": []
+    },
+    {
+      "name": "command-menu",
+      "violations": []
+    },
+    {
+      "name": "empty-overview",
+      "violations": []
+    },
+    {
+      "name": "desktop-history",
+      "violations": []
+    },
+    {
+      "name": "desktop-benchmark",
+      "violations": []
+    },
+    {
+      "name": "desktop-system",
+      "violations": []
+    },
+    {
+      "name": "mobile-overview",
+      "violations": []
+    },
+    {
+      "name": "mobile-sources",
+      "violations": []
+    },
+    {
+      "name": "mobile-navigation",
+      "violations": []
+    }
+  ],
+  "workspace": "Imported V1/V2 real traces in an isolated SQLite store. Provider endpoint intentionally unavailable."
+}
